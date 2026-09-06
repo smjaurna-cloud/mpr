@@ -1,16 +1,14 @@
 # Dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp/
 .pnp.js
 .yarn/install-state.gz
 
-# Next.js build output
-/.next/
-/out/
-
-# Production build artifacts
-build
-dist
+# Build outputs
+.next/
+out/
+build/
+dist/
 
 # Environment variables & secrets (Cultural & Monastic / AI Security Rule)
 .env
