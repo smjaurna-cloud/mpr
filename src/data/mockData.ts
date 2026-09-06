@@ -301,6 +301,7 @@ export type AccountStatus = "ACTIVE" | "SUSPENDED" | "PENDING_VERIFICATION";
 export interface SystemUser {
   id: string;
   username: string;
+  password?: string;      // รหัสผ่านสำหรับการยืนยันตัวตน
   fullName: string;
   title: string;          // พระธรรม..., พระมหา, พระครู, สามเณร, นาย, นาง, ดร.
   paliName?: string;       // ฉายา เช่น ปิยสีโล, สิริวฑฺฒโน
@@ -329,17 +330,18 @@ export interface SystemUser {
 export const mockSystemUsers: SystemUser[] = [
   {
     id: "usr-somboon",
-    username: "somboon",
-    fullName: "อาจารย์สมบูรณ์ (somboon)",
+    username: "Somboon",
+    password: "123456",
+    fullName: "อาจารย์สมบูรณ์ (Somboon Admin)",
     title: "อาจารย์",
-    department: "ศูนย์เทคโนโลยีสารสนเทศและบริหารระบบ (System Administrator)",
+    department: "ศูนย์เทคโนโลยีสารสนเทศและบริหารระบบ (Super Administrator)",
     role: "SUPER_ADMIN",
     monasticStatus: "LAYPERSON",
     accountStatus: "ACTIVE",
     email: "smjaurna@gmail.com",
     phone: "099-445-4256",
     lineConnected: true,
-    lastLogin: "2026-09-05 17:05 (เข้าสู่ระบบปัจจุบัน)",
+    lastLogin: "2026-09-06 14:58 (เข้าสู่ระบบปัจจุบัน)",
     permissions: {
       monasticLife: "FULL",
       almsPatron: "FULL",

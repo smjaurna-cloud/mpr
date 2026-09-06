@@ -358,6 +358,18 @@ export default function UserManagementPage() {
                       <span className="truncate">{user.email}</span>
                     </p>
                   </div>
+
+                  {user.password && (
+                    <div className="flex items-center justify-between text-[11px] bg-amber-50/70 p-2 rounded-xl border border-amber-200/80">
+                      <span className="text-amber-900 font-semibold flex items-center gap-1.5">
+                        <Lock className="w-3 h-3 text-amber-700" />
+                        รหัสผ่าน:
+                      </span>
+                      <code className="font-mono font-bold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-200">
+                        {user.password}
+                      </code>
+                    </div>
+                  )}
                 </div>
 
                 {/* Bottom Action Buttons */}

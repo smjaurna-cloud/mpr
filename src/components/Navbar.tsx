@@ -79,7 +79,7 @@ export default function Navbar() {
             </div>
             <div className="hidden lg:block text-left text-xs">
               <div className="flex items-center gap-1.5">
-                <p className="font-bold text-slate-900">somboon</p>
+                <p className="font-bold text-slate-900">Somboon</p>
                 <span className="px-1.5 py-0.2 bg-amber-100 text-amber-900 text-[9px] font-bold rounded">
                   Super Admin
                 </span>

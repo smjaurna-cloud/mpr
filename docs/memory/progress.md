@@ -37,7 +37,8 @@
   - TASK-915: สร้างและปรับปรุงไฟล์สคริปต์ `push_to_github.bat` ทั้งในโฟลเดอร์หลัก `D:\mpr` และโฟลเดอร์ `D:\mpr\smst` รองรับการพิมพ์ข้อความบันทึก (Commit Message) ด้วยตนเอง หรือกด Enter เพื่อใช้ข้อความอัตโนมัติ พร้อมแสดงสถานะภาษาไทย UTF-8 และ Push ขึ้นสู่ GitHub `origin main` ทันทีเพียงดับเบิลคลิก
   - TASK-916: ดำเนินการแยก Git Repository อิสระสำหรับ SMTS (Attendance Tracking System & Academic ERP) ใน `D:\mpr\smst` สร้าง `.gitignore`, `README.md` แบบละเอียด พร้อมเชื่อมต่อไปยัง `https://github.com/smjaurna-cloud/smts.git` และทำ Initial Commit / Push สู่สาขา `main` สำเร็จเรียบร้อย 100%
   - TASK-917: บูรณาการข้อมูลตารางเรียนและรายนามคณาจารย์ผู้สอน (ภาคการศึกษาที่ ๑/๒๕๖๙) ลงสู่ระบบห้องเรียนทั้ง ๔ ซูม ทั้งใน `smst/` (Standalone Biometric Workstation) และ `src/app/attendance-tracking/` (Next.js 15 Portal) ครอบคลุมพุทธศาสตรดุษฎีบัณฑิตและมหาบัณฑิต ทั้ง ๓ สาขาวิชา ๖ รุ่น พร้อมชื่อรายวิชา รหัสวิชา หน่วยกิต และคณะอาจารย์ผู้สอนร่วม ตรวจสอบ Build ผ่านฉลุย 100% ทั้ง Vite และ Next.js (18/18 Static Pages)
-* **Latest Action:** บูรณาการตารางสอนและคณาจารย์ประจำห้องเรียน ๔ ซูม สมบูรณ์ 100% พร้อม Push สู่ GitHub ทั้งสองคลังข้อมูล
+  - TASK-918: เพิ่มและตรวจสอบบัญชีผู้ดูแลระบบหลัก `Somboon` (Role: `SUPER_ADMIN`, Password: `123456`, Email: `smjaurna@gmail.com`) แสดงผลในแถบนำทาง Navbar ทั้งสองแอปพลิเคชัน และในหน้าบริหารผู้ใช้ (`/users`) พร้อมรหัสผ่านยืนยันสิทธิ์, ดำเนินการตรวจสอบความสมบูรณ์เชิงระบบครบทุกด้าน (Zero Errors, Type-Checked, Production Build 18/18 Pages, 2 Active Web Servers)
+* **Latest Action:** บัญชีผู้ดูแลระบบ Somboon Admin (123456) และระบบทั้งสองได้รับการตรวจสอบความสมบูรณ์ 100% เรียบร้อยแล้ว
 
 ---
 
