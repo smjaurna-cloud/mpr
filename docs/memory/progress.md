@@ -28,7 +28,8 @@
   - TASK-906: ระบบบริการการศึกษา (MOD-13: `/academic-services`) - ตารางเรียนบาลีศากยบุตร และโครงการบริการวิชาการชุมชน
   - TASK-907: บูรณาการโปรเจกต์ `D:\mpr` ผสาน Design System อัตลักษณ์ราชวิทยาลัย "Sacred Royal Heritage" เพิ่ม `A4CertificateModal` ใบอนุโมทนาบัตรทองคำ A4 สรรพากร ๒ เท่า และซิงค์ฐานข้อมูล Prisma SQLite (`dev.db`) สมบูรณ์
   - TASK-908: กำหนดค่า Git Repository ใน `D:\mpr`, เพิ่ม `.gitignore` คุ้มครองความปลอดภัย (ตัด node_modules, database, zip), ผูก Remote `https://github.com/smjaurna-cloud/mpr.git` และทำ Initial Commit สำเร็จ
-* **Latest Action:** เตรียมพร้อม Git Repository สมบูรณ์ พร้อมสำหรับ Push ขึ้น GitHub `smjaurna-cloud/mpr`
+  - TASK-909: สร้างสคริปต์อัตโนมัติ [push_to_github.bat](file:///d:/mpr/push_to_github.bat) อำนวยความสะดวกให้ผู้ดูแลระบบคลิกอัปโหลดขึ้น GitHub ได้ทันที
+* **Latest Action:** สร้างไฟล์ `push_to_github.bat` และบันทึกลงใน Git เรียบร้อยแล้ว
 
 ---
 
