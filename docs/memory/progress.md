@@ -34,7 +34,8 @@
   - TASK-912: เพิ่ม ๓ ระบบสำคัญใน `D:\mpr\smst`: (๑) ระบบจัดการห้องเรียนออนไซต์และออนไลน์ ผสาน ๔ บัญชี Zoom พร้อมรหัสผ่านและปุ่มคลิกเข้าเรียน/คัดลอกรหัสผ่าน, (๒) ระบบการเงินและบัญชี ชำระค่าเทอมด้วย PromptPay QR Code, ออกใบเสร็จดิจิทัลทางการ A4 สั่งพิมพ์ได้, พร้อมข้อมูลติดต่อฝ่ายการเงิน วส.มจร, (๓) ระบบยื่นคำร้องเรียนและข้อเสนอแนะ ติดตามสถานะคำร้อง (Pending, In Progress, Resolved) รองรับแบบไม่เปิดเผยตัวตน (Anonymous) ตรวจสอบ Type-Checked และ Build สำเร็จ 100%
   - TASK-913: ดำเนินการ Commit และ Push สำรองข้อมูลขึ้น GitHub `https://github.com/smjaurna-cloud/mpr.git` (Branch: `main`) ครบถ้วนทั้ง ๖ ไฟล์ Documentation Memory (PRD.md, AGENTS.md, architecture.md, implementation-plan.md, schema.md, progress.md) และชุดโมดูลแอปพลิเคชันบัณฑิตศึกษา `smst`
   - TASK-914: บูรณาการระบบติดตามเข้าเรียนบัณฑิตศึกษา (`/attendance-tracking`) เข้าสู่ระบบหลัก Next.js 15: เชื่อมโยง Sidebar ฝ่ายวิชาการ, ตรวจสอบ ๔ ห้องเรียน Zoom, ระบบชำระค่าเทอม และกล่องรับคำร้องเรียน, รัน Next.js Production Build ผ่าน 18/18 Static Pages แบบ Zero Errors (TypeScript Strict Mode)
-* **Latest Action:** บูรณาการระบบหลัก Next.js 15 และแอปพลิเคชันบัณฑิตศึกษา `smst` สมบูรณ์ครบถ้วน 100% พร้อม Build ผ่าน 18/18 เส้นทาง และพร้อม Push ขึ้น GitHub
+  - TASK-915: สร้างและปรับปรุงไฟล์สคริปต์ `push_to_github.bat` ทั้งในโฟลเดอร์หลัก `D:\mpr` และโฟลเดอร์ `D:\mpr\smst` รองรับการพิมพ์ข้อความบันทึก (Commit Message) ด้วยตนเอง หรือกด Enter เพื่อใช้ข้อความอัตโนมัติ พร้อมแสดงสถานะภาษาไทย UTF-8 และ Push ขึ้นสู่ GitHub `origin main` ทันทีเพียงดับเบิลคลิก
+* **Latest Action:** สร้างสคริปต์ `push_to_github.bat` และสำรองขึ้น GitHub สำเร็จ 100%
 
 ---
 
