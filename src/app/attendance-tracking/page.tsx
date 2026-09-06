@@ -14,8 +14,24 @@ import {
   MapPin,
   Users,
   Clock,
-  BookOpen
+  BookOpen,
+  Calendar
 } from "lucide-react";
+
+interface ScheduleItem {
+  id: string;
+  day: "วันพฤหัสบดี" | "วันศุกร์";
+  period: string;
+  timeRange: string;
+  courseCode: string;
+  courseNameTh: string;
+  courseNameEn?: string;
+  courseType: string;
+  credits: string;
+  instructor: string;
+  teachingTeam?: string[];
+  cohortPlan?: string;
+}
 
 interface ZoomRoomInfo {
   roomNumber: number;
@@ -27,52 +43,383 @@ interface ZoomRoomInfo {
   zoomUrl: string;
   isLive: boolean;
   topic: string;
+  schedules?: ScheduleItem[];
 }
 
 const ZOOM_ROOMS: ZoomRoomInfo[] = [
   {
     roomNumber: 1,
-    name: "ซูมห้องที่ ๑ (ดุษฎีบัณฑิต พระไตรปิฎกศึกษา)",
-    targetProgram: "พุทธศาสตรดุษฎีบัณฑิต สาขาวิชาพระไตรปิฎกศึกษา (รุ่น ๑ และ ๒)",
+    name: "ซูมห้องที่ ๑ (พธ.ม. พระไตรปิฎกเถรวาท)",
+    targetProgram: "พุทธศาสตรมหาบัณฑิต สาขาวิชาพระไตรปิฎกเถรวาท รุ่นที่ ๓ (ชั้นปีที่ ๑)",
     location: "อาคารพระไตรปิฎกศึกษา ชั้น ๑ ห้อง ๑๐๑",
     account: "mcu.bv352@gmail.com",
     pass: "MCU-034352253.zoom",
     zoomUrl: "https://zoom.us/join",
     isLive: true,
-    topic: "วิชาสัมมนาพระวินัยปิฎกและอรรถกถาขั้นสูง (Advance Vinaya Seminar)",
+    topic: "๖๒๐ ๑๐๑ หลักประมวลคำสอนของพระพุทธเจ้าในพระไตรปิฎกเถรวาท",
+    schedules: [
+      {
+        id: "sch-r1-1",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๔ - ๖",
+        timeRange: "๑๒.๔๕ - ๑๕.๔๕ น.",
+        courseCode: "๖๒๐ ๑๐๑",
+        courseNameTh: "หลักประมวลคำสอนของพระพุทธเจ้าในพระไตรปิฎกเถรวาท",
+        courseNameEn: "The Nine Bases of Buddha Teaching in Theravada Tipitaka",
+        courseType: "วิชาบังคับ",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร และคณะ",
+        teachingTeam: ["ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร", "อ.ดร.ประสิทธิ์ อัครสุวรรณกุล", "ดร.อวยพร ทิพย์สุวรรณ"],
+        cohortPlan: "พธ.ม. พระไตรปิฎกเถรวาท ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r1-2",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๖๒๐ ๑๐๔",
+        courseNameTh: "การวิเคราะห์พระวินัยปิฎกเถรวาท",
+        courseNameEn: "Theravada Vinaya Pitaka Analysis",
+        courseType: "วิชาเอก",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "พระมหาอภิเชษฐ์, รศ.ดร. และคณะ",
+        teachingTeam: ["พระมหาอภิเชษฐ์, รศ.ดร.", "พระมหาประสิทธิ์ ญาณรํสี, ผศ.ดร."],
+        cohortPlan: "พธ.ม. พระไตรปิฎกเถรวาท ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r1-3",
+        day: "วันศุกร์",
+        period: "คาบที่ ๔ - ๖",
+        timeRange: "๑๒.๔๕ - ๑๕.๔๕ น.",
+        courseCode: "๖๒๐ ๑๐๕",
+        courseNameTh: "ทฤษฎีและวิธีวิเคราะห์พระสุตตันตปิฎกเถรวาท",
+        courseNameEn: "Theravada Suttanta Pitaka Analysis",
+        courseType: "วิชาเอก",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "รศ.ดร.เวทย์ บรรณกรกุล และคณะ",
+        teachingTeam: ["รศ.ดร.เวทย์ บรรณกรกุล", "พระมหาชาญชัย, ผศ.ดร.", "ดร.อวยพร ทิพย์สุวรรณ"],
+        cohortPlan: "พธ.ม. พระไตรปิฎกเถรวาท ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r1-4",
+        day: "วันศุกร์",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๖๒๐ ๑๐๒",
+        courseNameTh: "ระเบียบวิธีวิจัยขั้นสูง",
+        courseNameEn: "Advanced Research Methodology in the Tipitaka",
+        courseType: "วิชาบังคับ",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "พระราชรัตนมุนี, รศ.ดร. และคณะ",
+        teachingTeam: ["พระราชรัตนมุนี, รศ.ดร.", "พระมหาบุญเลิศ อินฺทปญฺโญ, ศ.ดร.", "ผศ.ดร.ประสิทธิ์ มีนวล"],
+        cohortPlan: "พธ.ม. พระไตรปิฎกเถรวาท ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+    ],
   },
   {
     roomNumber: 2,
-    name: "ซูมห้องที่ ๒ (มหาบัณฑิต พระไตรปิฎกศึกษา)",
-    targetProgram: "พุทธศาสตรมหาบัณฑิต สาขาวิชาพระไตรปิฎกศึกษา (รุ่น ๑ และ ๒)",
+    name: "ซูมห้องที่ ๒ (พธ.ม. พระอภิธรรมปิฎก)",
+    targetProgram: "พุทธศาสตรมหาบัณฑิต สาขาวิชาพระอภิธรรมปิฎก รุ่นที่ ๑ และ ๒ (ชั้นปีที่ ๑ และ ๒)",
     location: "อาคารพระไตรปิฎกศึกษา ชั้น ๑ ห้อง ๑๐๒",
     account: "palitheravad034352253@gmail.com",
     pass: "MCU-034352253.zoom",
     zoomUrl: "https://zoom.us/join",
     isLive: true,
-    topic: "วิชาวิเคราะห์คัมภีร์สุตตันตปิฎกและปกรณ์พิเศษ",
+    topic: "๖๒๑ ๑๐๑ การศึกษาคัมภีร์ธัมมสังคณี / ๖๒๒ ๒๐๗ จิตวิทยาในพระอภิธรรม",
+    schedules: [
+      {
+        id: "sch-r2-1",
+        day: "วันพฤหัสบดี",
+        period: "คาบเช้า",
+        timeRange: "๐๙.๐๐ - ๑๑.๓๐ น.",
+        courseCode: "๖๒๑ ๑๐๐",
+        courseNameTh: "การใช้ภาษาบาลีเพื่อการศึกษาคัมภีร์",
+        courseNameEn: "Usage of Pali",
+        courseType: "วิชาปรับพื้นฐาน",
+        credits: "ไม่นับหน่วยกิต",
+        instructor: "พระมหาปิยะพันธุ์, รศ.ดร. และคณะ",
+        teachingTeam: ["พระมหาปิยะพันธุ์, รศ.ดร."],
+        cohortPlan: "พธ.ม. พระอภิธรรมปิฎก ชั้นปีที่ ๑ (รุ่นที่ ๒)",
+      },
+      {
+        id: "sch-r2-2",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๔ - ๖",
+        timeRange: "๑๒.๔๕ - ๑๕.๔๕ น.",
+        courseCode: "๖๒๑ ๑๐๑",
+        courseNameTh: "การศึกษาคัมภีร์ธัมมสังคณี",
+        courseNameEn: "A Study of Dhammasangani",
+        courseType: "วิชาเอก",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร และคณะ",
+        teachingTeam: ["ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร", "ดร.ประภา สุวรรณเกต และคณะครู"],
+        cohortPlan: "พธ.ม. พระอภิธรรมปิฎก ชั้นปีที่ ๑ (รุ่นที่ ๒)",
+      },
+      {
+        id: "sch-r2-3",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๖๒๑ ๑๐๒",
+        courseNameTh: "การศึกษาวิเคราะห์คัมภีร์ปุคคลบัญญัติ กถาวัตถุ และยมก",
+        courseNameEn: "An Analytical Study of Puggalapannatti, Kathavatthu and Yamaka",
+        courseType: "วิชาเอก",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "พระมหาอภิเชษฐ์, รศ.ดร. และคณะ",
+        teachingTeam: ["พระมหาอภิเชษฐ์, รศ.ดร."],
+        cohortPlan: "พธ.ม. พระอภิธรรมปิฎก ชั้นปีที่ ๑ (รุ่นที่ ๒)",
+      },
+      {
+        id: "sch-r2-4",
+        day: "วันศุกร์",
+        period: "คาบที่ ๔ - ๖",
+        timeRange: "๑๒.๔๕ - ๑๕.๔๕ น.",
+        courseCode: "๖๒๑ ๑๐๔",
+        courseNameTh: "การศึกษาพระอภิธรรมปิฎก",
+        courseNameEn: "Abhidhamma Pitaka Study",
+        courseType: "วิชาบังคับ",
+        credits: "๒-๓ (๓-๐-๖)",
+        instructor: "ดร.ประภา และคณะครู",
+        teachingTeam: ["ดร.ประภา สุวรรณเกต และคณะครู"],
+        cohortPlan: "พธ.ม. พระอภิธรรมปิฎก ชั้นปีที่ ๑ (รุ่นที่ ๒)",
+      },
+      {
+        id: "sch-r2-5",
+        day: "วันศุกร์",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๖๒๑ ๑๐๓",
+        courseNameTh: "การศึกษาวิเคราะห์คัมภีร์วิภังค์และธาตุกถา",
+        courseNameEn: "An Analytical Study of Vibhanga and Dhatukatha",
+        courseType: "วิชาเอก",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "ดร.บุญชู พรหมเผ่าพันธุ์ และคณะ",
+        teachingTeam: ["ดร.บุญชู พรหมเผ่าพันธุ์"],
+        cohortPlan: "พธ.ม. พระอภิธรรมปิฎก ชั้นปีที่ ๑ (รุ่นที่ ๒)",
+      },
+      {
+        id: "sch-r2-6",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๔ - ๖",
+        timeRange: "๑๒.๔๕ - ๑๕.๔๕ น.",
+        courseCode: "๖๒๒ ๒๐๗",
+        courseNameTh: "จิตวิทยาในพระอภิธรรม",
+        courseNameEn: "Psychology in the Abhidhamma",
+        courseType: "วิชาเลือก",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "ดร.ประภา และคณะครู",
+        teachingTeam: ["ดร.ประภา สุวรรณเกต และคณะครู"],
+        cohortPlan: "พธ.ม. พระอภิธรรมปิฎก ชั้นปีที่ ๒ (รุ่นที่ ๑)",
+      },
+      {
+        id: "sch-r2-7",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๖๒๒ ๒๐๒",
+        courseNameTh: "สัมมนาพระอภิธรรม",
+        courseNameEn: "Seminar on Abhidhamma",
+        courseType: "วิชาบังคับ",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร และคณะ",
+        teachingTeam: ["ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร"],
+        cohortPlan: "พธ.ม. พระอภิธรรมปิฎก ชั้นปีที่ ๒ (รุ่นที่ ๑)",
+      },
+      {
+        id: "sch-r2-8",
+        day: "วันศุกร์",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๖๒๒ ๒๐๑",
+        courseNameTh: "กัมมัฏฐาน",
+        courseNameEn: "Buddhist Meditation",
+        courseType: "วิชาบังคับไม่นับหน่วยกิต",
+        credits: "(๓) (๓-๐-๖)",
+        instructor: "พระมหาอภิเชษฐ์, รศ.ดร. และคณะ",
+        teachingTeam: ["พระมหาอภิเชษฐ์, รศ.ดร."],
+        cohortPlan: "พธ.ม. พระอภิธรรมปิฎก ชั้นปีที่ ๒ (รุ่นที่ ๑)",
+      },
+    ],
   },
   {
     roomNumber: 3,
-    name: "ซูมห้องที่ ๓ (มหาบัณฑิต พระอภิธรรมปิฎก)",
-    targetProgram: "พุทธศาสตรมหาบัณฑิต สาขาวิชาพระอภิธรรมปิฎก (รุ่น ๑ และ ๒)",
+    name: "ซูมห้องที่ ๓ (พธ.ด. พระไตรปิฎกเถรวาท)",
+    targetProgram: "พุทธศาสตรดุษฎีบัณฑิต สาขาวิชาพระไตรปิฎกเถรวาท (รุ่นที่ ๒ และ ๓ แผน ๑.๑ และ ๒.๑)",
     location: "อาคารพระไตรปิฎกศึกษา ชั้น ๒ ห้อง ๒๐๑",
     account: "palitheravad27042564@hotmail.com",
     pass: "palitheravad27042564",
     zoomUrl: "https://zoom.us/join",
     isLive: true,
-    topic: "วิชาคัมภีร์ยมกและปัฏฐานมหาปกรณ์ (Yamaka & Patthana Analysis)",
+    topic: "๘๒๐ ๑๐๐ ดุษฎีนิพนธ์ / ๘๒๐ ๑๐๑ ระเบียบวิธีวิจัยทางพระไตรปิฎกขั้นสูง",
+    schedules: [
+      {
+        id: "sch-r3-1",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๔ - ๖",
+        timeRange: "๑๒.๔๕ - ๑๕.๔๕ น.",
+        courseCode: "๘๒๐ ๑๐๐",
+        courseNameTh: "ดุษฎีนิพนธ์",
+        courseNameEn: "Dissertation",
+        courseType: "วิทยานิพนธ์/ดุษฎีนิพนธ์",
+        credits: "๓๖ หน่วยกิต",
+        instructor: "พระมหาอภิเชษฐ์, รศ.ดร. และคณะ",
+        teachingTeam: ["พระมหาอภิเชษฐ์, รศ.ดร.", "คณะกรรมการที่ปรึกษาดุษฎีนิพนธ์"],
+        cohortPlan: "พธ.ด. แผน ๑.๑ ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r3-2",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๘๒๐ ๑๐๑",
+        courseNameTh: "ระเบียบวิธีวิจัยทางพระไตรปิฎกขั้นสูง",
+        courseNameEn: "Advanced Research Methodology in the Tipitaka",
+        courseType: "วิชาบังคับไม่นับหน่วยกิต",
+        credits: "(๓) (๓-๐-๖)",
+        instructor: "ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร และคณะ",
+        teachingTeam: ["ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร"],
+        cohortPlan: "พธ.ด. แผน ๑.๑ ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r3-3",
+        day: "วันศุกร์",
+        period: "คาบที่ ๔ - ๖",
+        timeRange: "๑๒.๔๕ - ๑๕.๔๕ น.",
+        courseCode: "๘๒๐ ๑๐๒",
+        courseNameTh: "พุทธปรัชญาวิทยาศาสตร์",
+        courseNameEn: "Buddhist Philosophy of Science",
+        courseType: "วิชาบังคับไม่นับหน่วยกิต",
+        credits: "(๓) (๓-๐-๖)",
+        instructor: "รศ.ดร.เวทย์ บรรณกรกุล และคณะ",
+        teachingTeam: ["รศ.ดร.เวทย์ บรรณกรกุล"],
+        cohortPlan: "พธ.ด. แผน ๑.๑ ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r3-4",
+        day: "วันศุกร์",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๘๒๐ ๒๐๑",
+        courseNameTh: "วิปัสสนากัมมัฏฐาน",
+        courseNameEn: "Insight Meditation",
+        courseType: "วิชาบังคับไม่นับหน่วยกิต",
+        credits: "(๓) (๓-๐-๖)",
+        instructor: "อาจารย์สมบูรณ์, รศ.ดร. และคณะ",
+        teachingTeam: ["อาจารย์สมบูรณ์, รศ.ดร."],
+        cohortPlan: "พธ.ด. แผน ๑.๑ ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r3-5",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๔ - ๖",
+        timeRange: "๑๒.๔๕ - ๑๕.๔๕ น.",
+        courseCode: "๘๒๐ ๑๐๓",
+        courseNameTh: "สัมมนาพระพุทธศาสนากับสังคมไทย",
+        courseNameEn: "Seminar on Buddhist University and Thai Society",
+        courseType: "วิชาบังคับไม่นับหน่วยกิต",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "ดร.บุญชู พรหมเผ่าพันธุ์ และคณะ",
+        teachingTeam: ["ดร.บุญชู พรหมเผ่าพันธุ์"],
+        cohortPlan: "พธ.ด. แผน ๒.๑ ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r3-6",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๘๒๐ ๑๐๑",
+        courseNameTh: "ระเบียบวิธีวิจัยทางพระไตรปิฎกขั้นสูง",
+        courseNameEn: "Advanced Research Methodology in the Tipitaka",
+        courseType: "วิชาบังคับ",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร และคณะ",
+        teachingTeam: ["ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร"],
+        cohortPlan: "พธ.ด. แผน ๒.๑ ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r3-7",
+        day: "วันศุกร์",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๘๒๐ ๒๐๒",
+        courseNameTh: "สัมมนาพระไตรปิฎก",
+        courseNameEn: "Seminar on Tipitaka",
+        courseType: "วิชาเอก",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "พระมหาอภิเชษฐ์, รศ.ดร. และคณะ",
+        teachingTeam: ["พระมหาอภิเชษฐ์, รศ.ดร."],
+        cohortPlan: "พธ.ด. แผน ๒.๑ ชั้นปีที่ ๑ (รุ่นที่ ๓)",
+      },
+      {
+        id: "sch-r3-8",
+        day: "วันพฤหัสบดี",
+        period: "คาบที่ ๗ - ๙",
+        timeRange: "๑๖.๐๐ - ๑๙.๐๐ น.",
+        courseCode: "๘๒๐ ๒๐๕",
+        courseNameTh: "ศาสตร์และวิทยาการร่วมสมัยในพระไตรปิฎกเถรวาท",
+        courseNameEn: "The Hermeneutics in Theravada Tipitaka",
+        courseType: "วิชาเลือก",
+        credits: "๓ (๓-๐-๖)",
+        instructor: "พระมหาอภิเชษฐ์, รศ.ดร. และคณะ",
+        teachingTeam: ["พระมหาอภิเชษฐ์, รศ.ดร."],
+        cohortPlan: "พธ.ด. แผน ๒.๑ ชั้นปีที่ ๒ (รุ่นที่ ๒)",
+      },
+      {
+        id: "sch-r3-9",
+        day: "วันศุกร์",
+        period: "คาบที่ ๔ - ๙",
+        timeRange: "๑๒.๔๕ - ๑๙.๐๐ น.",
+        courseCode: "๘๒๐ ๕๐๐",
+        courseNameTh: "ดุษฎีนิพนธ์",
+        courseNameEn: "Dissertation",
+        courseType: "วิทยานิพนธ์/ดุษฎีนิพนธ์",
+        credits: "๓๖ หน่วยกิต",
+        instructor: "ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร และคณะ",
+        teachingTeam: ["ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร"],
+        cohortPlan: "พธ.ด. แผน ๒.๑ ชั้นปีที่ ๒ (รุ่นที่ ๒)",
+      },
+    ],
   },
   {
     roomNumber: 4,
-    name: "ซูมห้องที่ ๔ (ห้องสอบวิทยานิพนธ์และการประชุมวิชาการ)",
+    name: "ซูมห้องที่ ๔ (ห้องสอบดุษฎีนิพนธ์ & สัมมนาวิชาการ)",
     targetProgram: "ทุกสาขาวิชาบัณฑิตศึกษา / กองบริการวิชาการและงานวิจัย",
     location: "ห้องประชุมสมเด็จพระสังฆราช ชั้น ๓ อาคารวิทยบริการ",
     account: "mcu.zoom515@mcu.ac.th",
     pass: "mcuzoom515",
     zoomUrl: "https://zoom.us/join",
     isLive: false,
-    topic: "การสอบป้องกันเค้าโครงวิทยานิพนธ์ระดับดุษฎีบัณฑิต",
+    topic: "การสอบวัดคุณสมบัติดุษฎีบัณฑิต (QE) และการสอบป้องกันดุษฎีนิพนธ์",
+    schedules: [
+      {
+        id: "sch-r4-1",
+        day: "วันพฤหัสบดี",
+        period: "คาบเช้า",
+        timeRange: "๐๙.๐๐ - ๑๒.๐๐ น.",
+        courseCode: "QE-800",
+        courseNameTh: "การสอบวัดคุณสมบัติดุษฎีบัณฑิต (Qualifying Examination)",
+        courseNameEn: "Ph.D. Qualifying Examination",
+        courseType: "วิทยานิพนธ์/ดุษฎีนิพนธ์",
+        credits: "เกณฑ์มาตรฐาน ผ่าน/ไม่ผ่าน",
+        instructor: "คณะกรรมการผู้ทรงคุณวุฒิประจำสาขาวิชา",
+        teachingTeam: ["พระราชรัตนมุนี, รศ.ดร.", "พระมหาสมบูรณ์ สุมงฺคโล, รศ.ดร.", "ผศ.ดร.สุทธิพงษ์ พรชัยธนบวร"],
+        cohortPlan: "นิสิตดุษฎีบัณฑิตทุกสาขา",
+      },
+      {
+        id: "sch-r4-2",
+        day: "วันศุกร์",
+        period: "คาบบ่าย",
+        timeRange: "๑๓.๐๐ - ๑๖.๓๐ น.",
+        courseCode: "DEF-800",
+        courseNameTh: "การสอบป้องกันดุษฎีนิพนธ์และวิทยานิพนธ์ (Final Defense)",
+        courseNameEn: "Doctoral Dissertation & Master Thesis Defense",
+        courseType: "วิทยานิพนธ์/ดุษฎีนิพนธ์",
+        credits: "ตามแผนหลักสูตร",
+        instructor: "คณะกรรมการผู้ทรงคุณวุฒิภายนอกและภายใน",
+        teachingTeam: ["พระมหาอภิเชษฐ์, รศ.ดร.", "รศ.ดร.เวทย์ บรรณกรกุล", "ดร.บุญชู พรหมเผ่าพันธุ์"],
+        cohortPlan: "นิสิตผู้ยื่นขอสอบวิทยานิพนธ์",
+      },
+    ],
   },
 ];
 
@@ -272,6 +619,101 @@ export default function AttendanceTrackingPage() {
                           <Copy className="w-3.5 h-3.5" />
                         </button>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Official Timetable & Faculty Section */}
+                  <div className="mt-4 pt-3 border-t border-stone-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                        <Calendar className="w-3.5 h-3.5 text-amber-600" />
+                        <span>ตารางเรียน & คณาจารย์ผู้สอน (ภาค ๑/๒๕๖๙)</span>
+                      </div>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold border border-amber-200">
+                        {room.schedules ? room.schedules.length : 0} รายวิชา
+                      </span>
+                    </div>
+
+                    <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                      {room.schedules && room.schedules.length > 0 ? (
+                        room.schedules.map((sch) => (
+                          <div
+                            key={sch.id}
+                            className="p-2.5 rounded-xl bg-stone-50 border border-stone-200 hover:border-amber-300 hover:bg-amber-50/30 transition-all text-xs space-y-1.5"
+                          >
+                            <div className="flex items-center justify-between gap-1 flex-wrap">
+                              <div className="flex items-center gap-1.5">
+                                <span
+                                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                                    sch.day === "วันพฤหัสบดี"
+                                      ? "bg-orange-100 text-orange-800 border border-orange-200"
+                                      : "bg-blue-100 text-blue-800 border border-blue-200"
+                                  }`}
+                                >
+                                  {sch.day}
+                                </span>
+                                <span className="text-slate-700 text-[11px] font-semibold">
+                                  {sch.timeRange}
+                                </span>
+                                <span className="text-slate-400 text-[10px]">({sch.period})</span>
+                              </div>
+                              <span
+                                className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
+                                  sch.courseType === "วิชาเอก"
+                                    ? "bg-amber-100 text-amber-800 border border-amber-200"
+                                    : sch.courseType === "วิชาบังคับ"
+                                    ? "bg-rose-100 text-rose-800 border border-rose-200"
+                                    : sch.courseType === "วิชาเลือก"
+                                    ? "bg-indigo-100 text-indigo-800 border border-indigo-200"
+                                    : sch.courseType === "วิทยานิพนธ์/ดุษฎีนิพนธ์"
+                                    ? "bg-purple-100 text-purple-800 border border-purple-200"
+                                    : "bg-slate-200 text-slate-700"
+                                }`}
+                              >
+                                {sch.courseType} • {sch.credits}
+                              </span>
+                            </div>
+
+                            <div>
+                              <div className="font-bold text-slate-900 text-xs flex items-center gap-1.5 flex-wrap">
+                                <span className="font-mono text-amber-900 bg-amber-100 px-1 py-0.5 rounded text-[10px] font-bold border border-amber-200">
+                                  {sch.courseCode}
+                                </span>
+                                <span>{sch.courseNameTh}</span>
+                              </div>
+                              {sch.courseNameEn && (
+                                <div className="text-[10px] text-slate-500 italic mt-0.5">
+                                  {sch.courseNameEn}
+                                </div>
+                              )}
+                              {sch.cohortPlan && (
+                                <div className="text-[10px] text-rose-700 font-medium mt-1">
+                                  🎯 {sch.cohortPlan}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="pt-1.5 border-t border-stone-200/70 flex flex-col gap-0.5">
+                              <div className="flex items-start gap-1 text-[11px]">
+                                <span className="font-semibold text-slate-600 shrink-0">
+                                  อาจารย์ผู้สอน:
+                                </span>
+                                <span className="font-bold text-amber-950">{sch.instructor}</span>
+                              </div>
+                              {sch.teachingTeam && sch.teachingTeam.length > 0 && (
+                                <div className="flex items-start gap-1 text-[10px] text-slate-500 pl-1">
+                                  <span className="shrink-0">• คณะผู้สอน:</span>
+                                  <span>{sch.teachingTeam.join(", ")}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-center py-3 text-xs text-slate-400">
+                          ไม่มีข้อมูลตารางเรียน
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
