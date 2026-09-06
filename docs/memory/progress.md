@@ -32,7 +32,8 @@
   - TASK-910: ยืนยันการสำรองข้อมูลขึ้น GitHub ครบถ้วน รวมถึงเอกสาร Context Memory ทั้ง ๖ ไฟล์ (PRD, AGENTS, architecture, implementation-plan, schema, progress)
   - TASK-911: พัฒนาระบบ Attendance Tracking System (ระบบติดตามการเข้าเรียนของนิสิตระดับบัณฑิตศึกษา) ในไดเรกทอรี `D:\mpr\smst` รองรับ ๓ สาขาวิชา ๖ รุ่น พร้อมโมดูล Face Registration (ปลอดภาพถ่าย PDPA 128-d Vector), Real-Time Face Scanning (Continuous/Manual, Difference Score HUD เมื่อไม่ผ่านเกณฑ์), Summary Dashboard (7-Day Chart, 10 Recent Check-ins), Student Management (Cascade Delete ประวัติเข้าเรียน), และ Data Management (JSON Export/Import, Reset, Seed Demo) ตรวจสอบ Strict Mode Type-Checked และ Build สำเร็จ 100%
   - TASK-912: เพิ่ม ๓ ระบบสำคัญใน `D:\mpr\smst`: (๑) ระบบจัดการห้องเรียนออนไซต์และออนไลน์ ผสาน ๔ บัญชี Zoom พร้อมรหัสผ่านและปุ่มคลิกเข้าเรียน/คัดลอกรหัสผ่าน, (๒) ระบบการเงินและบัญชี ชำระค่าเทอมด้วย PromptPay QR Code, ออกใบเสร็จดิจิทัลทางการ A4 สั่งพิมพ์ได้, พร้อมข้อมูลติดต่อฝ่ายการเงิน วส.มจร, (๓) ระบบยื่นคำร้องเรียนและข้อเสนอแนะ ติดตามสถานะคำร้อง (Pending, In Progress, Resolved) รองรับแบบไม่เปิดเผยตัวตน (Anonymous) ตรวจสอบ Type-Checked และ Build สำเร็จ 100%
-* **Latest Action:** ติดตั้งและทดสอบโมดูลคำร้องเรียน การเงินค่าเทอม และห้องเรียน ๔ ซูม ใน `smst` สำเร็จพร้อม Build และ Verify เรียบร้อย 100%
+  - TASK-913: ดำเนินการ Commit และ Push สำรองข้อมูลขึ้น GitHub `https://github.com/smjaurna-cloud/mpr.git` (Branch: `main`) ครบถ้วนทั้ง ๖ ไฟล์ Documentation Memory (PRD.md, AGENTS.md, architecture.md, implementation-plan.md, schema.md, progress.md) และชุดโมดูลแอปพลิเคชันบัณฑิตศึกษา `smst`
+* **Latest Action:** สำรองข้อมูลเอกสาร Memory ๖ ไฟล์ และโมดูล `smst` ขึ้น GitHub `smjaurna-cloud/mpr` สำเร็จ 100%
 
 ---
 
