@@ -35,7 +35,8 @@
   - TASK-913: ดำเนินการ Commit และ Push สำรองข้อมูลขึ้น GitHub `https://github.com/smjaurna-cloud/mpr.git` (Branch: `main`) ครบถ้วนทั้ง ๖ ไฟล์ Documentation Memory (PRD.md, AGENTS.md, architecture.md, implementation-plan.md, schema.md, progress.md) และชุดโมดูลแอปพลิเคชันบัณฑิตศึกษา `smst`
   - TASK-914: บูรณาการระบบติดตามเข้าเรียนบัณฑิตศึกษา (`/attendance-tracking`) เข้าสู่ระบบหลัก Next.js 15: เชื่อมโยง Sidebar ฝ่ายวิชาการ, ตรวจสอบ ๔ ห้องเรียน Zoom, ระบบชำระค่าเทอม และกล่องรับคำร้องเรียน, รัน Next.js Production Build ผ่าน 18/18 Static Pages แบบ Zero Errors (TypeScript Strict Mode)
   - TASK-915: สร้างและปรับปรุงไฟล์สคริปต์ `push_to_github.bat` ทั้งในโฟลเดอร์หลัก `D:\mpr` และโฟลเดอร์ `D:\mpr\smst` รองรับการพิมพ์ข้อความบันทึก (Commit Message) ด้วยตนเอง หรือกด Enter เพื่อใช้ข้อความอัตโนมัติ พร้อมแสดงสถานะภาษาไทย UTF-8 และ Push ขึ้นสู่ GitHub `origin main` ทันทีเพียงดับเบิลคลิก
-* **Latest Action:** สร้างสคริปต์ `push_to_github.bat` และสำรองขึ้น GitHub สำเร็จ 100%
+  - TASK-916: ดำเนินการแยก Git Repository อิสระสำหรับ SMTS (Attendance Tracking System & Academic ERP) ใน `D:\mpr\smst` สร้าง `.gitignore`, `README.md` แบบละเอียด พร้อมเชื่อมต่อไปยัง `https://github.com/smjaurna-cloud/smts.git` และทำ Initial Commit / Push สู่สาขา `main` สำเร็จเรียบร้อย 100%
+* **Latest Action:** เชื่อมต่อและนำส่งโค้ดโครงการ SMTS ขึ้นสู่ GitHub Repository `smjaurna-cloud/smts` สำเร็จ 100%
 
 ---
 
