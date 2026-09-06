@@ -19,7 +19,8 @@ import {
   Target,
   BookOpen,
   Microscope,
-  GraduationCap
+  GraduationCap,
+  UserCheck
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -145,6 +146,13 @@ const navigationGroups: NavGroup[] = [
         href: "/academic-services",
         icon: GraduationCap,
         badge: "วิชาการ",
+      },
+      {
+        name: "ติดตามเข้าเรียน & บัณฑิตศึกษา",
+        description: "สแกนใบหน้า, ๔ ห้อง Zoom, ค่าเทอม & ร้องเรียน",
+        href: "/attendance-tracking",
+        icon: UserCheck,
+        badge: "FaceScan",
       },
     ],
   },

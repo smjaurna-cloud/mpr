@@ -33,7 +33,8 @@
   - TASK-911: พัฒนาระบบ Attendance Tracking System (ระบบติดตามการเข้าเรียนของนิสิตระดับบัณฑิตศึกษา) ในไดเรกทอรี `D:\mpr\smst` รองรับ ๓ สาขาวิชา ๖ รุ่น พร้อมโมดูล Face Registration (ปลอดภาพถ่าย PDPA 128-d Vector), Real-Time Face Scanning (Continuous/Manual, Difference Score HUD เมื่อไม่ผ่านเกณฑ์), Summary Dashboard (7-Day Chart, 10 Recent Check-ins), Student Management (Cascade Delete ประวัติเข้าเรียน), และ Data Management (JSON Export/Import, Reset, Seed Demo) ตรวจสอบ Strict Mode Type-Checked และ Build สำเร็จ 100%
   - TASK-912: เพิ่ม ๓ ระบบสำคัญใน `D:\mpr\smst`: (๑) ระบบจัดการห้องเรียนออนไซต์และออนไลน์ ผสาน ๔ บัญชี Zoom พร้อมรหัสผ่านและปุ่มคลิกเข้าเรียน/คัดลอกรหัสผ่าน, (๒) ระบบการเงินและบัญชี ชำระค่าเทอมด้วย PromptPay QR Code, ออกใบเสร็จดิจิทัลทางการ A4 สั่งพิมพ์ได้, พร้อมข้อมูลติดต่อฝ่ายการเงิน วส.มจร, (๓) ระบบยื่นคำร้องเรียนและข้อเสนอแนะ ติดตามสถานะคำร้อง (Pending, In Progress, Resolved) รองรับแบบไม่เปิดเผยตัวตน (Anonymous) ตรวจสอบ Type-Checked และ Build สำเร็จ 100%
   - TASK-913: ดำเนินการ Commit และ Push สำรองข้อมูลขึ้น GitHub `https://github.com/smjaurna-cloud/mpr.git` (Branch: `main`) ครบถ้วนทั้ง ๖ ไฟล์ Documentation Memory (PRD.md, AGENTS.md, architecture.md, implementation-plan.md, schema.md, progress.md) และชุดโมดูลแอปพลิเคชันบัณฑิตศึกษา `smst`
-* **Latest Action:** สำรองข้อมูลเอกสาร Memory ๖ ไฟล์ และโมดูล `smst` ขึ้น GitHub `smjaurna-cloud/mpr` สำเร็จ 100%
+  - TASK-914: บูรณาการระบบติดตามเข้าเรียนบัณฑิตศึกษา (`/attendance-tracking`) เข้าสู่ระบบหลัก Next.js 15: เชื่อมโยง Sidebar ฝ่ายวิชาการ, ตรวจสอบ ๔ ห้องเรียน Zoom, ระบบชำระค่าเทอม และกล่องรับคำร้องเรียน, รัน Next.js Production Build ผ่าน 18/18 Static Pages แบบ Zero Errors (TypeScript Strict Mode)
+* **Latest Action:** บูรณาการระบบหลัก Next.js 15 และแอปพลิเคชันบัณฑิตศึกษา `smst` สมบูรณ์ครบถ้วน 100% พร้อม Build ผ่าน 18/18 เส้นทาง และพร้อม Push ขึ้น GitHub
 
 ---
 
@@ -55,3 +56,5 @@
 | **MOD-11**| Tipitaka Library & IT | ✅ Completed | `src/app/library/page.tsx` (พระไตรปิฎก ๔๕ เล่ม, สัททนีติ, ปทรูปสิทธิ) |
 | **MOD-12**| Research & Educational QA | ✅ Completed | `src/app/research-qa/page.tsx` (คลังวิจัยพุทธศาสตร์, AUN-QA, สมศ.) |
 | **MOD-13**| Academic Services & Outreach | ✅ Completed | `src/app/academic-services/page.tsx` (ตารางสอนบาลี ๔ ชั้น, อบรมเยาวชน) |
+| **MOD-14**| Graduate Biometric & Hybrid Class | ✅ Completed | `src/app/attendance-tracking/page.tsx` & `smst/` (สแกนใบหน้า, ๔ ซูม, ค่าเทอม, คำร้อง) |
+
