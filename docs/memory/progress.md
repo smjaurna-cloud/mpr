@@ -38,7 +38,8 @@
   - TASK-916: ดำเนินการแยก Git Repository อิสระสำหรับ SMTS (Attendance Tracking System & Academic ERP) ใน `D:\mpr\smst` สร้าง `.gitignore`, `README.md` แบบละเอียด พร้อมเชื่อมต่อไปยัง `https://github.com/smjaurna-cloud/smts.git` และทำ Initial Commit / Push สู่สาขา `main` สำเร็จเรียบร้อย 100%
   - TASK-917: บูรณาการข้อมูลตารางเรียนและรายนามคณาจารย์ผู้สอน (ภาคการศึกษาที่ ๑/๒๕๖๙) ลงสู่ระบบห้องเรียนทั้ง ๔ ซูม ทั้งใน `smst/` (Standalone Biometric Workstation) และ `src/app/attendance-tracking/` (Next.js 15 Portal) ครอบคลุมพุทธศาสตรดุษฎีบัณฑิตและมหาบัณฑิต ทั้ง ๓ สาขาวิชา ๖ รุ่น พร้อมชื่อรายวิชา รหัสวิชา หน่วยกิต และคณะอาจารย์ผู้สอนร่วม ตรวจสอบ Build ผ่านฉลุย 100% ทั้ง Vite และ Next.js (18/18 Static Pages)
   - TASK-918: เพิ่มและตรวจสอบบัญชีผู้ดูแลระบบหลัก `Somboon` (Role: `SUPER_ADMIN`, Password: `123456`, Email: `smjaurna@gmail.com`) แสดงผลในแถบนำทาง Navbar ทั้งสองแอปพลิเคชัน และในหน้าบริหารผู้ใช้ (`/users`) พร้อมรหัสผ่านยืนยันสิทธิ์, ดำเนินการตรวจสอบความสมบูรณ์เชิงระบบครบทุกด้าน (Zero Errors, Type-Checked, Production Build 18/18 Pages, 2 Active Web Servers)
-* **Latest Action:** บัญชีผู้ดูแลระบบ Somboon Admin (123456) และระบบทั้งสองได้รับการตรวจสอบความสมบูรณ์ 100% เรียบร้อยแล้ว
+  - TASK-919: เพิ่มและเปิดให้บริการ "ศูนย์ดาวน์โหลดและจัดการข้อมูลระบบ (Download Center)" ทั้งในระบบ Standalone `smst` และในระบบ Next.js Portal (`/attendance-tracking`) รองรับการดาวน์โหลดไฟล์ชุดข้อมูล ๖ หมวดหมู่ ได้แก่ (๑) ตารางเรียนและคณาจารย์ ๔ ห้องซูม (CSV), (๒) ทะเบียนรายชื่อนิสิต (CSV), (๓) ประวัติการเช็คชื่อเข้าเรียน Biometric (CSV), (๔) ทะเบียนชำระค่าเทอมและใบเสร็จ (CSV), (๕) ข้อมูลการยื่นคำร้องเรียน ๕ หมวด (CSV), (๖) สำรองคอนฟิกระบบทั้งหมด (JSON) โดยทุกไฟล์ CSV มี UTF-8 Byte Order Mark (BOM) ทำให้เปิดด้วย Microsoft Excel และ Google Sheets ได้ภาษาไทยสมบูรณ์ 100% ไม่เป็นภาษาต่างดาว พร้อมลิงก์เปิดข้ามระบบได้อย่างสะดวกรวดเร็ว
+* **Latest Action:** พัฒนาศูนย์ดาวน์โหลดข้อมูล (Download Center) พร้อมทดสอบการดาวน์โหลดไฟล์และ Build ผ่าน 100% ทั้ง ๒ ระบบเรียบร้อยแล้ว
 
 ---
 
