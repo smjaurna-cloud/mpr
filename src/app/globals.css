@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+Thai:wght@400;500;600;700&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #faf8f5;
+  --foreground: #0b192c;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Be Vietnam Pro', 'Bai Jamjuree', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+h1, h2, h3, .font-royal-serif {
+  font-family: 'Noto Serif Thai', 'Sarabun', Georgia, serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .border-gold-subtle {
+    border-color: rgba(197, 160, 89, 0.25);
+  }
+  .bg-cream {
+    background-color: #fffdf9;
+  }
+  .bg-ivory {
+    background-color: #faf8f5;
+  }
+}
+

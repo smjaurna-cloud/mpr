@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+<html lang="th"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Noto+Serif+Thai:wght@400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-secondary-fixed": "#321200",
+          "primary-fixed": "#ffdea5",
+          "on-tertiary-fixed-variant": "#3a475c",
+          "surface-tint": "#775a19",
+          "on-error-container": "#93000a",
+          "on-tertiary-fixed": "#0e1c2f",
+          "on-primary": "#ffffff",
+          "surface-container-high": "#eae8e5",
+          "inverse-on-surface": "#f2f0ed",
+          "secondary-fixed-dim": "#ffb68b",
+          "tertiary-container": "#99a6bf",
+          "secondary-fixed": "#ffdbc8",
+          "on-tertiary": "#ffffff",
+          "surface-variant": "#e4e2df",
+          "surface-container-lowest": "#ffffff",
+          "error-container": "#ffdad6",
+          "primary-fixed-dim": "#e9c176",
+          "on-tertiary-container": "#2f3c50",
+          "surface": "#fbf9f6",
+          "on-error": "#ffffff",
+          "tertiary-fixed-dim": "#bac7e1",
+          "surface-container-low": "#f5f3f0",
+          "on-secondary": "#ffffff",
+          "on-primary-container": "#4e3700",
+          "tertiary-fixed": "#d6e3fe",
+          "outline-variant": "#d1c5b4",
+          "tertiary": "#525f75",
+          "on-secondary-container": "#753500",
+          "on-surface": "#1b1c1a",
+          "on-secondary-fixed-variant": "#753400",
+          "surface-bright": "#fbf9f6",
+          "background": "#fbf9f6",
+          "outline": "#7f7667",
+          "secondary": "#934b17",
+          "on-primary-fixed-variant": "#5d4201",
+          "inverse-surface": "#30312f",
+          "on-surface-variant": "#4e4639",
+          "surface-container-highest": "#e4e2df",
+          "inverse-primary": "#e9c176",
+          "on-primary-fixed": "#261900",
+          "secondary-container": "#fd9f65",
+          "surface-dim": "#dbdad7",
+          "surface-container": "#efeeeb",
+          "error": "#ba1a1a",
+          "primary": "#775a19",
+          "on-background": "#1b1c1a",
+          "primary-container": "#c5a059"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "margin-desktop": "3rem",
+          "space-sm": "0.75rem",
+          "space-xl": "2rem",
+          "margin-mobile": "1rem",
+          "space-md": "1rem",
+          "gutter-desktop": "2rem",
+          "space-2xs": "0.25rem",
+          "space-xs": "0.5rem",
+          "space-2xl": "3rem",
+          "space-lg": "1.5rem",
+          "gutter-mobile": "1rem",
+          "space-3xl": "4.5rem"
+        },
+        "fontFamily": {
+          "headline-sm": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "body-lg": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "body-sm": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "headline-lg": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "title-md": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "display-mobile": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "headline-md": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "label-lg": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "label-sm": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "title-lg": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "headline-lg-mobile": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "display": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "body-md": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ]
+        },
+        "fontSize": {
+          "headline-sm": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "500"
+            }
+          ],
+          "body-lg": [
+            "17px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "36px",
+            {
+              "lineHeight": "46px",
+              "fontWeight": "600"
+            }
+          ],
+          "title-md": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "display-mobile": [
+            "32px",
+            {
+              "lineHeight": "40px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "500"
+            }
+          ],
+          "label-lg": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.04em",
+              "fontWeight": "600"
+            }
+          ],
+          "title-lg": [
+            "18px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "26px",
+            {
+              "lineHeight": "34px",
+              "fontWeight": "600"
+            }
+          ],
+          "display": [
+            "48px",
+            {
+              "lineHeight": "60px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      }
+    }
+  };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between overflow-y-auto"><div class="flex flex-col"><div class="p-space-lg bg-surface-container-low flex items-center gap-space-sm"><img alt="Royal Thai Buddhist academic emblem seal logo for Mahavajiralongkorn Pali Theravada College (มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย). Circular emblem featuring a sacred radiant golden lotus, Dharmachakra wheel of law, sacred scriptures Tripitaka book in radiant royal gold finish with intricate Thai decorative motif, vector style, isolated on clean background, opulent gold gradient #D4AF37 #F3E5AB.. Design context: - Primary color: #c5a059
+- Font: notoSerif
+- Mode: light
+- Roundness: rounded-sm
+. The logo should be visually consistent with these brand tokens." class="h-12 w-12 object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XwaT_ELYX3bq6dy01opuu_UW_xTCoGv3SM_yi7nZMU2uDJVBpy6jJHjApdz6xjS2wQ-9li4JIFuTPe-AbApIXLPX763x6OvKYb5JlKDk8xZPSAe0LQo9kl0qKnn_pyla6Bkbsii-FURgLVxydUD8AYRpKJRdzJ2kBFMJETUQIrnoqw1EIHYb9yV12E5n4M-BJLOGnUzWcEWwAWR06tk_FDcqjeGmPHTaUmvrB3zmPi3zHi4mey-O_eqK8U"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-title-md text-primary truncate leading-tight tracking-tight">มหาวชิราลงกรณ</span><span class="font-headline-sm text-label-sm text-primary truncate">บาลีเถรวาทราชวิทยาลัย</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-space-2xs">ระบบบริหารจัดการหน่วยงาน</span></div></div><div class="px-space-md pt-space-md pb-space-2xs"><span class="font-label-sm text-label-sm text-outline uppercase tracking-wider px-space-xs">เมนูบริหารงานกลาง</span></div><nav class="flex flex-col gap-space-2xs px-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="executive-overview" href="#"><span class="material-symbols-outlined text-[20px] shrink-0 text-primary">dashboard</span><span class="truncate">ภาพรวมผู้บริหาร</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="monastic-students-and-enrollment" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">school</span><span class="truncate">ทะเบียนการศึกษา &amp; นักเรียนบาลี</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container font-semibold rounded" data-path="donations-and-funds" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">volunteer_activism</span><span class="truncate">กองทุนบริจาค &amp; e-Donation</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="tripitaka-archive-and-media" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">menu_book</span><span class="truncate">คลังพระไตรปิฎก &amp; สื่อจดหมายเหตุ</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="news-and-announcements" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">campaign</span><span class="truncate">ข่าวสารและประกาศ</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="academic-calendar-and-events" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">calendar_month</span><span class="truncate">ปฏิทินสอบและศาสนกิจ</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="system-settings-and-roles" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">admin_panel_settings</span><span class="truncate">ตั้งค่าระบบและสิทธิ์ผู้ใช้</span></a></nav></div><div class="p-space-md bg-surface-container-lowest m-space-xs rounded bg-surface-container-low"><div class="flex items-center gap-space-xs mb-space-2xs"><span class="material-symbols-outlined text-[16px] text-primary">verified</span><span class="font-label-sm text-label-sm text-primary font-semibold">Mahavajiralongkorn</span></div><p class="font-body-sm text-label-sm text-on-surface-variant leading-normal">ราชวิทยาลัยพระบาลีเถรวาท เพื่อการศาสนศึกษาชั้นสูง</p></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full max-w-sm"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span><input class="w-full pl-10 pr-space-md py-space-xs rounded bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-primary shadow-[0_1px_4px_rgba(0,0,0,0.02)]" placeholder="ค้นหาข้อมูลพระภิกษุ-สามเณร, รหัสคัมภีร์, รายการบริจาค..." type="text"/></div><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-low"><span class="material-symbols-outlined text-primary text-[18px]">event_note</span><select class="bg-transparent font-label-sm text-label-sm text-on-surface-variant focus:outline-none cursor-pointer"><option>ภาคการศึกษา ๑/๒๕๖๗</option><option>ภาคการศึกษา ๒/๒๕๖๖</option><option>ภาคการศึกษา ๑/๒๕๖๖</option></select></div></div><div class="flex items-center gap-space-md shrink-0"><button class="flex items-center gap-space-2xs px-space-sm py-space-xs rounded bg-surface-container-lowest text-secondary font-label-sm text-label-sm hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><span class="material-symbols-outlined text-[18px]">download</span><span>ส่งออกรายงาน</span></button><div class="relative"><button class="w-9 h-9 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></button></div><div class="h-6 w-px bg-outline-variant"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="text-right hidden sm:block"><p class="font-title-md text-label-lg text-on-surface leading-snug">พระครูปลัดฯ</p><p class="font-label-sm text-label-sm text-on-surface-variant">ผู้ดูแลระบบกลาง</p></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-space-lg py-space-lg"><div class="flex flex-col w-full gap-space-xl">
+<!-- Page Header & Action Bar -->
+<section class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-xl shadow-sm">
+<div class="absolute -right-16 -top-24 w-80 h-80 rounded-full bg-gradient-to-br from-primary-fixed/20 via-primary-container/10 to-transparent blur-3xl pointer-events-none"></div>
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-lg relative z-10">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-xs py-0.5 rounded bg-primary-fixed/40 text-on-primary-fixed-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+            ระบบงานพระธรรมทูตและบัญชีอุปถัมภ์
+          </span>
+<span class="text-outline text-label-sm">•</span>
+<span class="font-label-sm text-label-sm text-tertiary">กรมสรรพากร e-Donation API : สถานะออนไลน์</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+          ระบบบริหารจัดการกองทุนและเงินบริจาค e-Donation
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+          ตรวจสอบสลิปโอนเงิน อนุมัติใบอนุโมทนาบัตร และเชื่อมโยงข้อมูลกรมสรรพากร มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย
+        </p>
+</div>
+<!-- Action Group -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container text-on-surface font-label-lg text-label-lg shadow-sm hover:bg-surface-container-high transition-all active:scale-[0.98]" id="btn-sync-tax">
+<span class="material-symbols-outlined text-primary text-[20px]">cloud_sync</span>
+<span>ส่งข้อมูล e-Donation สรรพากร</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-surface-container-low text-secondary font-label-lg text-label-lg shadow-sm hover:bg-surface-container transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">description</span>
+<span>ออกรายงานสรุปยอดบัญชี</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded bg-gradient-to-r from-primary-container via-primary to-primary text-on-primary font-label-lg text-label-lg shadow-md hover:opacity-95 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span>+ บันทึกรับบริจาคเงินสด/เช็ค</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 3 Main Funds Showcase & Live Status -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<!-- Fund 1 -->
+<div class="relative flex flex-col justify-between bg-surface-container-lowest rounded-xl p-space-lg shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary to-secondary"></div>
+<div>
+<div class="flex items-center justify-between gap-space-xs mb-space-sm">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">กองทุนที่ ๑</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-emerald-800 bg-emerald-100/70 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> ๘๗% ประจำเดือน
+          </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-2xs leading-snug">
+          ภัตตาหารเพลและน้ำปานะประจำวัน
+        </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+          ค่าภัตตาหารเช้า-เพล พระภิกษุสามเณรผู้ศึกษาพระปริยัติธรรม ๘๕ รูป ตลอดเดือนปัจจุบัน
+        </p>
+<div class="mt-space-md p-space-sm rounded bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-baseline justify-between">
+<span class="font-label-sm text-label-sm text-tertiary">ยอดรับแล้วปัจจุบัน</span>
+<span class="font-headline-sm text-headline-sm text-secondary font-bold">๑๗๗,๔๘๐ <span class="text-body-sm font-normal text-on-surface">บาท</span></span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2 overflow-hidden mt-1">
+<div class="bg-secondary h-full rounded-full transition-all duration-700" style="width: 87%;"></div>
+</div>
+<div class="flex justify-between text-body-sm font-body-sm text-outline mt-1">
+<span>เป้าหมาย ๒๐๔,๐๐๐ บาท/เดือน</span>
+<span>เหลือ ๒๖,๕๒๐ บาท</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-primary">groups</span>
+<span>มหาศรัทธา <strong>๑,๕๔๐</strong> ท่าน</span>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:text-on-surface font-semibold flex items-center gap-0.5">
+          ประวัติภัตตาหาร <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Fund 2 -->
+<div class="relative flex flex-col justify-between bg-surface-container-lowest rounded-xl p-space-lg shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary-container to-primary"></div>
+<div>
+<div class="flex items-center justify-between gap-space-xs mb-space-sm">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">กองทุนที่ ๒</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-amber-800 bg-amber-100/70 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">auto_stories</span> ๖๔% ภาคเรียน
+          </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-2xs leading-snug">
+          ทุนการศึกษาบาลีและคัมภีร์พระไตรปิฎก
+        </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+          ทุนอุดหนุนตำราบาลีไวยากรณ์ คัมภีร์อรรถกถา ฎีกา และทุนนิตยภัตสามเณรนักเรียน
+        </p>
+<div class="mt-space-md p-space-sm rounded bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-baseline justify-between">
+<span class="font-label-sm text-label-sm text-tertiary">ยอดระดมทุนสะสม</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">๑๔๒,๕๐๐ <span class="text-body-sm font-normal text-on-surface">บาท</span></span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2 overflow-hidden mt-1">
+<div class="bg-primary h-full rounded-full transition-all duration-700" style="width: 64%;"></div>
+</div>
+<div class="flex justify-between text-body-sm font-body-sm text-outline mt-1">
+<span>เป้าหมาย ๒๒๒,๐๐๐ บาท</span>
+<span>เหลือ ๗๙,๕๐๐ บาท</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-primary">groups</span>
+<span>ผู้บริจาค <strong>๘๕๐</strong> ท่าน</span>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:text-on-surface font-semibold flex items-center gap-0.5">
+          สมุดบุญตำรา <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Fund 3 -->
+<div class="relative flex flex-col justify-between bg-surface-container-lowest rounded-xl p-space-lg shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+<div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-secondary to-primary-container"></div>
+<div>
+<div class="flex items-center justify-between gap-space-xs mb-space-sm">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">กองทุนที่ ๓</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-primary bg-primary-fixed/50 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">apartment</span> ๗๘% ระยะที่ ๒
+          </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-2xs leading-snug">
+          สร้างอาคารหอเรียนและกุฏิที่พัก
+        </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+          อาคารปฏิบัติศาสนกิจและที่พำนักพระเถรานุเถระ อาจารย์ผู้สอนบาลีชั้นประโยค ป.ธ.๖ - ๙
+        </p>
+<div class="mt-space-md p-space-sm rounded bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-baseline justify-between">
+<span class="font-label-sm text-label-sm text-tertiary">ยอดระดมทุนเสร็จสิ้น</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">๑,๐๕๐,๐๐๐ <span class="text-body-sm font-normal text-on-surface">บาท</span></span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2 overflow-hidden mt-1">
+<div class="bg-primary-container h-full rounded-full transition-all duration-700" style="width: 78%;"></div>
+</div>
+<div class="flex justify-between text-body-sm font-body-sm text-outline mt-1">
+<span>เป้าหมายระยะ ๑,๓๕๐,๐๐๐ บาท</span>
+<span>เหลือ ๓๐๐,๐๐๐ บาท</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md bg-surface-container-lowest">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-primary">groups</span>
+<span>ศรัทธา <strong>๑,๑๒๐</strong> ท่าน</span>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:text-on-surface font-semibold flex items-center gap-0.5">
+          แผนผังก่อสร้าง <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Bank Reconciliation and Daily Stream Bento -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-stretch">
+<!-- Krungthai Daily Auto-Reconciliation Widget -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-sky-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sky-700 text-[28px]">account_balance</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-title-lg text-title-lg text-on-surface">ธนาคารกรุงไทย (มหาชน)</h2>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> ตรงกับระบบบัญชี 100%
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+              บัญชีกระแสรายวัน สาขากำแพงแสน • เลขที่บัญชี <span class="font-semibold text-on-surface tracking-wider">701-0-84512-3</span>
+</p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="flex items-center gap-1 px-space-sm py-1 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[16px]">refresh</span> ตรวจสอบยอดสด
+          </button>
+<span class="text-label-sm font-label-sm text-outline">ซิงค์ล่าสุด ๒ นาทีที่แล้ว</span>
+</div>
+</div>
+<!-- Quick Metrics Grid inside the Widget -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md py-space-sm">
+<div class="p-space-md rounded bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-tertiary">ยอดคงเหลือจริงในบัญชี (Statement)</span>
+<div class="font-headline-md text-headline-md text-on-surface font-semibold mt-1">
+            ฿ ๑,๓๗๐,๕๙๐.๐๐
+          </div>
+<span class="font-body-sm text-body-sm text-emerald-700 flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span> ยอดตรงสมบูรณ์
+          </span>
+</div>
+<div class="p-space-md rounded bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-tertiary">ยอดรับบริจาคผ่าน QR วันนี้</span>
+<div class="font-headline-md text-headline-md text-primary font-semibold mt-1">
+            ฿ ๔๘,๒๕๐.๐๐
+          </div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1 block">
+            รวม ๓๘ รายการใหม่
+          </span>
+</div>
+<div class="p-space-md rounded bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-tertiary">รอนำส่งสรรพากร e-Donation</span>
+<div class="font-headline-md text-headline-md text-secondary font-semibold mt-1">
+            ฿ ๑๙,๕๐๐.๐๐
+          </div>
+<span class="font-body-sm text-body-sm text-amber-700 mt-1 block">
+            ๑๔ ธุรกรรมรออนุมัติ
+          </span>
+</div>
+</div>
+<!-- Inline mini comparison status bar -->
+<div class="pt-space-md flex flex-wrap items-center justify-between gap-space-xs text-label-sm font-label-sm text-on-surface-variant">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> รายการแมตช์อัตโนมัติ (Automated) : 98.2%</span>
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span> รอเจ้าหน้าที่พิจารณา (Manual Review) : 1.8%</span>
+</div>
+<span class="text-tertiary">รหัสเชื่อมต่อ KTB Open API ID: MV-882-9134-KTB</span>
+</div>
+</div>
+<!-- Live Patron Spotlight / Quick Visual Note -->
+<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary font-semibold tracking-wide uppercase">มหาทานบารมีประจำสัปดาห์</span>
+<span class="material-symbols-outlined text-primary-container">workspace_premium</span>
+</div>
+<div class="flex items-center gap-space-md my-space-md">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-fixed text-[32px]">spa</span>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface leading-tight">คุณโยมกุลภัทร และครอบครัว</h4>
+<p class="font-body-sm text-body-sm text-secondary font-medium">เจ้าภาพภัตตาหารเพลพระ ๘๕ รูป</p>
+<p class="font-label-sm text-label-sm text-outline">ยอดบุญ ๓๐,๐๐๐ บาท • ออก e-Donation ลดหย่อน ๒ เท่า</p>
+</div>
+</div>
+<div class="p-space-sm rounded bg-surface-container-low flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">ออกใบอนุโมทนาทองคำเสร็จสิ้น</span>
+<button class="font-label-sm text-label-sm text-primary underline hover:text-on-surface">ดูฉบับพิมพ์</button>
+</div>
+</div>
+</section>
+<!-- e-Donation Slip Audit Table Section -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<!-- Filter Tabs & Batch Tools -->
+<div class="p-space-lg pb-space-md flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-space-xs">
+<button class="px-space-md py-space-xs rounded font-label-lg text-label-lg bg-primary-container text-on-primary-container font-semibold transition-all shadow-sm">
+          รอตรวจสอบสลิป (๑๔ รายการ)
+        </button>
+<button class="px-space-md py-space-xs rounded font-label-lg text-label-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-all">
+          อนุมัติแล้ว &amp; ออกใบเสร็จแล้ว (๒,๑๘๐)
+        </button>
+<button class="px-space-md py-space-xs rounded font-label-lg text-label-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-all">
+          ส่งข้อมูลสรรพากรสำเร็จ (๒,๑๕๔)
+        </button>
+<button class="px-space-md py-space-xs rounded font-label-lg text-label-lg bg-surface-container-low text-error hover:bg-error-container/30 transition-all flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">warning</span> รายการขัดข้อง/สลิปไม่ตรง (๓)
+        </button>
+</div>
+<!-- Quick Batch Actions -->
+<div class="flex items-center gap-space-xs">
+<button class="flex items-center gap-1 px-space-md py-space-xs rounded bg-surface-container text-primary font-label-sm text-label-sm hover:bg-primary hover:text-on-primary transition-all" id="btn-batch-approve">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+<span>อนุมัติชุดที่เลือก (Auto-OCR 100%)</span>
+</button>
+</div>
+</div>
+<!-- Table Search & Filter Bar -->
+<div class="px-space-lg py-space-sm bg-surface-container-low flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-space-md py-1.5 rounded bg-surface-container-lowest text-on-surface placeholder:text-outline text-body-sm font-body-sm focus:outline-none focus:ring-1 focus:ring-primary shadow-xs" placeholder="ค้นหาตามรหัสรายการ, ชื่อผู้บริจาค, เลขบัตร ปชช., หรือเลขอ้างอิงสลิป..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-space-sm text-label-sm font-label-sm text-on-surface-variant">
+<span>เรียงตาม:</span>
+<select class="bg-surface-container-lowest px-2 py-1 rounded text-on-surface text-label-sm font-label-sm focus:outline-none">
+<option>วันที่โอนล่าสุด (ล่าสุดก่อน)</option>
+<option>จำนวนเงิน (มากไปน้อย)</option>
+<option>สถานะความเสี่ยง OCR</option>
+</select>
+</div>
+</div>
+<!-- The Detailed Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/60 text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-space-sm px-space-md w-12 text-center">
+<input class="rounded accent-primary cursor-pointer" id="check-all" type="checkbox"/>
+</th>
+<th class="py-space-sm px-space-md">รหัสรายการ / เวลาโอน</th>
+<th class="py-space-sm px-space-md">ผู้บริจาค / นามสกุล</th>
+<th class="py-space-sm px-space-md">กองทุนที่ระบุ</th>
+<th class="py-space-sm px-space-md text-right">จำนวนเงิน (บาท)</th>
+<th class="py-space-sm px-space-md">ช่องทางชำระ</th>
+<th class="py-space-sm px-space-md">ความประสงค์ e-Donation</th>
+<th class="py-space-sm px-space-md text-center">หลักฐานสลิป &amp; OCR</th>
+<th class="py-space-sm px-space-md text-center">การดำเนินการ</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-body-sm font-body-sm">
+<!-- Row 1: High confidence match -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-space-md px-space-md text-center">
+<input class="row-checkbox rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-semibold text-on-surface font-body-sm">EDN-2567-0891</span>
+<div class="text-label-sm font-label-sm text-outline flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span> วันนี้ ๑๐:๔๒ น.
+              </div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="font-semibold text-on-surface">พลเอก ธรรมนูญ ปัญญาวงศ์</div>
+<div class="text-label-sm font-label-sm text-outline">โทร 081-445-XXXX</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-primary-fixed/50 text-on-primary-fixed-variant text-label-sm font-label-sm">
+                กองทุนภัตตาหารเพล
+              </span>
+</td>
+<td class="py-space-md px-space-md text-right font-headline-sm text-headline-sm text-secondary font-semibold">
+              ๕,๐๐๐.๐๐
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-sky-500"></span>
+<span class="font-medium text-on-surface">KTB พร้อมเพย์ QR</span>
+</div>
+<div class="text-label-sm font-label-sm text-outline">Ref: 0140810427845</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1 text-emerald-800 font-semibold text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">badge</span> เลข ปชช: 1-1037-XXXXX-XX-8
+              </div>
+<div class="text-label-sm font-label-sm text-tertiary">ขอลดหย่อนภาษี ๒ เท่า</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container text-on-surface-variant hover:text-primary hover:bg-primary-fixed/30 font-label-sm text-label-sm transition-all shadow-xs" onclick="openSlipModal('EDN-2567-0891', 'พลเอก ธรรมนูญ ปัญญาวงศ์', '๕,๐๐๐.๐๐ บาท', '100% ตรงกับระบบธนาคารกรุงไทย')">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">document_scanner</span>
+<span>ดูสลิป (OCR ตรง 100%)</span>
+</button>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded bg-primary text-on-primary hover:opacity-90 transition-all shadow-xs flex items-center justify-center" title="อนุมัติ &amp; ส่ง e-Donation">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+<button class="p-1.5 rounded bg-surface-container text-secondary hover:bg-secondary hover:text-on-secondary transition-all shadow-xs flex items-center justify-center" title="พิมพ์ใบอนุโมทนาบัตรทอง">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1.5 rounded bg-surface-container text-error hover:bg-error hover:text-on-error transition-all shadow-xs flex items-center justify-center" title="ปฏิเสธ/ขอสลิปใหม่">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Standard Donation with High OCR Confidence -->
+<tr class="hover:bg-surface-container-low transition-colors group bg-surface-container-lowest">
+<td class="py-space-md px-space-md text-center">
+<input class="row-checkbox rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-semibold text-on-surface font-body-sm">EDN-2567-0890</span>
+<div class="text-label-sm font-label-sm text-outline flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span> วันนี้ ๑๐:๑๕ น.
+              </div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="font-semibold text-on-surface">นางวิภาดา รัตนโชติกา</div>
+<div class="text-label-sm font-label-sm text-outline">โทร 089-123-XXXX</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm">
+                กองทุนตำราพระไตรปิฎก
+              </span>
+</td>
+<td class="py-space-md px-space-md text-right font-headline-sm text-headline-sm text-primary font-semibold">
+              ๑,๐๐๐.๐๐
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-blue-600"></span>
+<span class="font-medium text-on-surface">โอนผ่าน ธ.กรุงเทพ</span>
+</div>
+<div class="text-label-sm font-label-sm text-outline">Ref: BBL-9941029</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1 text-emerald-800 font-semibold text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">badge</span> เลข ปชช: 3-7201-XXXXX-XX-1
+              </div>
+<div class="text-label-sm font-label-sm text-tertiary">ต้องการใบอนุโมทนาบัตรกระดาษ</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container text-on-surface-variant hover:text-primary hover:bg-primary-fixed/30 font-label-sm text-label-sm transition-all shadow-xs" onclick="openSlipModal('EDN-2567-0890', 'นางวิภาดา รัตนโชติกา', '๑,๐๐๐.๐๐ บาท', 'ยอดตรงกับบัญชี KTB เงินเข้า')">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">document_scanner</span>
+<span>ดูสลิป (OCR ตรง 100%)</span>
+</button>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded bg-primary text-on-primary hover:opacity-90 transition-all shadow-xs flex items-center justify-center" title="อนุมัติ &amp; ส่ง e-Donation">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+<button class="p-1.5 rounded bg-surface-container text-secondary hover:bg-secondary hover:text-on-secondary transition-all shadow-xs flex items-center justify-center" title="พิมพ์ใบอนุโมทนาบัตรทอง">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1.5 rounded bg-surface-container text-error hover:bg-error hover:text-on-error transition-all shadow-xs flex items-center justify-center" title="ปฏิเสธ/ขอสลิปใหม่">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Building Fund Large amount -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-space-md px-space-md text-center">
+<input class="row-checkbox rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-semibold text-on-surface font-body-sm">EDN-2567-0889</span>
+<div class="text-label-sm font-label-sm text-outline flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span> วันนี้ ๐๙:๕๐ น.
+              </div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="font-semibold text-on-surface">บจก. สยามปรีดาวัฒนะภัณฑ์</div>
+<div class="text-label-sm font-label-sm text-outline">เลขภาษีนิติบุคคล: 010554800XXXX</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed text-label-sm font-label-sm">
+                กองทุนสร้างอาคารหอเรียน
+              </span>
+</td>
+<td class="py-space-md px-space-md text-right font-headline-sm text-headline-sm text-secondary font-semibold">
+              ๕๐,๐๐๐.๐๐
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-sky-600"></span>
+<span class="font-medium text-on-surface">KTB โอนตรงบัญชี</span>
+</div>
+<div class="text-label-sm font-label-sm text-outline">Ref: 20240518095034</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1 text-on-secondary-container font-semibold text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">corporate_fare</span> ยื่นนิติบุคคล (หัก คชจ. ๒ เท่า)
+              </div>
+<div class="text-label-sm font-label-sm text-tertiary">ขอรับใบอนุโมทนาทองพร้อมกรอบ</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container text-on-surface-variant hover:text-primary hover:bg-primary-fixed/30 font-label-sm text-label-sm transition-all shadow-xs" onclick="openSlipModal('EDN-2567-0889', 'บจก. สยามปรีดาวัฒนะภัณฑ์', '๕๐,๐๐๐.๐๐ บาท', 'ยอดตรงกับสเตทเมนต์สาขากำแพงแสน')">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">document_scanner</span>
+<span>ดูสลิป (OCR ตรง 100%)</span>
+</button>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded bg-primary text-on-primary hover:opacity-90 transition-all shadow-xs flex items-center justify-center" title="อนุมัติ &amp; ส่ง e-Donation">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+<button class="p-1.5 rounded bg-surface-container text-secondary hover:bg-secondary hover:text-on-secondary transition-all shadow-xs flex items-center justify-center" title="พิมพ์ใบอนุโมทนาบัตรทอง">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+<button class="p-1.5 rounded bg-surface-container text-error hover:bg-error hover:text-on-error transition-all shadow-xs flex items-center justify-center" title="ปฏิเสธ/ขอสลิปใหม่">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Discrepancy / Attention Needed -->
+<tr class="hover:bg-surface-container-low transition-colors group bg-amber-50/40">
+<td class="py-space-md px-space-md text-center">
+<input class="row-checkbox rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-semibold text-on-surface font-body-sm">EDN-2567-0888</span>
+<div class="text-label-sm font-label-sm text-outline flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">schedule</span> วันนี้ ๐๙:๑๒ น.
+              </div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="font-semibold text-on-surface">นายสมชาย บุญรอดคง</div>
+<div class="text-label-sm font-label-sm text-outline">ไม่ระบุเบอร์โทร</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-primary-fixed/50 text-on-primary-fixed-variant text-label-sm font-label-sm">
+                กองทุนภัตตาหารเพล
+              </span>
+</td>
+<td class="py-space-md px-space-md text-right font-headline-sm text-headline-sm text-on-surface font-semibold">
+              ๕๐๐.๐๐
+            </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-green-600"></span>
+<span class="font-medium text-on-surface">โอนผ่าน ธ.กสิกรไทย</span>
+</div>
+<div class="text-label-sm font-label-sm text-amber-800">เวลาในสลิปคลาดเคลื่อน ๒ ชม.</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1 text-tertiary text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">hourglass_empty</span> ไม่ประสงค์ลดหย่อนภาษี
+              </div>
+<div class="text-label-sm font-label-sm text-outline">รับใบอนุโมทนาทางอีเมล</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-amber-100 text-amber-900 hover:bg-amber-200 font-label-sm text-label-sm transition-all shadow-xs" onclick="openSlipModal('EDN-2567-0888', 'นายสมชาย บุญรอดคง', '๕๐๐.๐๐ บาท', 'คำเตือน: เวลาในสลิป 07:12 น. ตรวจพบในบัญชี 09:12 น.')">
+<span class="material-symbols-outlined text-[16px] text-amber-700">warning</span>
+<span>ตรวจทานสลิป (OCR 88%)</span>
+</button>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1.5 rounded bg-surface-container text-on-surface-variant hover:bg-primary hover:text-on-primary transition-all shadow-xs flex items-center justify-center" title="อนุมัติ &amp; ส่ง e-Donation">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<button class="p-1.5 rounded bg-error-container text-on-error-container hover:bg-error hover:text-on-error transition-all shadow-xs flex items-center justify-center" title="ขอสลิปใหม่">
+<span class="material-symbols-outlined text-[18px]">contact_support</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination and Bottom Info -->
+<div class="p-space-md bg-surface-container-lowest flex flex-col sm:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span>แสดงรายการที่ <strong>๑ - ๔</strong> จากทั้งหมด <strong>๑๔</strong> รายการ</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-3 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-sm text-label-sm" disabled="">ย้อนกลับ</button>
+<button class="px-3 py-1 rounded bg-primary text-on-primary font-label-sm text-label-sm">๑</button>
+<button class="px-3 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-sm text-label-sm">๒</button>
+<button class="px-3 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-sm text-label-sm">ถัดไป</button>
+</div>
+</div>
+</section>
+<!-- Editorial Section: e-Donation Tax & Certificate Automation Rules -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg">
+<!-- Card 1: Sacred Golden Certificate Details -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-space-xs mb-space-sm text-primary">
+<span class="material-symbols-outlined text-[24px]">workspace_premium</span>
+<h3 class="font-title-lg text-title-lg text-on-surface">การออกใบอนุโมทนาบัตรทองคำ</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+          ผู้บริจาคสมทบกองทุนตั้งแต่ ๑,๐๐๐ บาทขึ้นไป ระบบจะจัดพิมพ์ใบอนุโมทนาบัตรประดับลายน้ำทองคำตราวิทยาลัย พร้อมรหัส QR ตรวจสอบความถูกต้องจากระบบราชบัณฑิตยสถานสงฆ์
+        </p>
+<div class="p-space-sm rounded bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-tertiary">ตราประทับดิจิทัลราชวิทยาลัย</span>
+<span class="text-emerald-700 font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">check</span> เปิดใช้งาน (SHA-256)</span>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-tertiary">ลายเซ็นอิเล็กทรอนิกส์ผู้อำนวยการ</span>
+<span class="text-emerald-700 font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">check</span> ลงนามอัตโนมัติ</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm">
+<button class="w-full py-2 rounded bg-surface-container text-primary hover:bg-primary hover:text-on-primary transition-colors font-label-sm text-label-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">tune</span> ปรับตั้งค่าแม่แบบใบอนุโมทนา
+        </button>
+</div>
+</div>
+<!-- Card 2: Revenue Dept Data Linkage Policy -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-space-xs mb-space-sm text-secondary">
+<span class="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+<h3 class="font-title-lg text-title-lg text-on-surface">เกณฑ์ลดหย่อนภาษีสรรพากร ๒ เท่า</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+          มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย ได้รับอนุมัติเป็นสถานศึกษาศาสนาตามประกาศกระทรวงการคลัง เงินบริจาคผ่านระบบ e-Donation จะถูกหักลดหย่อนได้ทันทีโดยไม่ต้องใช้เอกสาร
+        </p>
+<div class="p-space-sm rounded bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-tertiary">เวลาตัดรอบส่ง e-Donation</span>
+<span class="text-on-surface font-semibold">ทุกวัน เวลา ๒๓:๕๙ น.</span>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-tertiary">ผลตอบรับจากกรมสรรพากร</span>
+<span class="text-on-surface font-semibold">ภายใน ๑๕ นาที</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm">
+<button class="w-full py-2 rounded bg-surface-container text-secondary hover:bg-secondary hover:text-on-secondary transition-colors font-label-sm text-label-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">history</span> ดูบันทึกการส่ง (API Audit Log)
+        </button>
+</div>
+</div>
+<!-- Card 3: Monastic Community Food Schedule Today -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-space-xs mb-space-sm text-primary">
+<span class="material-symbols-outlined text-[24px]">restaurant</span>
+<h3 class="font-title-lg text-title-lg text-on-surface">ตารางถวายภัตตาหารวันนี้</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">
+          จำนวนภิกษุ-สามเณรรับบิณฑบาตและฉันภัตตาหารเพล ประจำวันที่ ๑๘ พฤษภาคม ๒๕๖๗
+        </p>
+<div class="space-y-2 mt-2">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low text-body-sm font-body-sm">
+<span class="text-on-surface font-medium">พระเถราจารย์ &amp; ครูสอนบาลี</span>
+<span class="font-semibold text-secondary">๑๒ รูป</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low text-body-sm font-body-sm">
+<span class="text-on-surface font-medium">สามเณรเปรียญธรรม (ป.ธ.๑-๙)</span>
+<span class="font-semibold text-primary">๗๓ รูป</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low text-body-sm font-body-sm">
+<span class="text-on-surface font-medium">รวมภัตตาหารจัดถวาย</span>
+<span class="font-semibold text-on-surface">๘๕ รูป (ครบถ้วน)</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm">
+<button class="w-full py-2 rounded bg-primary-container text-on-primary-container hover:opacity-90 transition-colors font-label-sm text-label-sm font-semibold flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">event_available</span> ปฏิทินจองเจ้าภาพภัตตาหาร
+        </button>
+</div>
+</div>
+</section>
+<!-- Interactive Modal for Slip & OCR Inspection (Hidden by default, opened via JS) -->
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-space-md" id="slip-modal">
+<div class="bg-surface-container-lowest rounded-xl max-w-2xl w-full p-space-xl shadow-2xl relative flex flex-col max-h-[921px] overflow-y-auto">
+<div class="flex items-center justify-between pb-space-md border-b-0">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">verified</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">การตรวจจับ OCR สลิปหลักฐานการโอน</h3>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant" onclick="closeSlipModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md mt-space-md">
+<!-- Visual Slip View Placeholder -->
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-tertiary">ภาพสลิปจากผู้บริจาค (Slip Image)</span>
+<div class="relative w-full h-72 rounded-lg bg-surface-container flex flex-col items-center justify-center p-space-md overflow-hidden">
+<img class="object-cover w-full h-full rounded" data-alt="Official Bank Transfer slip displayed digitally with Krungthai bank emblem, high resolution Thai typography, transfer timestamp and QR code verification graphic in gold and soft grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJQWCrI6-57JFFyHYw1HM4vS7lUtag0cpd9w_M4xiJrycAI5FJ1Z0A7VYy7PCA7Yjy1pPg5p5xlINgsu7tV17x9-8F8lHP4SgVZLIinFUHXky7ne_TE4H_dL0wF5syJ8shzaQEZqsMf28dh37o-nOFyepBE-l0YoBuDwBTHA9OaUnSC5DiQ5W1Wc1_HSXWes_rPTzmJu4Hl6KFQNFd2Rpu3x6JolylZt9I4NQHJjQ0_x99Fj3nBda6QA"/>
+<div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-white">
+<span class="font-label-sm text-label-sm flex items-center gap-1 text-emerald-400">
+<span class="material-symbols-outlined text-[16px]">check_circle</span> ตรวจพบ QR Code ในภาพสลิป
+              </span>
+</div>
+</div>
+</div>
+<!-- OCR Extracted Fields -->
+<div class="flex flex-col justify-between">
+<div class="space-y-space-xs">
+<span class="font-label-sm text-label-sm text-tertiary">ผลวิเคราะห์เปรียบเทียบระบบธนาคาร</span>
+<div class="p-space-xs rounded bg-surface-container-low">
+<span class="text-label-sm font-label-sm text-outline block">รหัสอ้างอิงรายการ:</span>
+<span class="font-semibold text-on-surface text-body-sm" id="modal-ref">EDN-2567-0891</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low">
+<span class="text-label-sm font-label-sm text-outline block">ชื่อผู้โอนที่ตรวจพบ:</span>
+<span class="font-semibold text-on-surface text-body-sm" id="modal-donor">พลเอก ธรรมนูญ ปัญญาวงศ์</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low">
+<span class="text-label-sm font-label-sm text-outline block">จำนวนเงินในสลิป:</span>
+<span class="font-headline-sm text-headline-sm text-secondary font-bold" id="modal-amount">๕,๐๐๐.๐๐ บาท</span>
+</div>
+<div class="p-space-xs rounded bg-emerald-50 text-emerald-900">
+<span class="text-label-sm font-label-sm text-emerald-700 block">สถานะความสอดคล้อง (Reconciliation):</span>
+<span class="font-medium text-body-sm flex items-center gap-1 mt-0.5" id="modal-status">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">check_circle</span> 100% ตรงกับระบบธนาคารกรุงไทย
+              </span>
+</div>
+</div>
+<div class="flex flex-col gap-2 mt-space-md pt-space-xs">
+<button class="w-full py-2.5 rounded bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2" onclick="approveAndClose()">
+<span class="material-symbols-outlined text-[18px]">verified</span> อนุมัติ &amp; ยืนยันส่ง e-Donation ทันที
+            </button>
+<button class="w-full py-2 rounded bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-all" onclick="closeSlipModal()">
+              ปิดหน้าต่างตรวจสลิป
+            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function openSlipModal(ref, donor, amount, status) {
+    document.getElementById('modal-ref').innerText = ref;
+    document.getElementById('modal-donor').innerText = donor;
+    document.getElementById('modal-amount').innerText = amount;
+    document.getElementById('modal-status').innerText = status;
+    document.getElementById('slip-modal').classList.remove('hidden');
+  }
+
+  function closeSlipModal() {
+    document.getElementById('slip-modal').classList.add('hidden');
+  }
+
+  function approveAndClose() {
+    alert('บันทึกอนุมัติยอดบริจาคสำเร็จ ระบบได้เตรียมส่งข้อมูลเข้ากรมสรรพากร e-Donation ในรอบถัดไป');
+    closeSlipModal();
+  }
+
+  // Select all checkbox micro-interaction
+  const checkAll = document.getElementById('check-all');
+  if (checkAll) {
+    checkAll.addEventListener('change', function() {
+      const checkboxes = document.querySelectorAll('.row-checkbox');
+      checkboxes.forEach(cb => cb.checked = checkAll.checked);
+    });
+  }
+
+  // Sync button feedback
+  const syncBtn = document.getElementById('btn-sync-tax');
+  if (syncBtn) {
+    syncBtn.addEventListener('click', function() {
+      const originalHtml = syncBtn.innerHTML;
+      syncBtn.innerHTML = '<span class="material-symbols-outlined text-primary text-[20px] animate-spin">autorenew</span><span>กำลังเชื่อมต่อกรมสรรพากร...</span>';
+      setTimeout(() => {
+        syncBtn.innerHTML = '<span class="material-symbols-outlined text-emerald-600 text-[20px]">check_circle</span><span>ส่งข้อมูลเรียบร้อย (๑๔ รายการ)</span>';
+        setTimeout(() => {
+          syncBtn.innerHTML = originalHtml;
+        }, 3000);
+      }, 1400);
+    });
+  }
+
+  // Batch approve button feedback
+  const batchBtn = document.getElementById('btn-batch-approve');
+  if (batchBtn) {
+    batchBtn.addEventListener('click', function() {
+      alert('เริ่มดำเนินการอนุมัติแบบกลุ่มสำหรับรายการที่มี OCR ตรง 100% เรียบร้อยแล้ว (จำนวน ๑๑ รายการ)');
+    });
+  }
+</script></main></div></body></html>

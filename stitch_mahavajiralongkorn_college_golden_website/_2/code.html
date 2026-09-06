@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+
+<html lang="th"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Noto+Serif+Thai:wght@400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-secondary-fixed": "#321200",
+          "primary-fixed": "#ffdea5",
+          "on-tertiary-fixed-variant": "#3a475c",
+          "surface-tint": "#775a19",
+          "on-error-container": "#93000a",
+          "on-tertiary-fixed": "#0e1c2f",
+          "on-primary": "#ffffff",
+          "surface-container-high": "#eae8e5",
+          "inverse-on-surface": "#f2f0ed",
+          "secondary-fixed-dim": "#ffb68b",
+          "tertiary-container": "#99a6bf",
+          "secondary-fixed": "#ffdbc8",
+          "on-tertiary": "#ffffff",
+          "surface-variant": "#e4e2df",
+          "surface-container-lowest": "#ffffff",
+          "error-container": "#ffdad6",
+          "primary-fixed-dim": "#e9c176",
+          "on-tertiary-container": "#2f3c50",
+          "surface": "#fbf9f6",
+          "on-error": "#ffffff",
+          "tertiary-fixed-dim": "#bac7e1",
+          "surface-container-low": "#f5f3f0",
+          "on-secondary": "#ffffff",
+          "on-primary-container": "#4e3700",
+          "tertiary-fixed": "#d6e3fe",
+          "outline-variant": "#d1c5b4",
+          "tertiary": "#525f75",
+          "on-secondary-container": "#753500",
+          "on-surface": "#1b1c1a",
+          "on-secondary-fixed-variant": "#753400",
+          "surface-bright": "#fbf9f6",
+          "background": "#fbf9f6",
+          "outline": "#7f7667",
+          "secondary": "#934b17",
+          "on-primary-fixed-variant": "#5d4201",
+          "inverse-surface": "#30312f",
+          "on-surface-variant": "#4e4639",
+          "surface-container-highest": "#e4e2df",
+          "inverse-primary": "#e9c176",
+          "on-primary-fixed": "#261900",
+          "secondary-container": "#fd9f65",
+          "surface-dim": "#dbdad7",
+          "surface-container": "#efeeeb",
+          "error": "#ba1a1a",
+          "primary": "#775a19",
+          "on-background": "#1b1c1a",
+          "primary-container": "#c5a059"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "margin-desktop": "3rem",
+          "space-sm": "0.75rem",
+          "space-xl": "2rem",
+          "margin-mobile": "1rem",
+          "space-md": "1rem",
+          "gutter-desktop": "2rem",
+          "space-2xs": "0.25rem",
+          "space-xs": "0.5rem",
+          "space-2xl": "3rem",
+          "space-lg": "1.5rem",
+          "gutter-mobile": "1rem",
+          "space-3xl": "4.5rem"
+        },
+        "fontFamily": {
+          "headline-sm": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "body-lg": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "body-sm": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "headline-lg": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "title-md": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "display-mobile": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "headline-md": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "label-lg": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "label-sm": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ],
+          "title-lg": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "headline-lg-mobile": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "display": [
+            "Noto Serif",
+            "Noto Serif Thai"
+          ],
+          "body-md": [
+            "Be Vietnam Pro",
+            "sans-serif"
+          ]
+        },
+        "fontSize": {
+          "headline-sm": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "500"
+            }
+          ],
+          "body-lg": [
+            "17px",
+            {
+              "lineHeight": "28px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "36px",
+            {
+              "lineHeight": "46px",
+              "fontWeight": "600"
+            }
+          ],
+          "title-md": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "display-mobile": [
+            "32px",
+            {
+              "lineHeight": "40px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "500"
+            }
+          ],
+          "label-lg": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.04em",
+              "fontWeight": "600"
+            }
+          ],
+          "title-lg": [
+            "18px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "26px",
+            {
+              "lineHeight": "34px",
+              "fontWeight": "600"
+            }
+          ],
+          "display": [
+            "48px",
+            {
+              "lineHeight": "60px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      }
+    }
+  };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between overflow-y-auto"><div class="flex flex-col"><div class="p-space-lg bg-surface-container-low flex items-center gap-space-sm"><img alt="Royal Thai Buddhist academic emblem seal logo for Mahavajiralongkorn Pali Theravada College (มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย). Circular emblem featuring a sacred radiant golden lotus, Dharmachakra wheel of law, sacred scriptures Tripitaka book in radiant royal gold finish with intricate Thai decorative motif, vector style, isolated on clean background, opulent gold gradient #D4AF37 #F3E5AB.. Design context: - Primary color: #c5a059
+- Font: notoSerif
+- Mode: light
+- Roundness: rounded-sm
+. The logo should be visually consistent with these brand tokens." class="h-12 w-12 object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XwaT_ELYX3bq6dy01opuu_UW_xTCoGv3SM_yi7nZMU2uDJVBpy6jJHjApdz6xjS2wQ-9li4JIFuTPe-AbApIXLPX763x6OvKYb5JlKDk8xZPSAe0LQo9kl0qKnn_pyla6Bkbsii-FURgLVxydUD8AYRpKJRdzJ2kBFMJETUQIrnoqw1EIHYb9yV12E5n4M-BJLOGnUzWcEWwAWR06tk_FDcqjeGmPHTaUmvrB3zmPi3zHi4mey-O_eqK8U"/><div class="flex flex-col min-w-0"><span class="font-headline-sm text-title-md text-primary truncate leading-tight tracking-tight">มหาวชิราลงกรณ</span><span class="font-headline-sm text-label-sm text-primary truncate">บาลีเถรวาทราชวิทยาลัย</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate mt-space-2xs">ระบบบริหารจัดการหน่วยงาน</span></div></div><div class="px-space-md pt-space-md pb-space-2xs"><span class="font-label-sm text-label-sm text-outline uppercase tracking-wider px-space-xs">เมนูบริหารงานกลาง</span></div><nav class="flex flex-col gap-space-2xs px-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded"><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container font-semibold rounded" data-path="executive-overview" href="#"><span class="material-symbols-outlined text-[20px] shrink-0 text-primary">dashboard</span><span class="truncate">ภาพรวมผู้บริหาร</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="monastic-students-and-enrollment" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">school</span><span class="truncate">ทะเบียนการศึกษา &amp; นักเรียนบาลี</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="donations-and-funds" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">volunteer_activism</span><span class="truncate">กองทุนบริจาค &amp; e-Donation</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="tripitaka-archive-and-media" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">menu_book</span><span class="truncate">คลังพระไตรปิฎก &amp; สื่อจดหมายเหตุ</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="news-and-announcements" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">campaign</span><span class="truncate">ข่าวสารและประกาศ</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="academic-calendar-and-events" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">calendar_month</span><span class="truncate">ปฏิทินสอบและศาสนกิจ</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="system-settings-and-roles" href="#"><span class="material-symbols-outlined text-[20px] shrink-0">admin_panel_settings</span><span class="truncate">ตั้งค่าระบบและสิทธิ์ผู้ใช้</span></a></nav></div><div class="p-space-md bg-surface-container-lowest m-space-xs rounded bg-surface-container-low"><div class="flex items-center gap-space-xs mb-space-2xs"><span class="material-symbols-outlined text-[16px] text-primary">verified</span><span class="font-label-sm text-label-sm text-primary font-semibold">Mahavajiralongkorn</span></div><p class="font-body-sm text-label-sm text-on-surface-variant leading-normal">ราชวิทยาลัยพระบาลีเถรวาท เพื่อการศาสนศึกษาชั้นสูง</p></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full max-w-sm"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span><input class="w-full pl-10 pr-space-md py-space-xs rounded bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-primary shadow-[0_1px_4px_rgba(0,0,0,0.02)]" placeholder="ค้นหาข้อมูลพระภิกษุ-สามเณร, รหัสคัมภีร์, รายการบริจาค..." type="text"/></div><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-low"><span class="material-symbols-outlined text-primary text-[18px]">event_note</span><select class="bg-transparent font-label-sm text-label-sm text-on-surface-variant focus:outline-none cursor-pointer"><option>ภาคการศึกษา ๑/๒๕๖๗</option><option>ภาคการศึกษา ๒/๒๕๖๖</option><option>ภาคการศึกษา ๑/๒๕๖๖</option></select></div></div><div class="flex items-center gap-space-md shrink-0"><button class="flex items-center gap-space-2xs px-space-sm py-space-xs rounded bg-surface-container-lowest text-secondary font-label-sm text-label-sm hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><span class="material-symbols-outlined text-[18px]">download</span><span>ส่งออกรายงาน</span></button><div class="relative"><button class="w-9 h-9 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></button></div><div class="h-6 w-px bg-outline-variant"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="text-right hidden sm:block"><p class="font-title-md text-label-lg text-on-surface leading-snug">พระครูปลัดฯ</p><p class="font-label-sm text-label-sm text-on-surface-variant">ผู้ดูแลระบบกลาง</p></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-space-lg py-space-lg"><div class="flex flex-col w-full gap-space-xl">
+<!-- Top Executive Header & Contextual Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-xs">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+          ปีการศึกษา ๒๕๖๗
+        </span>
+<span class="font-body-sm text-body-sm text-outline">|</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">calendar_today</span>
+          วันอังคารที่ ๑๙ พฤศจิกายน ๒๕๖๗ (แรม ๓ ค่ำ เดือน ๑๒)
+        </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-space-2xs">
+        แดชบอร์ดบริหารภาพรวมราชวิทยาลัย
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        ระบบสารสนเทศและการบริหารราชกิจการศึกษาบาลีเถรวาท สถิติรวมและงานอุปถัมภ์ศาสนธรรม
+      </p>
+</div>
+<!-- Quick Action Bar -->
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-sm rounded bg-surface-container-lowest text-secondary font-label-lg text-label-lg shadow-sm hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+<span>ออกรายงานประจำเดือน (PDF)</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-sm rounded bg-primary text-on-primary font-label-lg text-label-lg shadow-md hover:bg-primary-container hover:text-on-primary-container transition-all">
+<span class="material-symbols-outlined text-[20px]">edit_calendar</span>
+<span>บันทึกศาสนกิจด่วน</span>
+</button>
+</div>
+</div>
+<!-- 4 Royal Gold Key Metrics Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Card 1: Fund & Donations -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-container via-primary to-secondary"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">ยอดบริจาคและกองทุนสะสมรวม</span>
+<div class="font-headline-md text-headline-md text-on-surface font-headline-sm mt-space-2xs">฿ ๑๒,๔๘๕,๕๐๐</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-on-primary-fixed shrink-0">
+<span class="material-symbols-outlined text-[22px]">account_balance</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<div class="inline-flex items-center gap-1 text-secondary font-label-sm text-label-sm bg-secondary-fixed/40 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+          +๑๔.๘% จากเดือนก่อน
+        </div>
+<span class="font-body-sm text-body-sm text-outline truncate ml-2">กองทุนเสนาสนะ &amp; ภัตตาหาร</span>
+</div>
+</div>
+<!-- Card 2: Monastic Students -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-fixed to-primary-container"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">ศาสนทายาท &amp; ภิกษุสามเณร</span>
+<div class="font-headline-md text-headline-md text-primary font-headline-sm mt-space-2xs">๑๔๘ <span class="font-body-md text-body-md font-normal text-on-surface">รูป</span></div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">school</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm">ศากยสีหะ ๑๑๒</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm">มูลกัจจายนะ ๓๖</span>
+</div>
+</div>
+<!-- Card 3: Online Pali Library Visits -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-tertiary via-tertiary-container to-primary-fixed"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">สถิติสืบค้นคัมภีร์ออนไลน์</span>
+<div class="font-headline-md text-headline-md text-on-surface font-headline-sm mt-space-2xs">๔๕,๒๑๐ <span class="font-body-md text-body-md font-normal text-on-surface-variant">ครั้ง</span></div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shrink-0">
+<span class="material-symbols-outlined text-[22px]">local_library</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<div class="inline-flex items-center gap-1 text-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+          E-Books ๓,๘๔๐ เล่ม
+        </div>
+<span class="font-body-sm text-body-sm text-outline">พระไตรปิฎกสากล</span>
+</div>
+</div>
+<!-- Card 4: Infrastructure Progress -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-primary-fixed"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">โครงการก่อสร้างเสนาสนะ</span>
+<div class="font-headline-md text-headline-md text-secondary font-headline-sm mt-space-2xs">๗๘% <span class="font-body-md text-body-md font-normal text-on-surface-variant">เสร็จสิ้น</span></div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0">
+<span class="material-symbols-outlined text-[22px]">apartment</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex flex-col gap-1">
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 78%"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-outline pt-0.5">
+<span>หอเรียน &amp; กุฏิสงฆ์</span>
+<span class="text-secondary font-medium">ระยะที่ ๒ ตามเป้า</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Primary Asymmetric Layout: 2/3 and 1/3 -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT 2/3 COLUMN (Span 8) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- Visual Banner & 3 Main Monastic Funds Progress -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg overflow-hidden relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm pb-space-md border-b-0">
+<div>
+<div class="flex items-center gap-space-2xs text-primary mb-1">
+<span class="material-symbols-outlined text-[20px]">auto_stories</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">กองทุนบำรุงการศึกษาและพระพุทธศาสนา</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-headline-sm">ความคืบหน้า ๓ กองทุนบุญหลัก</h2>
+</div>
+<a class="inline-flex items-center gap-1 font-label-lg text-label-lg text-secondary hover:text-on-secondary-container transition-colors" href="#">
+<span>รายละเอียดงบประมาณ</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</a>
+</div>
+<!-- 3 Funds Progress List -->
+<div class="mt-space-md flex flex-col gap-space-lg">
+<!-- Fund 1 -->
+<div class="bg-surface-container-low p-space-md rounded-lg flex flex-col gap-space-xs">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0">
+<span class="material-symbols-outlined text-[20px]">restaurant</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">๑. กองทุนภัตตาหารเพลและน้ำปานะศาสนทายาท</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">อุปถัมภ์ภัตตาหารเช้า-เพล พระภิกษุสามเณรผู้สอบคัดเลือกบาลี</p>
+</div>
+</div>
+<div class="text-right sm:self-center">
+<span class="font-title-md text-title-md font-bold text-on-surface">฿ ๔,๓๕๐,๐๐๐</span>
+<span class="font-body-sm text-body-sm text-outline">/ ฿ ๕,๐๐๐,๐๐๐</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md mt-space-xs">
+<div class="flex-1 bg-surface-container-highest rounded-full h-2.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-700" style="width: 87%"></div>
+</div>
+<span class="font-label-sm text-label-sm font-semibold text-secondary w-12 text-right">๘๗%</span>
+</div>
+</div>
+<!-- Fund 2 -->
+<div class="bg-surface-container-low p-space-md rounded-lg flex flex-col gap-space-xs">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed shrink-0">
+<span class="material-symbols-outlined text-[20px]">school</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">๒. กองทุนส่งเสริมการเรียนพระบาลีและคัมภีร์พระไตรปิฎก</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">ตำราเรียนบาลีศากยสีหะ, นิตยภัตอาจารย์ผู้เชี่ยวชาญ, อุปกรณ์การศึกษา</p>
+</div>
+</div>
+<div class="text-right sm:self-center">
+<span class="font-title-md text-title-md font-bold text-on-surface">฿ ๓,๒๐๐,๐๐๐</span>
+<span class="font-body-sm text-body-sm text-outline">/ ฿ ๕,๐๐๐,๐๐๐</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md mt-space-xs">
+<div class="flex-1 bg-surface-container-highest rounded-full h-2.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-700" style="width: 64%"></div>
+</div>
+<span class="font-label-sm text-label-sm font-semibold text-primary w-12 text-right">๖๔%</span>
+</div>
+</div>
+<!-- Fund 3 -->
+<div class="bg-surface-container-low p-space-md rounded-lg flex flex-col gap-space-xs">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shrink-0">
+<span class="material-symbols-outlined text-[20px]">roofing</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">๓. กองทุนสร้างอาคารหอเรียนและเสนาสนะกุฏิที่พัก</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">พัฒนาอาคารพระปริยัติธรรมและบูรณะกุฏิสงฆ์ให้สัปปายะต่อการปฏิบัติ</p>
+</div>
+</div>
+<div class="text-right sm:self-center">
+<span class="font-title-md text-title-md font-bold text-on-surface">฿ ๗,๘๐๐,๐๐๐</span>
+<span class="font-body-sm text-body-sm text-outline">/ ฿ ๑๐,๐๐๐,๐๐๐</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md mt-space-xs">
+<div class="flex-1 bg-surface-container-highest rounded-full h-2.5 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-700" style="width: 78%"></div>
+</div>
+<span class="font-label-sm text-label-sm font-semibold text-on-primary-container w-12 text-right">๗๘%</span>
+</div>
+</div>
+</div>
+<!-- Visual Highlights strip inside Card -->
+<div class="mt-space-lg grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="relative rounded-lg overflow-hidden h-36 bg-surface-container">
+<div class="bg-cover bg-center w-full h-full" data-alt="A serene open-air Buddhist library hall with monks reading ancient Pali palm-leaf manuscripts and leather-bound canonical books in warm golden afternoon sunlight. The architecture displays subtle royal Thai gilded motifs with deep midnight and teak accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAPh9yu1UGR7Y3o7YIhzt3a096HDpXhETSwmOP_b7jlOIz-d-2k8wQWa4k5CUJ3LQP13u_QNAZgxTs6USJpEgQdHQ5egJQBB5slV60vgzdE4BQ2xq4OArQPsL_ofyMVvRa9Cf04dj6J07VVIxWpz51a_TmpacTofOFQQn7oVbXJLZEcgUMkfJdSrXMSPPzU-iuveNtFP7_hPY1sOFAb8vXnPZufEqyW6MIlwIlV3m0lltkXDOlA40AtqA')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent p-space-sm flex flex-col justify-end">
+<span class="font-label-sm text-label-sm text-primary-fixed uppercase">คลังธรรมศึกษา</span>
+<p class="font-title-md text-title-md text-surface-container-lowest font-medium">ห้องสมุดพระไตรปิฎกนานาชาติ เปิดค้นคว้า ๒๔ ชม.</p>
+</div>
+</div>
+<div class="relative rounded-lg overflow-hidden h-36 bg-surface-container">
+<div class="bg-cover bg-center w-full h-full" data-alt="Architectural construction site of an elegant Thai Buddhist scholastic pavilion building with golden multi-tiered roof trims and arched windows surrounded by lush tropical gardens, bathed in clear sky daylight." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8GQeoWOT1_kFSSNiPZaH9_Rj1sNT1t5tPoypO3uhaao4I0NNBidb8i7cLNXT3Uk9-TTGIIud65qEHG2xGNSuDJbOHZ2BvxBtkvzHlFhjL64cx8D3weOyXTmtAFTAhD_6YbcrqXxcv3Zx51W1mQRL3c0g0Iomq14usjac4ubN89qQ-jENrCgAPVGDNFuUd5B9WL0KLvAhv9FzTih6C3Z7CbwhMZPVUOwx8il_xqKsx1ru5AMOdMhm-Cw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent p-space-sm flex flex-col justify-end">
+<span class="font-label-sm text-label-sm text-secondary-fixed uppercase">อาคารเรียนพระปริยัติธรรม</span>
+<p class="font-title-md text-title-md text-surface-container-lowest font-medium">ความคืบหน้าการมุงหลังคาและงานสถาปัตยกรรม ๘๕%</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Transaction Table Card: e-Donation & Funds -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-md">
+<div>
+<div class="flex items-center gap-space-2xs text-primary mb-1">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">งานการเงินและบัญชีศรัทธา</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-headline-sm">รายงานธุรกรรมบริจาค e-Donation ล่าสุด</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">รายการที่รอการตรวจสอบสลิปและส่งข้อมูลสรรพากรเพื่อลดหย่อนภาษี</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-3 py-1.5 rounded bg-surface-container-low text-on-surface-variant hover:bg-surface-container text-label-sm font-label-sm transition-colors">ทั้งหมด</button>
+<button class="px-3 py-1.5 rounded bg-primary-container text-on-primary-container text-label-sm font-label-sm font-semibold">รออนุมัติ (๕)</button>
+<button class="p-1.5 rounded bg-surface-container text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto -mx-space-lg px-space-lg">
+<table class="w-full text-left text-on-surface">
+<thead>
+<tr class="bg-surface-container-low text-outline font-label-sm text-label-sm uppercase">
+<th class="py-3 px-4 rounded-l">ลำดับ</th>
+<th class="py-3 px-4">วันที่-เวลา</th>
+<th class="py-3 px-4">ผู้บริจาค / เจ้าภาพ</th>
+<th class="py-3 px-4">กองทุนบุญ</th>
+<th class="py-3 px-4 text-right">จำนวนเงิน</th>
+<th class="py-3 px-4 text-center">e-Donation</th>
+<th class="py-3 px-4">สถานะ</th>
+<th class="py-3 px-4 text-center rounded-r">จัดการ</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest/80 transition-colors bg-surface-container-lowest">
+<td class="py-3 px-4 text-outline font-medium">๑</td>
+<td class="py-3 px-4 whitespace-nowrap">๑๙ พ.ย. ๖๗ <span class="text-outline text-label-sm">๑๐:๑๕</span></td>
+<td class="py-3 px-4">
+<div class="font-title-md text-body-md text-on-surface">คุณหญิงพรทิพย์ สุวรรณเมธา</div>
+<div class="text-label-sm text-outline">โทร. ๐๘๑-๙๒๓-XXXX</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-label-sm">ภัตตาหารเพล</span>
+</td>
+<td class="py-3 px-4 text-right font-semibold text-secondary">฿ ๕๐,๐๐๐</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center text-primary" title="แจ้งเลข ๑๓ หลักแล้ว">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+</span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed font-semibold">ตรวจสอบแล้ว</span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded text-primary hover:bg-primary-fixed/40 transition-colors" title="ดูหลักฐานสลิป">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</button>
+<button class="p-1 rounded text-secondary hover:bg-secondary-fixed/40 transition-colors" title="พิมพ์ใบอนุโมทนาบัตร">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-low/40">
+<td class="py-3 px-4 text-outline font-medium">๒</td>
+<td class="py-3 px-4 whitespace-nowrap">๑๙ พ.ย. ๖๗ <span class="text-outline text-label-sm">๐๙:๔๐</span></td>
+<td class="py-3 px-4">
+<div class="font-title-md text-body-md text-on-surface">ครอบครัวศิริเจริญยนต์</div>
+<div class="text-label-sm text-outline">กทม.</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-label-sm">ทุนการศึกษาบาลี</span>
+</td>
+<td class="py-3 px-4 text-right font-semibold text-secondary">฿ ๒๐,๐๐๐</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center text-primary">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+</span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed font-semibold">รอออกใบเสร็จ</span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded text-primary hover:bg-primary-fixed/40 transition-colors" title="ดูหลักฐานสลิป">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</button>
+<button class="p-1 rounded text-secondary hover:bg-secondary-fixed/40 transition-colors" title="พิมพ์ใบอนุโมทนาบัตร">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest/80 transition-colors bg-surface-container-lowest">
+<td class="py-3 px-4 text-outline font-medium">๓</td>
+<td class="py-3 px-4 whitespace-nowrap">๑๘ พ.ย. ๖๗ <span class="text-outline text-label-sm">๒๑:๓๐</span></td>
+<td class="py-3 px-4">
+<div class="font-title-md text-body-md text-on-surface">นายแพทย์สมศักดิ์ วรเดชากุล</div>
+<div class="text-label-sm text-outline">โรงพยาบาลศิริราช</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-label-sm">สร้างเสนาสนะกุฏิ</span>
+</td>
+<td class="py-3 px-4 text-right font-semibold text-secondary">฿ ๑๐๐,๐๐๐</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center text-primary">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+</span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed font-semibold">ตรวจสอบแล้ว</span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded text-primary hover:bg-primary-fixed/40 transition-colors" title="ดูหลักฐานสลิป">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</button>
+<button class="p-1 rounded text-secondary hover:bg-secondary-fixed/40 transition-colors" title="พิมพ์ใบอนุโมทนาบัตร">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-low/40">
+<td class="py-3 px-4 text-outline font-medium">๔</td>
+<td class="py-3 px-4 whitespace-nowrap">๑๘ พ.ย. ๖๗ <span class="text-outline text-label-sm">๑๖:๑๒</span></td>
+<td class="py-3 px-4">
+<div class="font-title-md text-body-md text-on-surface">อุบาสิกาสุนีย์ รัตนโชติ</div>
+<div class="text-label-sm text-outline">สาธุชน จ.นครปฐม</div>
+</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-label-sm">ค่าน้ำ-ค่าไฟฟ้า</span>
+</td>
+<td class="py-3 px-4 text-right font-semibold text-secondary">฿ ๕,๐๐๐</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center text-outline" title="ไม่ประสงค์ลดหย่อน">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded font-label-sm text-label-sm bg-surface-container-highest text-on-surface-variant">สมบูรณ์</span>
+</td>
+<td class="py-3 px-4 text-center whitespace-nowrap">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 rounded text-primary hover:bg-primary-fixed/40 transition-colors" title="ดูหลักฐานสลิป">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface transition-colors" title="พิมพ์ใบอนุโมทนาบัตร">
+<span class="material-symbols-outlined text-[18px]">print</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>แสดง ๔ จาก ๑๒๘ รายการในรอบเดือนนี้</span>
+<div class="flex items-center gap-space-xs">
+<button class="px-2.5 py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface disabled:opacity-50" disabled="">ก่อนหน้า</button>
+<span class="px-2 font-medium">๑</span>
+<button class="px-2.5 py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface">ถัดไป</button>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT 1/3 COLUMN (Span 4) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Card 3: Weekly Calendar & Examinations -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-2xs text-secondary">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-headline-sm">กำหนดการสอบ &amp; ศาสนกิจ</h3>
+</div>
+<span class="text-label-sm font-label-sm text-outline">สัปดาห์นี้</span>
+</div>
+<div class="flex flex-col gap-space-md mt-space-sm">
+<!-- Event Item 1 -->
+<div class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="w-12 h-12 rounded-lg bg-primary-fixed flex flex-col items-center justify-center text-on-primary-fixed shrink-0">
+<span class="font-label-sm text-label-sm font-bold uppercase leading-none">พ.ย.</span>
+<span class="font-headline-sm text-title-lg font-bold leading-none mt-0.5">๒๑</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="px-1.5 py-0.5 rounded bg-primary text-on-primary text-[10px] font-semibold">สอบวัดผล</span>
+<span class="font-body-sm text-label-sm text-outline">๑๓:๐๐ - ๑๖:๐๐ น.</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mt-1 truncate">สอบวัดผลบาลีศากยสีหะ ชั้นประโยค ๓</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">ณ อาคารหอประชุมวิทยปสาทการี</p>
+</div>
+</div>
+<!-- Event Item 2 -->
+<div class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="w-12 h-12 rounded-lg bg-secondary-fixed flex flex-col items-center justify-center text-on-secondary-fixed shrink-0">
+<span class="font-label-sm text-label-sm font-bold uppercase leading-none">พ.ย.</span>
+<span class="font-headline-sm text-title-lg font-bold leading-none mt-0.5">๒๓</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="px-1.5 py-0.5 rounded bg-secondary text-on-secondary text-[10px] font-semibold">พิธีสงฆ์</span>
+<span class="font-body-sm text-label-sm text-outline">๐๙:๓๐ น.</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mt-1 truncate">พิธีเจริญพระพุทธมนต์สมโภชพระคัมภีร์</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">คณะสงฆ์และสาธุชนร่วมถวายผ้าป่าการศึกษา</p>
+</div>
+</div>
+<!-- Event Item 3 -->
+<div class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest flex flex-col items-center justify-center text-on-surface shrink-0">
+<span class="font-label-sm text-label-sm font-bold uppercase leading-none">พ.ย.</span>
+<span class="font-headline-sm text-title-lg font-bold leading-none mt-0.5">๒๔</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="px-1.5 py-0.5 rounded bg-outline-variant text-on-surface-variant text-[10px] font-semibold">ภัตตาหาร</span>
+<span class="font-body-sm text-label-sm text-outline">๑๐:๓๐ น.</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mt-1 truncate">ภัตตาหารมหาทานบารมีประจำสัปดาห์</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">เจ้าภาพ: สมาคมศิษย์เก่าบาลีเถรวาท</p>
+</div>
+</div>
+</div>
+<a class="mt-space-md pt-space-xs text-center font-label-sm text-label-sm text-primary hover:text-on-primary-container font-semibold" href="#">
+          ดูปฏิทินศาสนกิจและตารางสอบทั้งหมด →
+        </a>
+</div>
+<!-- Card 4: Daily Monastic Operations Status -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-2xs text-primary">
+<span class="material-symbols-outlined text-[20px]">fact_check</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-headline-sm">สถานะการอุปถัมภ์รายวัน</h3>
+</div>
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+</div>
+<div class="flex flex-col gap-space-sm mt-space-xs">
+<!-- Item 1: Meal Hosting -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">rice_bowl</span>
+<div>
+<span class="font-title-md text-body-md text-on-surface block">ภัตตาหารเช้า-เพลวันนี้</span>
+<span class="font-body-sm text-label-sm text-on-surface-variant">เจ้าภาพ: คณะครูอาจารย์โรงเรียนพระปริยัติฯ</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold shrink-0">มีเจ้าภาพครบ</span>
+</div>
+<!-- Item 2: Kuti Residence -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">hotel</span>
+<div>
+<span class="font-title-md text-body-md text-on-surface block">กุฏิสัปปายะพักสงฆ์</span>
+<span class="font-body-sm text-label-sm text-on-surface-variant">ครองพำนัก ๔๔ / ๔๘ ห้อง</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm shrink-0">ว่าง ๔ ห้อง</span>
+</div>
+<!-- Item 3: Attendance -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-[22px]">how_to_reg</span>
+<div>
+<span class="font-title-md text-body-md text-on-surface block">การเข้าห้องเรียนพระบาลี</span>
+<span class="font-body-sm text-label-sm text-on-surface-variant">สถิติเช็คชื่อภาคเช้า ๑๔๘ รูป</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold shrink-0">๑๐๐% ครบ</span>
+</div>
+</div>
+</div>
+<!-- Card 5: Quick Approval Monastic Enrollment Action -->
+<div class="bg-surface-container-low rounded-xl shadow-sm p-space-lg relative overflow-hidden">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">งานรับสมัครศาสนทายาทใหม่</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-headline-sm mt-0.5">อนุมัติการสมัครเรียนบาลี</h3>
+</div>
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-label-sm shrink-0">
+            ๗
+          </div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+          มีผู้สมัครใหม่ (พระภิกษุ ๔ รูป, สามเณร ๓ รูป) ผ่านการสอบสัมภาษณ์เบื้องต้น รอคณะกรรมการอนุมัติคุณสมบัติขั้นสุดท้าย
+        </p>
+<!-- Monastic Candidate Preview Pills -->
+<div class="mt-space-sm flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-on-surface text-label-sm font-body-sm">พระมหาศุภชัย สุจิตฺโต</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-on-surface text-label-sm font-body-sm">สามเณรธีรภัทร ปุญฺญาวโร</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-outline text-label-sm font-body-sm">+๕ ท่าน</span>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-space-xs">
+<button class="flex-1 py-2 px-space-sm rounded bg-primary text-on-primary font-label-sm text-label-sm hover:bg-primary-container hover:text-on-primary-container transition-colors text-center font-semibold">
+            เปิดตรวจเอกสารทั้ง ๗ รูป
+          </button>
+<button class="p-2 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Micro-interaction for smooth status buttons feedback
+  document.addEventListener('DOMContentLoaded', () => {
+    const actionButtons = document.querySelectorAll('button[title]');
+    actionButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const title = btn.getAttribute('title');
+        console.log(`Action triggered: ${title}`);
+      });
+    });
+  });
+</script></main></div></body></html>

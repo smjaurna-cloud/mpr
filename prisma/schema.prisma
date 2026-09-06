@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String?  @unique
+  fullName      String
+  paliName      String?  // ฉายา เช่น ฐิตสิริ, ปิยสีโล
+  sanghaRank    String?  // สมณศักดิ์
+  monasticType  String   @default("SAMANERA") // BHIKKHU, SAMANERA, LAYPERSON
+  role          String   @default("SAMANERA") // SUPER_ADMIN, TEACHER, PROCTOR, SAMANERA, PATRON
+  templeName    String?  // วัดสังกัด
+  phone         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  samaneraProfile SamaneraProfile?
+  routinesChecked RoutineLog[]     @relation("ProctorChecked")
+  approvals       ApprovalStep[]
+}
+
+model SamaneraProfile {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentNumber  String   @unique // รหัสศากยบุตร
+  kutiNumber        String?  // กุฏิ / อาศรมที่พัก
+  dateOfOrdination  DateTime?
+  preceptorName     String?  // พระอุปัชฌาย์
+  bloodType         String?
+  allergies         String?  // การแพ้ยา / แพ้อาหาร
+  emergencyContact  String?
+
+  routines          RoutineLog[]
+  mukhopathaRecords MukhopathaRecord[]
+  academicRecord    AcademicRecord?
+  patronPairings    PatronSamaneraPair[]
+}
+
+model RoutineLog {
+  id          String   @id @default(uuid())
+  samaneraId  String
+  samanera    SamaneraProfile @relation(fields: [samaneraId], references: [id], onDelete: Cascade)
+  routineType String   // MORNING_CHANTING, EVENING_CHANTING, KAMMATTHANA, PINDBAT, MEAL_OFFERING
+  date        String   // YYYY-MM-DD
+  timeSlot    String?
+  status      String   @default("PRESENT") // PRESENT, LATE, SICK_LEAVE, ABSENT
+  checkedById String?
+  checkedBy   User?    @relation("ProctorChecked", fields: [checkedById], references: [id])
+  remarks     String?
+  createdAt   DateTime @default(now())
+}
+
+model AlmsBooking {
+  id              String   @id @default(uuid())
+  bookingDate     String   // YYYY-MM-DD
+  mealType        String   @default("LUNCH") // BREAKFAST, LUNCH, PANA
+  hostName        String   // ชื่อเจ้าภาพ / คณะศรัทธา
+  hostPhone       String
+  numberOfGuests  Int      @default(1)
+  menuItems       String?  // เมนูภัตตาหาร
+  donationAmount  Float    @default(0)
+  status          String   @default("CONFIRMED") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  isTaxDeductible Boolean  @default(true)
+  receiptHash     String?
+  createdAt       DateTime @default(now())
+}
+
+model PatronSamaneraPair {
+  id          String   @id @default(uuid())
+  samaneraId  String
+  samanera    SamaneraProfile @relation(fields: [samaneraId], references: [id], onDelete: Cascade)
+  patronName  String
+  patronPhone String
+  lineUserId  String?
+  startDate   DateTime @default(now())
+  status      String   @default("ACTIVE")
+}
+
+model MukhopathaRecord {
+  id            String   @id @default(uuid())
+  samaneraId    String
+  samanera      SamaneraProfile @relation(fields: [samaneraId], references: [id], onDelete: Cascade)
+  scriptureName String   // เช่น คัมภีร์ปทรูปสิทธิ, สัททนีติ, พระปาติโมกข์
+  chapterTitle  String   // บท/กัณฑ์
+  grade         String   // EXCELLENT, GOOD, NEEDS_IMPROVE, FAILED
+  audioUrl      String?
+  evaluatorName String
+  evaluatorNote String?
+  passedDate    String   // YYYY-MM-DD
+  createdAt     DateTime @default(now())
+}
+
+model SarabanDocument {
+  id            String   @id @default(uuid())
+  docNumber     String   @unique
+  title         String
+  category      String   // คำสั่งราชวิทยาลัย, บันทึกข้อความ, หนังสืออาราธนา
+  urgencyLevel  String   @default("NORMAL") // NORMAL, URGENT, TOP_URGENT
+  originator    String   // ส่วนงานผู้เสนอ
+  status        String   @default("PENDING_APPROVAL") // PENDING_APPROVAL, APPROVED, REJECTED
+  createdAt     DateTime @default(now())
+  
+  steps         ApprovalStep[]
+}
+
+model ApprovalStep {
+  id            String   @id @default(uuid())
+  documentId    String
+  document      SarabanDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  approverId    String
+  approver      User     @relation(fields: [approverId], references: [id])
+  action        String   // APPROVED, REJECTED
+  comment       String?
+  signatureHash String
+  approvedAt    DateTime @default(now())
+}
+
+model AcademicRecord {
+  id              String   @id @default(uuid())
+  samaneraId      String   @unique
+  samanera        SamaneraProfile @relation(fields: [samaneraId], references: [id], onDelete: Cascade)
+  paliLevel       String   // เช่น บาลีศากยบุตร ชั้น ๒ (เทียบเท่า ป.ธ.๓)
+  mcuStudentId    String?  // รหัสนิสิต มจร
+  gpax            Float    @default(3.85)
+  vipassanaHours  Int      @default(120) // ชั่วโมงปฏิบัติธรรมสะสม
+  paliScore       Float    @default(94.5)
+  status          String   @default("STUDYING")
+}
