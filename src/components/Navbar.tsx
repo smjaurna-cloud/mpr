@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { Bell, ShieldCheck, UserCircle2, Sparkles, BookOpen } from "lucide-react";
+import { Bell, ShieldCheck, UserCircle2, Sparkles, BookOpen, MessageSquareText } from "lucide-react";
+import { VisitorCounterBadge } from "./VisitorCounterBadge";
 
 export default function Navbar() {
   return (
@@ -58,11 +59,19 @@ export default function Navbar() {
         </nav>
 
         {/* Right Actions & Profile */}
-        <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 rounded-lg text-xs font-semibold text-amber-900 shadow-2xs">
-            <ShieldCheck className="w-4 h-4 text-amber-600" />
-            <span>ระบบบูรณาการ มจร ๒๕๖๙</span>
-          </div>
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Visitor Counter Live Badge */}
+          <VisitorCounterBadge className="hidden md:inline-flex" />
+
+          {/* Quick Chat Board Access */}
+          <Link
+            href="/chat-board"
+            title="แชตบอร์ด & สนทนาธรรมออนไลน์ (MOD-19)"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 text-xs font-semibold transition-colors"
+          >
+            <MessageSquareText className="w-4 h-4 text-amber-700" />
+            <span className="hidden sm:inline">แชตบอร์ด</span>
+          </Link>
 
           <button 
             type="button" 

@@ -23,7 +23,9 @@ import {
   UserCheck,
   School,
   Car,
-  QrCode
+  QrCode,
+  BarChart3,
+  MessageSquareText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -69,6 +71,13 @@ const navigationGroups: NavGroup[] = [
         href: "/mukhopatha",
         icon: BookMarked,
         badge: "ศากยบุตร",
+      },
+      {
+        name: "แชตบอร์ด & สนทนาธรรม",
+        description: "MOD-19: กระดานสนทนา & ห้องแชตสด",
+        href: "/chat-board",
+        icon: MessageSquareText,
+        badge: "Live",
       },
     ],
   },
@@ -130,6 +139,13 @@ const navigationGroups: NavGroup[] = [
         href: "/complaints-tracking",
         icon: QrCode,
         badge: "QR & Track",
+      },
+      {
+        name: "สถิติผู้เข้าเยี่ยมชม",
+        description: "MOD-18: ทราฟฟิกสด & การใช้งานระบบ",
+        href: "/visitor-analytics",
+        icon: BarChart3,
+        badge: "Live",
       },
     ],
   },
