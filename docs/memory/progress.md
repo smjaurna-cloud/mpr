@@ -5,9 +5,9 @@
 ---
 
 ## 1. Overall Status
-- **Current Milestone:** Enterprise Buddhist College ERP System (21 Full Modules Complete)
+- **Current Milestone:** Enterprise Buddhist College ERP System (22 Full Modules Complete)
 - **Active User:** `somboon` (Super Administrator: `smjaurna@gmail.com`, เบอร์โทร: `099-445-4256`)
-- **Status:** ✅ Production Build Ready & Verified (32/32 Static & Dynamic Pages Prerendered Successfully)
+- **Status:** ✅ Production Build Ready & Verified (34/34 Static & Dynamic Pages Prerendered Successfully)
 - **Health:** 🟢 Excellent (Zero Errors, Strict Mode Type-Checked)
 - **Verified Date:** 2026-09-09
 - **System Theme:** Sacred Royal Heritage (พุทธศิลป์โมเดิร์น: Royal Gold #C5A059, Civara Saffron, Midnight Navy, Warm Ivory)
@@ -62,14 +62,22 @@
     * ท้ายเว็บทางการระดับสถาบันอุดมศึกษา (Global Institutional Footer: `Footer.tsx`): ๔ คอลัมน์มาตรฐาน ข้อมูลที่ตั้ง เวลาทำการราชการ เวลาถวายภัตตาหารเพล ลิงก์ด่วน และเครื่องหมายรับรอง ITA / PDPA Compliant ติดตั้งทั่วทั้งระบบ
     * วิดเจ็ตโทรด่วนลอยหน้าจอ (Floating Quick Contact Speed-Dial: `QuickContactSpeedDial.tsx`): เมนูปุ่มลอยมุมขวาล่าง โทรเบอร์กลาง, สายด่วน ๒๔ ชม., LINE Official, แผนที่ GPS, ส่งข้อความ
     * Backend API (`src/app/api/contact/route.ts`): รองรับ GET ข้อมูลติดต่อ/ค้นหาตั๋ว, POST ส่งข้อความติดต่อพร้อมสร้าง Ticket Code, PATCH อัปเดตสถานะคำร้อง
-    * บูรณาการระบบนำทางใน `Sidebar.tsx` (MOD-21), ทางลัดใน `Navbar.tsx` และติดตั้งใน `layout.tsx` ผ่านการทดสอบ Next.js Production Build ๓๒/๓๒ routes สำเร็จ ๑๐๐%
-* **Latest Action:** พัฒนาระบบช่องทางติดต่อราชการตามมาตรฐานสถาบันอุดมศึกษา (MOD-21: `/contact`) สำเร็จครบถ้วน ๑๐๐% พร้อมใช้งานจริง
+  - TASK-926: ระบบเปิดอ่านเอกสารราชการและพรีวิวไฟล์งานอัจฉริยะ (MOD-22: `/file-viewer`) และโมดอลพรีวิวรวมศูนย์ (`DocumentViewerModal.tsx`):
+    * ระบบแปลงและแสดงผลเอกสาร Word (DOCX): ใช้ `mammoth` สกัดโครงสร้าง HTML แปลงเอกสารเป็นมุมมองหน้ากระดาษทางการ จัดระเบียบหัวข้อ ย่อหน้า และตารางข้อมูลสีทองสง่างาม พร้อมลายน้ำตราสัญลักษณ์ วส. มจร
+    * ระบบแสดงผลสเปรดชีต Excel (XLSX): ใช้ `xlsx` แปลงข้อมูลเป็นตาราง Spreadsheet Interactive รองรับการสลับชีต ค้นหาข้อมูลในตาราง และแถบระบุเลขแถว/คอลัมน์
+    * ระบบแสดงผลเอกสาร PDF: ฝัง PDF Viewer แสดงผลหน้ากระดาษแบบอินเตอร์แอคทีฟ พร้อมปุ่มเปิดเต็มจอและพิมพ์เอกสาร
+    * แถบเครื่องมือจัดการเอกสาร (Document Toolbar): ควบคุมการย่อ-ขยาย (Zoom: ๖๐% – ๑๕๐%), พิมพ์เอกสาร (Print), คัดลอกข้อความ (Copy Plain Text), ดาวน์โหลดไฟล์ต้นฉบับ, ขยายเต็มจอ (Fullscreen)
+    * การรองรับไฟล์งานจริงทั้งระบบ (๑๘ รายการ): ตั้งค่าเริ่มต้นเปิดไฟล์ `อาคารสถานที่มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย.docx` (๑๗๗ ไร่เศษ, ๑๑ อาคาร), กรอบงบประมาณ ๒๕๖๙ (PDF), การจัดห้องเรียน (PDF), ทะเบียนสงฆ์ ๑๔๓ รูป (XLSX), อัตรากำลัง ๓๖ อัตรา (XLSX), มคอ.๒ (PDF), ประวัติคณาจารย์ (DOCX), MOU พุทธปัญญาประดิษฐ์ (DOCX)
+    * การเปิดไฟล์ภายนอกจากเครื่องคอมพิวเตอร์ (Local File Opener): รองรับ Drag & Drop และการคลิกเลือกไฟล์ `.docx`, `.xlsx`, `.pdf`, `.csv`, `.txt` เพื่อแปลงและเปิดอ่านในเบราว์เซอร์ได้ทันที
+    * Backend API (`src/app/api/file-viewer/route.ts`): รองรับทั้ง `GET` (ดึงไฟล์ในระบบตามชื่อ/รหัส) และ `POST` (รับไฟล์อัปโหลดจากผู้ใช้เพื่อแปลงผลสด)
+    * บูรณาการข้ามโมดูล: เพิ่มปุ่ม "เปิดอ่านเอกสารทันที (DOCX)" ในหน้า `/contact`, อัปเกรดปุ่ม "เปิดอ่าน" ในหน้า `/library` ให้เปิดผ่าน DocumentViewerModal ทุกไฟล์, เพิ่มเมนูใน `Sidebar.tsx` (MOD-22), ผ่านการทดสอบ Next.js Production Build ๓๔/๓๔ routes สำเร็จ ๑๐๐%
+* **Latest Action:** พัฒนาระบบเปิดอ่านเอกสารราชการและพรีวิวไฟล์อัจฉริยะ (MOD-22: `/file-viewer`) สำเร็จครบถ้วน ๑๐๐% พร้อมใช้งานจริง
 
 ---
 
 ## 3. Module Completion Status
 | Module ID | Module Name | Status | Key Deliverables |
-| :---: | :--- | :--- :--- | :--- |
+| :---: | :--- | :--- | :--- |
 | **DOCS** | Context Memory 6 Files | ✅ Completed | `docs/memory/*.md`, `AGENTS.md` ครบ 6 ไฟล์ |
 | **CORE** | Next.js 15 + Tailwind + Layout | ✅ Completed | `src/app/layout.tsx`, `src/app/page.tsx`, `src/components/*` |
 | **MOD-01**| Samanera 24/7 Wellbeing | ✅ Completed | `src/app/monastic-life/page.tsx` (เช็กกิจวัตร, สุขภาพ, แจ้งเตือนครัว) |
@@ -93,5 +101,7 @@
 | **MOD-19**| Chat Board & Monastic Community | ✅ Completed | `src/app/chat-board/page.tsx` (กระดานสนทนา ๔ หมวดหมู่, ตอบกระทู้, อนุโมทนา 🙏, ห้องแชตสด, MCU Pali Bot, Moderation) |
 | **MOD-20**| Graduate Academic & Thesis Progress | ✅ Completed | `src/app/graduate-progress/page.tsx` (พธ.ด. ๒๖ รูป ๒๑ ขั้นตอน, พธ.ม. ๘ รูป ๑๕ ขั้นตอน, Matrix Board, Admin Edit, Excel CSV, พิมพ์ A4) |
 | **MOD-21**| Official Standard Contact & Directory | ✅ Completed | `src/app/contact/page.tsx` (ทำเนียบ ๘ ฝ่ายงาน, แผนที่ GPS, LINE, Q&A ฟอร์ม ITA O4-O5, Footer, SpeedDial, `/api/contact`) |
+| **MOD-22**| Smart Document Reader & Official File Viewer | ✅ Completed | `src/app/file-viewer/page.tsx`, `src/components/DocumentViewerModal.tsx`, `src/app/api/file-viewer/route.ts` (DOCX, XLSX, PDF, Text) |
+
 
 

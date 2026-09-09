@@ -27,7 +27,8 @@ import {
   BarChart3,
   MessageSquareText,
   Award,
-  PhoneCall
+  PhoneCall,
+  Eye
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -176,6 +177,13 @@ const navigationGroups: NavGroup[] = [
         badge: "พระไตรปิฎก",
       },
       {
+        name: "เปิดอ่านเอกสาร & พรีวิวไฟล์",
+        description: "MOD-22: Word, Excel, PDF อัจฉริยะ",
+        href: "/file-viewer",
+        icon: Eye,
+        badge: "DocViewer",
+      },
+      {
         name: "งานวิจัย & คุณภาพการศึกษา",
         description: "คลังงานวิจัยพุทธ & ประกัน AUN-QA",
         href: "/research-qa",
@@ -295,7 +303,7 @@ export default function Sidebar() {
           สังกัด: มหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย (มจร)
         </p>
         <div className="pt-2 border-t border-slate-200 text-[10px] text-slate-400 flex justify-between">
-          <span>Production Pilot v1.2 (๒๑ โมดูล)</span>
+          <span>Production Pilot v1.2 (๒๒ โมดูล)</span>
           <span className="text-emerald-600 font-medium">● ระบบสมบูรณ์</span>
         </div>
       </div>

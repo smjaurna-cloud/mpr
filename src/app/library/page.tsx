@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { mockTipitakaBooks, TipitakaBook } from "@/data/mockData";
 import { officialInstitutionalDocuments, OfficialDocument, getOfficialDocumentsStats } from "@/data/officialDocumentsData";
+import DocumentViewerModal from "@/components/DocumentViewerModal";
 
 export default function LibraryPage() {
   const [activeTab, setActiveTab] = useState<"tipitaka" | "official-documents">("tipitaka");
@@ -35,6 +36,7 @@ export default function LibraryPage() {
   // Official Documents state
   const [docSearchQuery, setDocSearchQuery] = useState("");
   const [selectedDocCategory, setSelectedDocCategory] = useState<string>("ALL");
+  const [viewerDoc, setViewerDoc] = useState<OfficialDocument | null>(null);
 
   const docStats = getOfficialDocumentsStats();
 
@@ -354,15 +356,14 @@ export default function LibraryPage() {
                     </div>
 
                     <div className="flex items-center gap-2 self-end md:self-center shrink-0">
-                      <a
-                        href={doc.downloadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg flex items-center gap-1.5 font-medium transition-colors"
+                      <button
+                        type="button"
+                        onClick={() => setViewerDoc(doc)}
+                        className="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-lg flex items-center gap-1.5 font-bold transition-colors border border-amber-300 shadow-2xs"
                       >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span>เปิดดู</span>
-                      </a>
+                        <Eye className="w-3.5 h-3.5 text-amber-700" />
+                        <span>เปิดอ่าน</span>
+                      </button>
 
                       <a
                         href={doc.downloadUrl}
@@ -445,6 +446,18 @@ export default function LibraryPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Official Document Viewer Modal */}
+      {viewerDoc && (
+        <DocumentViewerModal
+          isOpen={!!viewerDoc}
+          onClose={() => setViewerDoc(null)}
+          fileIdentifier={viewerDoc.id}
+          initialTitle={viewerDoc.displayName}
+          initialFormat={viewerDoc.fileFormat}
+          downloadUrl={viewerDoc.downloadUrl}
+        />
       )}
     </div>
   );

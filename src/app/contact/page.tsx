@@ -33,7 +33,9 @@ import {
   FileCheck2,
   HeartPulse,
   Download,
+  Eye,
 } from "lucide-react";
+import DocumentViewerModal from "@/components/DocumentViewerModal";
 import {
   mainCollegeContact,
   officialDepartments,
@@ -50,6 +52,7 @@ export default function ContactPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDeptFilter, setSelectedDeptFilter] = useState("ALL");
   const [copiedText, setCopiedText] = useState<string | null>(null);
+  const [isDocViewerOpen, setIsDocViewerOpen] = useState(false);
 
   // Inquiry Form State
   const [formData, setFormData] = useState({
@@ -545,14 +548,22 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsDocViewerOpen(true)}
+                  className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>เปิดอ่านเอกสารทันที (DOCX)</span>
+                </button>
                 <a
                   href={campusLandInfo.documentPath}
                   download={campusLandInfo.documentFileName}
                   className="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold text-xs border border-amber-300/80 flex items-center gap-1.5 transition-colors shadow-xs"
                 >
                   <Download className="w-3.5 h-3.5 text-amber-700" />
-                  <span>ดาวน์โหลดเอกสารอาคาร (.docx)</span>
+                  <span>ดาวน์โหลด (.docx)</span>
                 </a>
                 <span className="text-xs bg-amber-100 text-amber-900 px-2.5 py-1 rounded-full font-bold">
                   ๑๑ อาคาร
@@ -1152,6 +1163,16 @@ export default function ContactPage() {
           </div>
         </div>
       )}
+
+      {/* Official Building Document Viewer Modal */}
+      <DocumentViewerModal
+        isOpen={isDocViewerOpen}
+        onClose={() => setIsDocViewerOpen(false)}
+        fileIdentifier="อาคารสถานที่มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย.docx"
+        initialTitle="ข้อมูลอาคารสถานที่และผังวิทยาเขต มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย (๑๗๗ ไร่เศษ)"
+        initialFormat="DOCX"
+        downloadUrl={campusLandInfo.documentPath}
+      />
     </div>
   );
 }
