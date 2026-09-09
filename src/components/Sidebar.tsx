@@ -26,7 +26,8 @@ import {
   QrCode,
   BarChart3,
   MessageSquareText,
-  Award
+  Award,
+  PhoneCall
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -147,6 +148,13 @@ const navigationGroups: NavGroup[] = [
         href: "/visitor-analytics",
         icon: BarChart3,
         badge: "Live",
+      },
+      {
+        name: "ช่องทางติดต่อราชการ",
+        description: "MOD-21: ทำเนียบ ๘ ฝ่ายงาน & แผนที่ (ITA O4)",
+        href: "/contact",
+        icon: PhoneCall,
+        badge: "ITA O4",
       },
     ],
   },
@@ -287,7 +295,7 @@ export default function Sidebar() {
           สังกัด: มหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย (มจร)
         </p>
         <div className="pt-2 border-t border-slate-200 text-[10px] text-slate-400 flex justify-between">
-          <span>เวอร์ชัน ๑.๐ MVP (๑๓ โมดูล)</span>
+          <span>Production Pilot v1.2 (๒๑ โมดูล)</span>
           <span className="text-emerald-600 font-medium">● ระบบสมบูรณ์</span>
         </div>
       </div>

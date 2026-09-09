@@ -5,9 +5,9 @@
 ---
 
 ## 1. Overall Status
-- **Current Milestone:** Enterprise Buddhist College ERP System (20 Full Modules Complete)
+- **Current Milestone:** Enterprise Buddhist College ERP System (21 Full Modules Complete)
 - **Active User:** `somboon` (Super Administrator: `smjaurna@gmail.com`, เบอร์โทร: `099-445-4256`)
-- **Status:** ✅ Production Build Ready & Verified (30/30 Static & Dynamic Pages Prerendered Successfully)
+- **Status:** ✅ Production Build Ready & Verified (32/32 Static & Dynamic Pages Prerendered Successfully)
 - **Health:** 🟢 Excellent (Zero Errors, Strict Mode Type-Checked)
 - **Verified Date:** 2026-09-09
 - **System Theme:** Sacred Royal Heritage (พุทธศิลป์โมเดิร์น: Royal Gold #C5A059, Civara Saffron, Midnight Navy, Warm Ivory)
@@ -54,14 +54,22 @@
     * โหมดผู้ดูแลระบบ (Admin Edit Toggle): สำหรับ `Somboon Admin` สามารถคลิกสลับสถานะผ่าน/ยังไม่ผ่านในแต่ละขั้นตอนได้ทันที พร้อมบันทึกลง LocalStorage
     * ฟังก์ชันอัจฉริยะ: ค้นหาตามชื่อ-ฉายา-นามสกุล, กรองตามขั้นตอนสำคัญ (ผ่านโครงร่าง, ปฏิบัติธรรมวิปัสสนา, ผ่าน QE), สลับมุมมองบอร์ดและมุมมองการ์ด, Modal รายละเอียดหมุดหมายครบ ๕ หมวด
     * การส่งออกและการพิมพ์: ส่งออก Excel CSV ด้วย UTF-8 BOM รองรับภาษาไทย 100% และโหมดพิมพ์ A4 แนวนอน (Landscape) สำหรับพิมพ์ติดบอร์ดประกาศสถาบัน
-    * การเชื่อมโยงระบบ: เพิ่มรายการเมนูใน `Sidebar.tsx`, เชื่อมแบนเนอร์ทางลัดและปุ่มดาวน์โหลดใน `/attendance-tracking`, ผ่านการทดสอบ Next.js Production Build ๓๐/๓๐ routes สมบูรณ์ ๑๐๐%
-* **Latest Action:** พัฒนาระบบติดตามความก้าวหน้าดุษฎีนิพนธ์/วิทยานิพนธ์ (MOD-20: `/graduate-progress`) สำเร็จครบถ้วน ๑๐๐% พร้อมใช้งานจริง
+  - TASK-925: ศูนย์บริการข้อมูลและช่องทางติดต่อราชการตามระบบมาตรฐานสถาบันอุดมศึกษาและเกณฑ์ ITA (MOD-21: `/contact`) ครอบคลุม:
+    * ข้อมูลติดต่อทางการสถาบัน: วัดบาลีเถรวาทสังฆาราม กำแพงแสน นครปฐม, พิกัดภูมิศาสตร์ GPS (14.0325° N, 99.9856° E), แผนที่ดาวเทียม Google Maps Interactive, เส้นทางการเดินทาง ๓ รูปแบบ (รถยนต์ส่วนตัว, รถตู้ประจำทางสาย ๘๐, รถไฟ) และทำเนียบแผนผัง ๗ อาคารหลัก
+    * ทำเนียบหมายเลขภายใน ๘ ฝ่ายงานทางการ (สำนักงานผู้อำนวยการ, สำนักวิชาการ/ทะเบียน, ฝ่ายปกครอง/พระพี่เลี้ยง ๒๔ ชม., ฝ่ายบริหารบุคคล/สารบรรณ, การเงิน/พัสดุ, ศูนย์โภชนาการ/ภัตตาหารเพล, ศูนย์ไอที/พุทธปัญญาประดิษฐ์ BAI, หน่วยปฐมพยาบาลสงฆ์ ๒๔ ชม.) พร้อมระบบค้นหา, เบอร์ต่อ, เบอร์ตรง, อีเมล และรายการงานบริการ
+    * สื่อสังคมออนไลน์ & ดิจิทัล: LINE Official `@palitheravada` พร้อมปุ่ม Add Friend และกล่อง QR Code, Facebook Fanpage (๒๘,๙๐๐ ผู้ติดตาม), YouTube Channel (๑๕,๒๐๐ สมาชิก), เว็บไซต์หลัก palitheravada.mcu.ac.th และพอร์ทัล มจร วังน้อย
+    * แบบฟอร์มติดต่อสอบถามออนไลน์และ Q&A (เกณฑ์ ITA O5) พร้อมระบบสร้างรหัสตั๋วอัตโนมัติ `INQ-2569-xxx`, ระบบค้นหาและตรวจสอบสถานะคำร้อง (Ticket Tracking) พร้อม Stepper ๓ ขั้นตอน (รับเรื่อง -> กำลังตรวจ -> ตอบกลับ)
+    * ท้ายเว็บทางการระดับสถาบันอุดมศึกษา (Global Institutional Footer: `Footer.tsx`): ๔ คอลัมน์มาตรฐาน ข้อมูลที่ตั้ง เวลาทำการราชการ เวลาถวายภัตตาหารเพล ลิงก์ด่วน และเครื่องหมายรับรอง ITA / PDPA Compliant ติดตั้งทั่วทั้งระบบ
+    * วิดเจ็ตโทรด่วนลอยหน้าจอ (Floating Quick Contact Speed-Dial: `QuickContactSpeedDial.tsx`): เมนูปุ่มลอยมุมขวาล่าง โทรเบอร์กลาง, สายด่วน ๒๔ ชม., LINE Official, แผนที่ GPS, ส่งข้อความ
+    * Backend API (`src/app/api/contact/route.ts`): รองรับ GET ข้อมูลติดต่อ/ค้นหาตั๋ว, POST ส่งข้อความติดต่อพร้อมสร้าง Ticket Code, PATCH อัปเดตสถานะคำร้อง
+    * บูรณาการระบบนำทางใน `Sidebar.tsx` (MOD-21), ทางลัดใน `Navbar.tsx` และติดตั้งใน `layout.tsx` ผ่านการทดสอบ Next.js Production Build ๓๒/๓๒ routes สำเร็จ ๑๐๐%
+* **Latest Action:** พัฒนาระบบช่องทางติดต่อราชการตามมาตรฐานสถาบันอุดมศึกษา (MOD-21: `/contact`) สำเร็จครบถ้วน ๑๐๐% พร้อมใช้งานจริง
 
 ---
 
 ## 3. Module Completion Status
 | Module ID | Module Name | Status | Key Deliverables |
-| :---: | :--- | :---: | :--- |
+| :---: | :--- | :--- :--- | :--- |
 | **DOCS** | Context Memory 6 Files | ✅ Completed | `docs/memory/*.md`, `AGENTS.md` ครบ 6 ไฟล์ |
 | **CORE** | Next.js 15 + Tailwind + Layout | ✅ Completed | `src/app/layout.tsx`, `src/app/page.tsx`, `src/components/*` |
 | **MOD-01**| Samanera 24/7 Wellbeing | ✅ Completed | `src/app/monastic-life/page.tsx` (เช็กกิจวัตร, สุขภาพ, แจ้งเตือนครัว) |
@@ -84,4 +92,6 @@
 | **MOD-18**| Visitor Analytics & Traffic Insights | ✅ Completed | `src/app/visitor-analytics/page.tsx` (ทราฟฟิกสด ๔๒ คน, สถิติวัน/เดือน/ปี, แหล่งที่มา, อุปกรณ์, ส่งออก CSV) |
 | **MOD-19**| Chat Board & Monastic Community | ✅ Completed | `src/app/chat-board/page.tsx` (กระดานสนทนา ๔ หมวดหมู่, ตอบกระทู้, อนุโมทนา 🙏, ห้องแชตสด, MCU Pali Bot, Moderation) |
 | **MOD-20**| Graduate Academic & Thesis Progress | ✅ Completed | `src/app/graduate-progress/page.tsx` (พธ.ด. ๒๖ รูป ๒๑ ขั้นตอน, พธ.ม. ๘ รูป ๑๕ ขั้นตอน, Matrix Board, Admin Edit, Excel CSV, พิมพ์ A4) |
+| **MOD-21**| Official Standard Contact & Directory | ✅ Completed | `src/app/contact/page.tsx` (ทำเนียบ ๘ ฝ่ายงาน, แผนที่ GPS, LINE, Q&A ฟอร์ม ITA O4-O5, Footer, SpeedDial, `/api/contact`) |
+
 

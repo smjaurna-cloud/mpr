@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import Footer from "@/components/Footer";
+import QuickContactSpeedDial from "@/components/QuickContactSpeedDial";
 
 export const metadata: Metadata = {
   title: "ระบบบริหารจัดการ มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย (วส. มจร)",
@@ -23,7 +25,10 @@ export default function RootLayout({
             {children}
           </main>
         </div>
+        <Footer />
+        <QuickContactSpeedDial />
       </body>
     </html>
   );
 }
+

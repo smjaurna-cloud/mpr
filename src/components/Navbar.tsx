@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Bell, ShieldCheck, UserCircle2, Sparkles, BookOpen, MessageSquareText } from "lucide-react";
+import { Bell, ShieldCheck, UserCircle2, Sparkles, BookOpen, MessageSquareText, Phone } from "lucide-react";
 import { VisitorCounterBadge } from "./VisitorCounterBadge";
 
 export default function Navbar() {
@@ -62,6 +62,16 @@ export default function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Visitor Counter Live Badge */}
           <VisitorCounterBadge className="hidden md:inline-flex" />
+
+          {/* Quick Contact Access */}
+          <Link
+            href="/contact"
+            title="ช่องทางติดต่อราชการ & ทำเนียบ ๘ ฝ่ายงาน (MOD-21)"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 text-xs font-semibold transition-colors"
+          >
+            <Phone className="w-3.5 h-3.5 text-amber-700" />
+            <span className="hidden sm:inline">ติดต่อเรา</span>
+          </Link>
 
           {/* Quick Chat Board Access */}
           <Link
