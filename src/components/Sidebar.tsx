@@ -156,6 +156,13 @@ const navigationGroups: NavGroup[] = [
         badge: "A1-A6",
       },
       {
+        name: "หลักสูตรบัณฑิตศึกษา (มคอ.๒)",
+        description: "ป.โท-ป.เอก พระไตรปิฎก & พระอภิธรรม",
+        href: "/graduate-curriculum",
+        icon: BookMarked,
+        badge: "มคอ.๒",
+      },
+      {
         name: "ติดตามเข้าเรียน & บัณฑิตศึกษา",
         description: "สแกนใบหน้า, ๔ ห้อง Zoom, ค่าเทอม & ร้องเรียน",
         href: "/attendance-tracking",
