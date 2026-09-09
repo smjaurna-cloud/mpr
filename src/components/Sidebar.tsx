@@ -22,7 +22,8 @@ import {
   GraduationCap,
   UserCheck,
   School,
-  Car
+  Car,
+  QrCode
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -122,6 +123,13 @@ const navigationGroups: NavGroup[] = [
         href: "/vehicle-booking",
         icon: Car,
         badge: "๑๐ คัน",
+      },
+      {
+        name: "เรื่องร้องเรียน & ติดตามงาน",
+        description: "MOD-17: QR Code ร้องเรียน & ติดตามงานทุกระบบ",
+        href: "/complaints-tracking",
+        icon: QrCode,
+        badge: "QR & Track",
       },
     ],
   },

@@ -5,9 +5,9 @@
 ---
 
 ## 1. Overall Status
-- **Current Milestone:** Enterprise Buddhist College ERP System (16 Full Modules Complete)
+- **Current Milestone:** Enterprise Buddhist College ERP System (17 Full Modules Complete)
 - **Active User:** `somboon` (Super Administrator: `smjaurna@gmail.com`, เบอร์โทร: `099-445-4256`)
-- **Status:** ✅ Production Build Ready & Verified (21/21 Static Pages Prerendered Successfully)
+- **Status:** ✅ Production Build Ready & Verified (22/22 Static Pages Prerendered Successfully)
 - **Health:** 🟢 Excellent (Zero Errors, Strict Mode Type-Checked)
 - **Verified Date:** 2026-09-09
 - **System Theme:** Sacred Royal Heritage (พุทธศิลป์โมเดิร์น: Royal Gold #C5A059, Civara Saffron, Midnight Navy, Warm Ivory)
@@ -39,7 +39,8 @@
   - TASK-917: จัดเก็บและบูรณาการร่างบันทึกข้อตกลงความร่วมมือทางวิชาการ (MOU) ระหว่าง มจร กับ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง (สจล.) ด้านการวิจัยและพัฒนาพุทธปัญญาประดิษฐ์ (Buddhist AI: BAI) ที่ผ่านการตรวจจากกองนิติการ มจร ใน `docs/mou/` และเพิ่มแท็บแสดงรายละเอียดความร่วมมือในระบบงานวิจัยและประกันคุณภาพการศึกษา (`/research-qa`) พร้อมปุ่มดาวน์โหลดร่างเอกสารทางการ
   - TASK-918: ระบบบริหารยานพาหนะและขอใช้รถส่วนกลาง (MOD-16: `/vehicle-booking`) นำเข้าข้อมูลทางการรถส่วนกลาง ๑๐ คัน จากเอกสารสถาบัน จัดเก็บใน `docs/vehicles/` และ `public/vehicles/` พร้อมคู่มือ `README.md` กำหนดโครงสร้างข้อมูล `src/data/vehicleData.ts` รองรับระบบจองรถ ๓ แท็บ (ภาพรวมยานพาหนะ ๑๐ คัน, รายการจองและอนุมัติ, ไทม์ไลน์การใช้รถ), ฟอร์มจองรถใหม่พร้อมตรวจสอบพระวินัย (เพลก่อน ๑๑:๐๐ น., สัดส่วนภิกษุ/สามเณร/คฤหัสถ์), แบบฟอร์มใบขอใช้รถราชการพิมพ์ได้ A4 ทางการ พร้อมเชื่อมโยงเมนูใน Sidebar
   - TASK-919: นำเข้าทะเบียนรายชื่อพระภิกษุ ๒๐ รูป และสามเณร ๑๒๓ รูป ที่มีอยู่จริง รวม ๑๔๓ รูป จาก `รายชื่อพระภิกษุและสามเณรวัดบาลีเถรวาทสังฆาราม.xlsx` สู่ `src/data/sanghaData.ts` และ `src/data/mockData.ts` พร้อมระบุสัญชาติ/กลุ่มชนชาติ (ไทย ๙๙ รูป, ชาคมาบังกลาเทศ ๗ รูป, บารูอา ๘ รูป, สปป.ลาว ๔ รูป, ศรีลังกา ๔ รูป, พระภิกษุต่างชาติ ๑ รูป) พัฒนาหน้า `/monastic-life` รองรับการดูทำเนียบสงฆ์และดาวน์โหลดไฟล์จริง และจัดทำระบบคลังเอกสารราชการจริงทั้งระบบ (`src/data/officialDocumentsData.ts`) ใน `/library` (๑๗ รายการตรงตามชื่อไฟล์จริง) พร้อมเชื่อมโยงปุ่มดาวน์โหลดเอกสารจริงตรงใน `/planning-budget` (งบ ๖๙ PDF), `/classrooms` (จัดห้องเรียน PDF), `/hr` (เอกสารบุคคล XLSX), และ `/monastic-life` (ทะเบียนสงฆ์ XLSX)
-* **Latest Action:** บูรณาการทะเบียนพระภิกษุและสามเณรจริง ๑๔๓ รูป และระบบคลังเอกสารราชการชื่อจริง ๑๗ รายการ ผ่านการทดสอบ Next.js Build ๑๐๐% (21/21 routes)
+  - TASK-920: ศูนย์รับเรื่องร้องเรียน QR Code และระบบติดตามภารกิจราชการรวมศูนย์ทุกระบบ (MOD-17: `/complaints-tracking`) ศึกษาและบูรณาการมาตรฐานเว็บไซต์ทางการ `https://palitheravada.mcu.ac.th/` พัฒนาระบบรับเรื่องร้องเรียน e-Complaint Center พร้อมระบบสร้าง QR Code อัตโนมัติ (qrcode library) รองรับการสแกนด้วยโทรศัพท์มือถือ, ฟอร์มยื่นเรื่องแบบระบุตัวตนและไม่ประสงค์ระบุตัวตน (Anonymous) ตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) และพระวินัย, ระบบพิมพ์ป้ายประชาสัมพันธ์ QR Code ขนาด A4 (Standee Notice) ติดบอร์ด/กุฏิ/อาคารเรียน, ระบบติดตามสถานะคำร้องและภารกิจราชการรวมศูนย์ทุกระบบ (Unified Task Tracker) ครอบคลุม ๗ ระบบ (CMP-, VB-, DOC-, MTG-, ACAD-, ALM-, PRJ-) พร้อมพิมพ์ใบติดตามงาน (Official Tracking Slip) และ Stepper Timeline ๔ ขั้นตอน, กระดานข่าวสารและประกาศจัดซื้อจัดจ้าง e-Bidding ตัวจริง (Solar Rooftop ๒.๕๖ ลบ., หอประชุม ๒๔.๘๖ ลบ.), และประตูบริการดิจิทัลส่วนกลาง มจร (MCU REG, LessPaper2, e-Thesis, PTRJ ThaiJO, MCU SAS, ITA) ครบถ้วน ๑๐๐%
+* **Latest Action:** พัฒนาระบบ MOD-17 ศูนย์รับเรื่องร้องเรียน QR Code และติดตามงานทุกระบบ ผ่านการทดสอบ Next.js Build ๑๐๐% (22/22 routes)
 
 ---
 
@@ -64,4 +65,5 @@
 | **MOD-14**| Classrooms & Sanam Luang | ✅ Completed | `src/app/classrooms/page.tsx` (๖ ห้องเรียน A1-A6, นักธรรม, บาลีสนามหลวง, กฎระเบียบ, PDPA) |
 | **MOD-15**| Graduate Curricula (TQF 2) | ✅ Completed | `src/app/graduate-curriculum/page.tsx` (มคอ.๒ พธ.ด. พระไตรปิฎก, พธ.ม. พระไตรปิฎก, พธ.ม. พระอภิธรรม, ๕๓ รายวิชา, PDF) |
 | **MOD-16**| Central Fleet & Vehicle Booking | ✅ Completed | `src/app/vehicle-booking/page.tsx` (รถส่วนกลาง ๑๐ คัน, ฟอร์มจองตามพระวินัย, ไทม์ไลน์, ใบขอใช้รถ A4) |
+| **MOD-17**| e-Complaint & Cross-System Tracker | ✅ Completed | `src/app/complaints-tracking/page.tsx` (QR Code ร้องเรียน, ป้าย Standee A4, ติดตาม ๗ ระบบ CMP/VB/DOC/MTG/PRJ/ALM, e-Bidding, ประตูบริการ มจร) |
 
