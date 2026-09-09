@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { 
   ScanFace, 
   Video, 
@@ -18,7 +19,9 @@ import {
   Calendar,
   Download,
   FileSpreadsheet,
-  FileJson
+  FileJson,
+  Award,
+  ArrowUpRight
 } from "lucide-react";
 
 interface ScheduleItem {
@@ -503,6 +506,21 @@ export default function AttendanceTrackingPage() {
     triggerDownload(`petitions_log_${new Date().toISOString().slice(0, 10)}.csv`, csv);
   };
 
+  const handleDownloadGraduateProgress = () => {
+    let csv = "\uFEFFลำดับ,ชื่อ-ฉายา-นามสกุล,หลักสูตร,รุ่นที่,ร้อยละความก้าวหน้า (%),สถานะสอบโครงร่าง,สถานะปฏิบัติธรรม,สถานะสอบ QE\n" +
+      `"1","พระครูสิริรัตนบัณฑิต สุยวฑฺฒโน แก้วมณี","พธ.ด. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","14%","ยังไม่สอบ","ผ่าน (๔๕ วัน)","ผ่าน"\n` +
+      `"2","พระครูวิสิฐกิจจารักษ์ รตนโชโต ศะตากูล","พธ.ด. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","14%","ยังไม่สอบ","ผ่าน (๔๕ วัน)","ผ่าน"\n` +
+      `"3","พระครูเกษมธรรมาภิรักษ์ ชิตตาโภ บุญมา","พธ.ด. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","14%","ยังไม่สอบ","ผ่าน (๔๕ วัน)","ผ่าน"\n` +
+      `"4","พระครูปลัดนายกวรวัฒน์ ญาณทีโป ตติยวังสนสิทธิ","พธ.ด. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","43%","ผ่านสอบโครงร่าง","ผ่าน (๔๕ วัน)","ผ่าน"\n` +
+      `"5","พระครูสิทธิสารคุณ ธีรจิตฺโต วรวิทยอาศา","พธ.ด. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","43%","ผ่านสอบโครงร่าง","ผ่าน (๔๕ วัน)","ผ่าน"\n` +
+      `"6","พระปลัดจตุรภัทร ถาวโร วงศ์วรชนทัต","พธ.ด. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","48%","ผ่านสอบโครงร่าง","ผ่าน (๔๕ วัน)","ผ่าน"\n` +
+      `"7","พระหาญศักดิ์ ขนฺติสุโภ สังสัมฤทธิ์","พธ.ม. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","27%","ผ่านสอบโครงร่าง","รอดำเนินการ","-"\n` +
+      `"8","พระสมุห์ นภดล ปภาโส โพธิวุฒิ","พธ.ม. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","27%","ผ่านสอบโครงร่าง","รอดำเนินการ","-"\n` +
+      `"9","พระมหาวิศรุต นริสฺสโร อาษาวัง","พธ.ม. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","27%","ผ่านสอบโครงร่าง","รอดำเนินการ","-"\n` +
+      `"10","นายอาณัติชัย เหลืองอมรชัย","พธ.ม. พระไตรปิฎกเถรวาท","รุ่นที่ ๑","27%","ผ่านสอบโครงร่าง","รอดำเนินการ","-"\n`;
+    triggerDownload(`graduate_progress_summary_${new Date().toISOString().slice(0, 10)}.csv`, csv);
+  };
+
   const handleDownloadSystemJSON = () => {
     const data = {
       system: "SMST & Mahavajiralongkorn Bali Theravada Rajavidyalaya Portal",
@@ -551,6 +569,35 @@ export default function AttendanceTrackingPage() {
           <span>คัดลอก &quot;{copiedText}&quot; ลงคลิปบอร์ดเรียบร้อยแล้ว</span>
         </div>
       )}
+
+      {/* Graduate Progress Tracking Feature Banner */}
+      <div className="p-4 bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-blue-500/10 rounded-2xl border border-amber-300/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <Award className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs font-bold text-slate-900">
+                กระดานรายงานความก้าวหน้าดุษฎีนิพนธ์ & วิทยานิพนธ์ (MOD-20)
+              </h3>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
+                พธ.ด. ๒๖ รูป + พธ.ม. ๘ รูป
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-600 mt-0.5">
+              ติดตามหมุดหมายการศึกษา ๒๑ ขั้นตอน (ป.เอก) และ ๑๕ ขั้นตอน (ป.โท) ถอดแบบจากกระดานประกาศจริงของสถาบัน
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/graduate-progress"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold shrink-0 transition-colors shadow-xs"
+        >
+          <span>เปิดกระดานความก้าวหน้า</span>
+          <ArrowUpRight className="w-4 h-4 text-amber-400" />
+        </Link>
+      </div>
 
       {/* Cohorts Matrix Chips */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1065,7 +1112,40 @@ export default function AttendanceTrackingPage() {
                 </button>
               </div>
 
-              {/* Card 6: Full System JSON */}
+              {/* Card 6: Graduate Progress Tracking */}
+              <div className="p-5 rounded-xl border border-stone-200 hover:border-amber-500 bg-white hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="w-10 h-10 rounded-lg bg-amber-100 text-amber-900 flex items-center justify-center font-bold">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <h4 className="text-sm font-bold text-slate-800">ความก้าวหน้าดุษฎีนิพนธ์ & วิทยานิพนธ์</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    รายงานความก้าวหน้า ๒๑ ขั้นตอน (พธ.ด. ๒๖ รูป) และ ๑๕ ขั้นตอน (พธ.ม. ๘ รูป)
+                  </p>
+                  <div className="flex flex-wrap gap-1 text-[11px] text-slate-400">
+                    <span className="bg-slate-100 px-2 py-0.5 rounded">.CSV (Excel)</span>
+                    <span className="bg-slate-100 px-2 py-0.5 rounded">พธ.ด. & พธ.ม.</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleDownloadGraduateProgress}
+                    className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-amber-700 hover:bg-amber-800 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>ดาวน์โหลด CSV (Excel)</span>
+                  </button>
+                  <Link
+                    href="/graduate-progress"
+                    className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-xl text-[11px] font-semibold transition-colors"
+                  >
+                    <span>เปิดกระดานบอร์ด &rarr;</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Card 7: Full System JSON */}
               <div className="p-5 rounded-xl border border-stone-200 hover:border-slate-400 bg-white hover:shadow-md transition-all flex flex-col justify-between space-y-4">
                 <div className="space-y-2">
                   <div className="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center font-bold">

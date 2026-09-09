@@ -25,7 +25,8 @@ import {
   Car,
   QrCode,
   BarChart3,
-  MessageSquareText
+  MessageSquareText,
+  Award
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -200,6 +201,13 @@ const navigationGroups: NavGroup[] = [
         href: "/attendance-tracking",
         icon: UserCheck,
         badge: "FaceScan",
+      },
+      {
+        name: "ความก้าวหน้าบัณฑิตศึกษา",
+        description: "MOD-20: หมุดหมายดุษฎีนิพนธ์ & วิทยานิพนธ์",
+        href: "/graduate-progress",
+        icon: Award,
+        badge: "ป.โท-เอก",
       },
     ],
   },

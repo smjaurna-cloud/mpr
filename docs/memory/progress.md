@@ -5,9 +5,9 @@
 ---
 
 ## 1. Overall Status
-- **Current Milestone:** Enterprise Buddhist College ERP System (19 Full Modules Complete)
+- **Current Milestone:** Enterprise Buddhist College ERP System (20 Full Modules Complete)
 - **Active User:** `somboon` (Super Administrator: `smjaurna@gmail.com`, เบอร์โทร: `099-445-4256`)
-- **Status:** ✅ Production Build Ready & Verified (24/24 Static Pages Prerendered Successfully)
+- **Status:** ✅ Production Build Ready & Verified (30/30 Static & Dynamic Pages Prerendered Successfully)
 - **Health:** 🟢 Excellent (Zero Errors, Strict Mode Type-Checked)
 - **Verified Date:** 2026-09-09
 - **System Theme:** Sacred Royal Heritage (พุทธศิลป์โมเดิร์น: Royal Gold #C5A059, Civara Saffron, Midnight Navy, Warm Ivory)
@@ -48,8 +48,14 @@
     * Confirmation Modals & Safety Safeguards: เพิ่ม Modal ยืนยันก่อนระงับ/เปิดใช้งานบัญชีผู้ใช้ใน `/users` และ Modal ยืนยันก่อนลงนามอนุมัติ/ตีกลับคำสั่งใน `/e-approval` ป้องกันความผิดพลาด
     * PDPA & Monastic Privacy: เพิ่มระบบซ่อนเบอร์โทรศัพท์โยมอุปถัมภ์ใน `/alms-patron` (`081-xxx-4256`) พร้อมปุ่มสลับมุมมองเจ้าหน้าที่ และปกป้องข้อมูลเวชระเบียนสามเณรใน `/monastic-life`
     * Interactive Modals & CSV Export: เพิ่มฟังก์ชันส่งออก CSV ในหน้า `/monastic-life`, `/alms-patron`, `/mukhopatha`, `/users` และเชื่อมปุ่มเปิดใบอนุโมทนาบัตรทองคำทันทีหลังจองเพล
-    * Backend API Routes (Next.js App Router): สร้าง API endpoints ๕ เส้นทาง (`/api/sangha`, `/api/alms`, `/api/users`, `/api/analytics`, `/api/complaints`) รองรับการเชื่อมโยงฐานข้อมูลกลาง Prisma SQLite (`dev.db`) ผ่านการทดสอบ Next.js Build ๒๙/๒๙ routes สมบูรณ์ ๑๐๐%
-* **Latest Action:** ปรับปรุงข้อมูลและสถาปัตยกรรมทั้งระบบตามผลตรวจ Audit รอบสมบูรณ์ (TASK-923) ผ่านการทดสอบ Next.js Build ๒๙/๒๙ routes (รวม ๕ API routes) เรียบร้อย ๑๐๐% พร้อมใช้งานจริง (Production Pilot v1.2)
+  - TASK-924: พัฒนาระบบติดตามความก้าวหน้าผลงานและดุษฎีนิพนธ์/วิทยานิพนธ์ของนิสิตระดับบัณฑิตศึกษา (MOD-20: `/graduate-progress`) ถอดแบบจากกระดานรายงานความก้าวหน้าจริงของมหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย ครอบคลุม:
+    * ข้อมูลจริง ๑๐๐%: นิสิตระดับปริญญาเอก (พธ.ด. พระไตรปิฎกเถรวาท รุ่นที่ ๑) ๒๖ รูป/คน กับ ๒๑ ขั้นตอนหมุดหมาย และนิสิตระดับปริญญาโท (พธ.ม. พระไตรปิฎกเถรวาท รุ่นที่ ๑) ๘ รูป/คน กับ ๑๕ ขั้นตอนหมุดหมาย
+    * ถอดแบบหน้ากระดานบอร์ด Matrix: หัวตารางแนวตั้ง สีกระดานตามของจริง (พธ.ด. แดงเลือดนก พธ.ม. น้ำเงินกรมท่า) ติ๊กถูก `✓` แสดงสถานะความสำเร็จตามกระดานจริง และคำนวณ % ความก้าวหน้าอัตโนมัติ
+    * โหมดผู้ดูแลระบบ (Admin Edit Toggle): สำหรับ `Somboon Admin` สามารถคลิกสลับสถานะผ่าน/ยังไม่ผ่านในแต่ละขั้นตอนได้ทันที พร้อมบันทึกลง LocalStorage
+    * ฟังก์ชันอัจฉริยะ: ค้นหาตามชื่อ-ฉายา-นามสกุล, กรองตามขั้นตอนสำคัญ (ผ่านโครงร่าง, ปฏิบัติธรรมวิปัสสนา, ผ่าน QE), สลับมุมมองบอร์ดและมุมมองการ์ด, Modal รายละเอียดหมุดหมายครบ ๕ หมวด
+    * การส่งออกและการพิมพ์: ส่งออก Excel CSV ด้วย UTF-8 BOM รองรับภาษาไทย 100% และโหมดพิมพ์ A4 แนวนอน (Landscape) สำหรับพิมพ์ติดบอร์ดประกาศสถาบัน
+    * การเชื่อมโยงระบบ: เพิ่มรายการเมนูใน `Sidebar.tsx`, เชื่อมแบนเนอร์ทางลัดและปุ่มดาวน์โหลดใน `/attendance-tracking`, ผ่านการทดสอบ Next.js Production Build ๓๐/๓๐ routes สมบูรณ์ ๑๐๐%
+* **Latest Action:** พัฒนาระบบติดตามความก้าวหน้าดุษฎีนิพนธ์/วิทยานิพนธ์ (MOD-20: `/graduate-progress`) สำเร็จครบถ้วน ๑๐๐% พร้อมใช้งานจริง
 
 ---
 
@@ -77,4 +83,5 @@
 | **MOD-17**| e-Complaint & Cross-System Tracker | ✅ Completed | `src/app/complaints-tracking/page.tsx` (QR Code ร้องเรียน, ป้าย Standee A4, ติดตาม ๗ ระบบ CMP/VB/DOC/MTG/PRJ/ALM, e-Bidding, ประตูบริการ มจร) |
 | **MOD-18**| Visitor Analytics & Traffic Insights | ✅ Completed | `src/app/visitor-analytics/page.tsx` (ทราฟฟิกสด ๔๒ คน, สถิติวัน/เดือน/ปี, แหล่งที่มา, อุปกรณ์, ส่งออก CSV) |
 | **MOD-19**| Chat Board & Monastic Community | ✅ Completed | `src/app/chat-board/page.tsx` (กระดานสนทนา ๔ หมวดหมู่, ตอบกระทู้, อนุโมทนา 🙏, ห้องแชตสด, MCU Pali Bot, Moderation) |
+| **MOD-20**| Graduate Academic & Thesis Progress | ✅ Completed | `src/app/graduate-progress/page.tsx` (พธ.ด. ๒๖ รูป ๒๑ ขั้นตอน, พธ.ม. ๘ รูป ๑๕ ขั้นตอน, Matrix Board, Admin Edit, Excel CSV, พิมพ์ A4) |
 
