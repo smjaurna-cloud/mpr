@@ -20,7 +20,8 @@ import {
   BookOpen,
   Microscope,
   GraduationCap,
-  UserCheck
+  UserCheck,
+  School
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -146,6 +147,13 @@ const navigationGroups: NavGroup[] = [
         href: "/academic-services",
         icon: GraduationCap,
         badge: "วิชาการ",
+      },
+      {
+        name: "ห้องเรียน & บาลีสนามหลวง",
+        description: "๖ ห้องเรียน A1-A6 & ทะเบียนสามเณร",
+        href: "/classrooms",
+        icon: School,
+        badge: "A1-A6",
       },
       {
         name: "ติดตามเข้าเรียน & บัณฑิตศึกษา",

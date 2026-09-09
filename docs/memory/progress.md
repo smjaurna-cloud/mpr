@@ -31,7 +31,8 @@
   - TASK-909: สร้างสคริปต์อัตโนมัติ [push_to_github.bat](file:///d:/mpr/push_to_github.bat) อำนวยความสะดวกให้ผู้ดูแลระบบคลิกอัปโหลดขึ้น GitHub ได้ทันที
   - TASK-910: ยืนยันการสำรองข้อมูลขึ้น GitHub ครบถ้วน รวมถึงเอกสาร Context Memory ทั้ง ๖ ไฟล์ (PRD, AGENTS, architecture, implementation-plan, schema, progress)
   - TASK-911: นำเข้าบัญชีรายชื่อบุคลากรทางการ ๓๖ อัตรา + ๑ ตำแหน่งว่าง จาก `เอกสารบุคคล มบร.xlsx` เข้าสู่ระบบบริหารงานบุคคล (MOD-08: `/hr`) ครบ ๔ กลุ่มงาน พร้อมเลขที่ตำแหน่งทางการ มุมมองตารางราชการและมุมมองการ์ด
-* **Latest Action:** บูรณาการฐานข้อมูลบุคลากรจาก `เอกสารบุคคล มบร.xlsx` เข้าสู่ระบบ `/hr` และผ่านการทดสอบ `npm run build` สมบูรณ์ 100% (18/18 routes)
+  - TASK-912: ระบบผังห้องเรียน ๖ ห้องเรียน (A 1 – A 6) และการจัดชั้นเรียนบาลีสนามหลวง & นักธรรม (`/classrooms`) ครบถ้วนตามเอกสารทางการ ๑๓ หน้า จัดสรรอาจารย์ผู้สอน, บัญชีรายชื่อสามเณร ๒ สายวิชา, ระบบคุ้มครองข้อมูล PDPA สำหรับผู้เยาว์, กฎระเบียบห้องเรียน และตารางเวรทำความสะอาด
+* **Latest Action:** ติดตั้งโมดูล `/classrooms` พร้อมข้อมูลห้องเรียน A 1 ถึง A 6 และผ่านการทดสอบ `npm run build` สมบูรณ์ 100% (19/19 routes)
 
 ---
 
@@ -53,3 +54,5 @@
 | **MOD-11**| Tipitaka Library & IT | ✅ Completed | `src/app/library/page.tsx` (พระไตรปิฎก ๔๕ เล่ม, สัททนีติ, ปทรูปสิทธิ) |
 | **MOD-12**| Research & Educational QA | ✅ Completed | `src/app/research-qa/page.tsx` (คลังวิจัยพุทธศาสตร์, AUN-QA, สมศ.) |
 | **MOD-13**| Academic Services & Outreach | ✅ Completed | `src/app/academic-services/page.tsx` (ตารางสอนบาลี ๔ ชั้น, อบรมเยาวชน) |
+| **MOD-14**| Classrooms & Sanam Luang | ✅ Completed | `src/app/classrooms/page.tsx` (๖ ห้องเรียน A1-A6, นักธรรม, บาลีสนามหลวง, กฎระเบียบ, PDPA) |
+
