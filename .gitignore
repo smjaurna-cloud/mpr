@@ -32,6 +32,7 @@ prisma/*.db-journal
 *.pem
 Thumbs.db
 *.zip
+~$*
 
 
 # IDE & Editor Settings

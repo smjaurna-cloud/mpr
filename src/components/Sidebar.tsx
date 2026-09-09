@@ -21,7 +21,8 @@ import {
   Microscope,
   GraduationCap,
   UserCheck,
-  School
+  School,
+  Car
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -114,6 +115,13 @@ const navigationGroups: NavGroup[] = [
         href: "/users",
         icon: Users,
         badge: "RBAC",
+      },
+      {
+        name: "ยานพาหนะ & ระบบจองรถ",
+        description: "MOD-16: รถส่วนกลาง ๑๐ คัน & ขอใช้รถ",
+        href: "/vehicle-booking",
+        icon: Car,
+        badge: "๑๐ คัน",
       },
     ],
   },

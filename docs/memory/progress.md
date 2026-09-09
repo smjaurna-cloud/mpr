@@ -5,9 +5,9 @@
 ---
 
 ## 1. Overall Status
-- **Current Milestone:** Enterprise Buddhist College ERP System (13 Full Modules Complete)
+- **Current Milestone:** Enterprise Buddhist College ERP System (16 Full Modules Complete)
 - **Active User:** `somboon` (Super Administrator: `smjaurna@gmail.com`, เบอร์โทร: `099-445-4256`)
-- **Status:** ✅ Production Build Ready & Verified (17/17 Static Pages Prerendered Successfully)
+- **Status:** ✅ Production Build Ready & Verified (21/21 Static Pages Prerendered Successfully)
 - **Health:** 🟢 Excellent (Zero Errors, Strict Mode Type-Checked)
 - **Verified Date:** 2026-09-09
 - **System Theme:** Sacred Royal Heritage (พุทธศิลป์โมเดิร์น: Royal Gold #C5A059, Civara Saffron, Midnight Navy, Warm Ivory)
@@ -37,7 +37,8 @@
   - TASK-915: บูรณาการและจัดระเบียบเอกสารประวัติคณาจารย์ประจำหลักสูตรบัณฑิตศึกษา (`docs/faculty/`) จัดเก็บไฟล์ประวัติทางการ ๔ ท่าน (พระธรรมวชิราจารย์ รศ.ดร., รศ.ดร.เวทย์ บรรณกรกุล, ผศ.ดร.สุพิชฌาย์ พรพิชณรงค์, พระมหาเสฏฐวุฒิ วชิรญาโณ ดร. ป.ธ.๙) สร้างสารบัญ `docs/faculty/README.md` และปรับปรุงข้อมูลคณาจารย์ผู้รับผิดชอบในโมดูลหลักสูตรบัณฑิตศึกษาครบถ้วนสมบูรณ์
   - TASK-916: บูรณาการเอกสารประวัติและผลงานคณาจารย์เพิ่มเติมครบ ๘ รูป/ท่าน (เพิ่ม ดร.ธนสิทธิ์ ฉัตรสุวรรณ, พระมหาทรงชัย วิชยเภรี ดร., ดร.สมบูรณ์ จารุณะ, พระมหาศุภวัฒน์ ฐานวุฑฺโฒ ดร.), ยกระดับหน้า `/graduate-curriculum` แสดงประวัติการศึกษา ความเชี่ยวชาญ และปุ่มเปิดอ่าน/ดาวน์โหลดไฟล์ประวัติ (.pdf / .docx) พร้อมสร้างคลังดาวน์โหลดใน `public/faculty/`
   - TASK-917: จัดเก็บและบูรณาการร่างบันทึกข้อตกลงความร่วมมือทางวิชาการ (MOU) ระหว่าง มจร กับ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง (สจล.) ด้านการวิจัยและพัฒนาพุทธปัญญาประดิษฐ์ (Buddhist AI: BAI) ที่ผ่านการตรวจจากกองนิติการ มจร ใน `docs/mou/` และเพิ่มแท็บแสดงรายละเอียดความร่วมมือในระบบงานวิจัยและประกันคุณภาพการศึกษา (`/research-qa`) พร้อมปุ่มดาวน์โหลดร่างเอกสารทางการ
-* **Latest Action:** บูรณาการแฟ้มประวัติคณาจารย์ ๘ ท่าน และเอกสาร MOU พุทธปัญญาประดิษฐ์ (BAI) มจร-สจล. ผ่านการทดสอบ Build สำเร็จ ๑๐๐% (20/20 routes) และอัปโหลดขึ้น GitHub เรียบร้อยแล้ว
+  - TASK-918: ระบบบริหารยานพาหนะและขอใช้รถส่วนกลาง (MOD-16: `/vehicle-booking`) นำเข้าข้อมูลทางการรถส่วนกลาง ๑๐ คัน จากเอกสารสถาบัน จัดเก็บใน `docs/vehicles/` และ `public/vehicles/` พร้อมคู่มือ `README.md` กำหนดโครงสร้างข้อมูล `src/data/vehicleData.ts` รองรับระบบจองรถ ๓ แท็บ (ภาพรวมยานพาหนะ ๑๐ คัน, รายการจองและอนุมัติ, ไทม์ไลน์การใช้รถ), ฟอร์มจองรถใหม่พร้อมตรวจสอบพระวินัย (เพลก่อน ๑๑:๐๐ น., สัดส่วนภิกษุ/สามเณร/คฤหัสถ์), แบบฟอร์มใบขอใช้รถราชการพิมพ์ได้ A4 ทางการ พร้อมเชื่อมโยงเมนูใน Sidebar
+* **Latest Action:** บูรณาการระบบข้อมูลรถส่วนกลาง ๑๐ คัน และระบบจองรถราชการตามพระวินัยสมบูรณ์ ๑๐๐% (ผ่านการทดสอบ Build สำเร็จ 21/21 routes)
 
 ---
 
@@ -61,4 +62,5 @@
 | **MOD-13**| Academic Services & Outreach | ✅ Completed | `src/app/academic-services/page.tsx` (ตารางสอนบาลี ๔ ชั้น, อบรมเยาวชน) |
 | **MOD-14**| Classrooms & Sanam Luang | ✅ Completed | `src/app/classrooms/page.tsx` (๖ ห้องเรียน A1-A6, นักธรรม, บาลีสนามหลวง, กฎระเบียบ, PDPA) |
 | **MOD-15**| Graduate Curricula (TQF 2) | ✅ Completed | `src/app/graduate-curriculum/page.tsx` (มคอ.๒ พธ.ด. พระไตรปิฎก, พธ.ม. พระไตรปิฎก, พธ.ม. พระอภิธรรม, ๕๓ รายวิชา, PDF) |
+| **MOD-16**| Central Fleet & Vehicle Booking | ✅ Completed | `src/app/vehicle-booking/page.tsx` (รถส่วนกลาง ๑๐ คัน, ฟอร์มจองตามพระวินัย, ไทม์ไลน์, ใบขอใช้รถ A4) |
 
