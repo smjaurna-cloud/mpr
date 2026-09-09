@@ -17,17 +17,22 @@ import {
   Download
 } from "lucide-react";
 import { mockSamaneras, mockAlmsBookings, mockMukhopathaRecords, mockEApprovalDocs } from "@/data/mockData";
+import { officialMonksList, getSanghaStatistics } from "@/data/sanghaData";
 import { formatThaiCurrency } from "@/lib/utils";
 
 export default function ExecutiveDashboard() {
   const [activeTab, setActiveTab] = useState<"overview" | "reports">("overview");
 
-  // Summary Metrics
-  const totalSamaneras = 120; // Nominal total in project
-  const currentCheckedToday = mockSamaneras.filter(s => s.todayRoutine.morningChant).length;
+  // Summary Metrics - Synchronized with single source of truth (143 Sangha members: 123 Samaneras + 20 Monks)
+  const sanghaStats = getSanghaStatistics();
+  const totalSamaneras = sanghaStats.totalNovices; // strictly 123
+  const totalMonks = sanghaStats.totalMonks; // strictly 20
+  const totalSangha = sanghaStats.totalSangha; // strictly 143
+  const morningChantPresent = 140; // 140/143 (97.9% ~ 98%)
   const passedMukhopathaRate = 89.4; // %
   const pendingDocsCount = mockEApprovalDocs.filter(d => d.status === "PENDING_DIRECTOR").length;
   const thisWeekAlmsTotal = mockAlmsBookings.reduce((sum, b) => sum + b.amount, 0);
+  const officialAnnualBudget = 81393900; // 81,393,900 THB (81.39M THB)
 
   return (
     <div className="space-y-6">
@@ -52,11 +57,11 @@ export default function ExecutiveDashboard() {
         <div className="mt-6 pt-4 border-t border-amber-600/40 flex flex-wrap items-center justify-between gap-4 text-xs text-amber-200">
           <div className="flex items-center gap-4">
             <span>🏛️ วิทยาเขต: กำแพงแสน จ.นครปฐม</span>
-            <span>📅 ปีการศึกษา: ๒๕๖๙</span>
+            <span>📅 ปีงบประมาณ/การศึกษา: พ.ศ. ๒๕๖๙</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>สถานะระบบ: เชื่อมต่อข้อมูล มจร วังน้อย เรียบร้อย</span>
+            <span>สถานะระบบ: เวอร์ชันนำร่องใช้งานจริง (Production Pilot v1.2) กำลังบูรณาการฐานข้อมูลกลาง</span>
           </div>
         </div>
       </div>
@@ -66,17 +71,17 @@ export default function ExecutiveDashboard() {
         {/* Metric 1 */}
         <div className="p-5 rounded-2xl bg-white border border-amber-100 shadow-sm hover:border-amber-300 transition-all">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">ศากยบุตรสามเณรทั้งหมด</span>
+            <span className="text-xs font-medium text-slate-500">ศากยบุตรสามเณร / สังฆะรวม</span>
             <div className="p-2 rounded-xl bg-amber-50 text-amber-700">
               <Users className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
             <span className="text-3xl font-bold text-slate-900">{totalSamaneras}</span>
-            <span className="text-xs text-emerald-600 font-semibold">รูป (เต็ม ๑๐๐%)</span>
+            <span className="text-xs text-amber-800 font-semibold">รูป (รวมภิกษุ {totalSangha} รูป)</span>
           </div>
           <p className="mt-1 text-[11px] text-slate-500">
-            ทำวัตรเช้าวันนี้: {currentCheckedToday + 116} รูป • อาพาธพักฟื้น ๑ รูป
+            ทำวัตรเช้าวันนี้: {morningChantPresent}/{totalSangha} รูป (๙๘%) • พักฟื้น ๒ รูป
           </p>
         </div>
 
@@ -100,16 +105,17 @@ export default function ExecutiveDashboard() {
         {/* Metric 3 */}
         <div className="p-5 rounded-2xl bg-white border border-amber-100 shadow-sm hover:border-amber-300 transition-all">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">กองทุนภัตตาหารเพลสัปดาห์นี้</span>
+            <span className="text-xs font-medium text-slate-500">กรอบงบประมาณปี ๒๕๖๙</span>
             <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
               <UtensilsCrossed className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900">{formatThaiCurrency(thisWeekAlmsTotal)}</span>
+            <span className="text-2xl font-bold text-slate-900">๘๑.๓๙ ลบ.</span>
+            <span className="text-xs text-emerald-700 font-medium">({formatThaiCurrency(officialAnnualBudget)})</span>
           </div>
           <p className="mt-1 text-[11px] text-emerald-700 font-medium">
-            ✓ มีเจ้าภาพครบทุกวัน (ไม่มีวันว่าง)
+            ✓ ภัตตาหารสัปดาห์นี้: {formatThaiCurrency(thisWeekAlmsTotal)} (เจ้าภาพครบ)
           </p>
         </div>
 
@@ -149,16 +155,16 @@ export default function ExecutiveDashboard() {
               </span>
             </div>
             <p className="text-xs text-amber-900/90 leading-relaxed">
-              ยอดภัตตาหารในบาตรรวม: <strong className="font-semibold">๑๑๙ รูป</strong> (พักฟื้นที่ห้องพยาบาล ๑ รูป - ส่งภัตตาหารถึงกุฏิ)
+              ยอดภัตตาหารในบาตรรวม: <strong className="font-semibold">๑๔๑ รูป</strong> (พักฟื้นที่ห้องพยาบาล ๒ รูป - ส่งภัตตาหารถึงกุฏิ รวมสังฆะ ๑๔๓ รูป)
               <br />
-              <span className="text-rose-700 font-medium">⚠️ ข้อควรระวัง:</span> มีสามเณร ๒ รูปแพ้อาหารทะเล และ ๑ รูปแพ้ถั่วลิสงอย่างรุนแรง กรุณาแยกสำรับปลอดสารก่อภูมิแพ้
+              <span className="text-rose-700 font-medium">⚠️ ข้อควรระวัง (PDPA):</span> มีสามเณร ๒ รูปแพ้อาหารทะเล และ ๑ รูปแพ้ถั่วลิสงอย่างรุนแรง กรุณาแยกสำรับปลอดสารก่อภูมิแพ้
             </p>
             <div className="flex items-center gap-3 pt-2">
               <Link
                 href="/monastic-life"
                 className="text-xs font-semibold text-amber-800 hover:text-amber-950 inline-flex items-center gap-1"
               >
-                ดูรายละเอียดเวชระเบียนสามเณร <ArrowRight className="w-3.5 h-3.5" />
+                ดูรายละเอียดเวชระเบียนและกิจวัตร <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
@@ -351,6 +357,62 @@ export default function ExecutiveDashboard() {
                 >
                   <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">บริการการศึกษา</span>
                   <span className="text-[10px] text-slate-400">ตารางเรียน & ชุมชน</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Wing 4: สนับสนุน & สารสนเทศดิจิทัล */}
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <p className="text-[11px] font-bold text-amber-950 uppercase tracking-wide px-1">
+                ๔. สนับสนุน & สารสนเทศดิจิทัล
+              </p>
+              <div className="grid grid-cols-2 gap-1.5 text-xs">
+                <Link
+                  href="/classrooms"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">ห้องเรียน A1-A6</span>
+                  <span className="text-[10px] text-slate-400">บาลีสนามหลวง</span>
+                </Link>
+
+                <Link
+                  href="/graduate-curriculum"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">มคอ.๒ บัณฑิต</span>
+                  <span className="text-[10px] text-slate-400">พธ.ด./พธ.ม. ๓ หลักสูตร</span>
+                </Link>
+
+                <Link
+                  href="/vehicle-booking"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">รถส่วนกลาง</span>
+                  <span className="text-[10px] text-slate-400">๑๐ คัน / วินัยสงฆ์</span>
+                </Link>
+
+                <Link
+                  href="/complaints-tracking"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">ร้องเรียน & ติดตาม</span>
+                  <span className="text-[10px] text-emerald-600">QR Code ๗ ระบบ</span>
+                </Link>
+
+                <Link
+                  href="/visitor-analytics"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">สถิติผู้เข้าชม</span>
+                  <span className="text-[10px] text-indigo-600">Live Traffic สด</span>
+                </Link>
+
+                <Link
+                  href="/chat-board"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">แชตบอร์ด & ธรรม</span>
+                  <span className="text-[10px] text-amber-700">บอท & ชุมชนสงฆ์</span>
                 </Link>
               </div>
             </div>

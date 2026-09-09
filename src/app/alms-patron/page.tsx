@@ -15,7 +15,9 @@ import {
   Plus,
   QrCode,
   ShieldCheck,
-  Eye
+  Eye,
+  EyeOff,
+  Download
 } from "lucide-react";
 import { mockAlmsBookings, AlmsBookingItem, mockSamaneras } from "@/data/mockData";
 import { formatThaiCurrency } from "@/lib/utils";
@@ -26,8 +28,8 @@ export default function AlmsPatronPage() {
   const [selectedTab, setSelectedTab] = useState<"calendar" | "patron-portal" | "receipts">("calendar");
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [selectedCertificate, setSelectedCertificate] = useState<AlmsBookingItem | null>(null);
+  const [isAuthorizedStaff, setIsAuthorizedStaff] = useState(false);
 
-  
   // New Booking Form State
   const [newHostName, setNewHostName] = useState("");
   const [newHostPhone, setNewHostPhone] = useState("");
@@ -36,6 +38,32 @@ export default function AlmsPatronPage() {
   const [newAmount, setNewAmount] = useState("10000");
   const [newMenu, setNewMenu] = useState("แกงจืดเต้าหู้หมูสับ, ผัดผักรวม, ไก่ทอดเกลือ");
   const [bookingSuccess, setBookingSuccess] = useState(false);
+
+  // PDPA Telephone Masking Helper
+  const maskPhone = (phone: string) => {
+    if (!phone) return "";
+    if (isAuthorizedStaff) return phone;
+    const clean = phone.replace(/[^0-9]/g, "");
+    if (clean.length >= 9) {
+      return `${clean.slice(0, 3)}-xxx-${clean.slice(-4)}`;
+    }
+    return phone;
+  };
+
+  // Export CSV
+  const handleExportAlmsCsv = () => {
+    const headers = "รหัส,วันที่,มื้อภัตตาหาร,ชื่อเจ้าภาพ,เบอร์โทรศัพท์,เนื่องในโอกาส,จำนวนผู้ติดตาม,ยอดบริจาค,eDonationHash\n";
+    const rows = bookings.map(b => 
+      `"${b.id}","${b.date}","${b.mealType}","${b.hostName}","${isAuthorizedStaff ? b.hostPhone : maskPhone(b.hostPhone)}","${b.occasion}",${b.guestCount},${b.amount},"${b.eDonationHash}"`
+    ).join("\n");
+    const blob = new Blob(["\uFEFF" + headers + rows], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `รายการเจ้าภาพภัตตาหาร_${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   const handleCreateBooking = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,28 +104,64 @@ export default function AlmsPatronPage() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setShowBookingModal(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-700/20 transition-all self-start sm:self-auto"
-        >
-          <Plus className="w-4 h-4" />
-          <span>จองเป็นเจ้าภาพภัตตาหารเพล</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={() => setIsAuthorizedStaff(!isAuthorizedStaff)}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+              isAuthorizedStaff
+                ? "bg-amber-50 text-amber-900 border-amber-300"
+                : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+            }`}
+          >
+            {isAuthorizedStaff ? <EyeOff className="w-3.5 h-3.5 text-amber-700" /> : <Eye className="w-3.5 h-3.5 text-slate-500" />}
+            <span>{isAuthorizedStaff ? "ซ่อนเบอร์โทร (PDPA)" : "แสดงเบอร์ติดต่อ (เจ้าหน้าที่ PDPA)"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleExportAlmsCsv}
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>ส่งออก CSV</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowBookingModal(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-700/20 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>จองเป็นเจ้าภาพภัตตาหารเพล</span>
+          </button>
+        </div>
       </div>
 
       {bookingSuccess && (
-        <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-900 text-xs flex items-center justify-between">
+        <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
           <div className="flex items-center gap-2">
-            <CheckCircle className="w-5 h-5 text-emerald-600" />
+            <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
             <div>
               <p className="font-bold">จองภัตตาหารเพลสำเร็จ!</p>
               <p className="text-[11px] text-emerald-700">ระบบได้ออกรหัส e-Donation และส่งข้อความยืนยันทาง LINE เรียบร้อยแล้ว</p>
             </div>
           </div>
-          <span className="text-[10px] bg-emerald-200 text-emerald-900 font-semibold px-2 py-1 rounded">
-            สถานะ: ยืนยันแล้ว
-          </span>
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            {bookings.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setSelectedCertificate(bookings[0])}
+                className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all"
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span>เปิดใบอนุโมทนาบัตรทองคำทันที</span>
+              </button>
+            )}
+            <span className="text-[10px] bg-emerald-200 text-emerald-900 font-semibold px-2 py-1 rounded">
+              สถานะ: ยืนยันแล้ว
+            </span>
+          </div>
         </div>
       )}
 
@@ -160,7 +224,7 @@ export default function AlmsPatronPage() {
                   <h2 className="font-bold text-slate-900 text-sm">{item.hostName}</h2>
                   <p className="text-xs text-amber-700 font-medium mt-0.5">{item.occasion}</p>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    โทร: {item.hostPhone} • ผู้ติดตาม: {item.guestCount} ท่าน
+                    โทร: {maskPhone(item.hostPhone)} • ผู้ติดตาม: {item.guestCount} ท่าน
                   </p>
                 </div>
 

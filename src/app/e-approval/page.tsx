@@ -21,6 +21,7 @@ export default function EApprovalPage() {
   const [selectedDoc, setSelectedDoc] = useState<EApprovalDoc | null>(null);
   const [signingSuccess, setSigningSuccess] = useState(false);
   const [signatureNote, setSignatureNote] = useState("อนุมัติ ดำเนินการตามระเบียบ มจร ได้");
+  const [confirmingAction, setConfirmingAction] = useState<"APPROVE" | "REJECT" | null>(null);
 
   const handleApprove = (docId: string) => {
     setDocs(prev => prev.map(d => {
@@ -204,22 +205,73 @@ export default function EApprovalPage() {
                 </p>
               </div>
 
-              <div className="pt-3 border-t flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleReject(selectedDoc.id)}
-                  className="px-4 py-2 border border-rose-200 text-rose-700 rounded-xl hover:bg-rose-50 font-semibold"
-                >
-                  ส่งกลับแก้ไข
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleApprove(selectedDoc.id)}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow"
-                >
-                  ยืนยันลงนามอนุมัติ
-                </button>
-              </div>
+              {confirmingAction && (
+                <div className={`p-4 rounded-xl border text-xs space-y-2 animate-fadeIn ${
+                  confirmingAction === "APPROVE"
+                    ? "bg-emerald-50 border-emerald-300 text-emerald-950"
+                    : "bg-rose-50 border-rose-300 text-rose-950"
+                }`}>
+                  <div className="flex items-center gap-2 font-bold">
+                    <AlertCircle className="w-4 h-4 text-amber-700" />
+                    <span>
+                      {confirmingAction === "APPROVE"
+                        ? "ยืนยันการลงลายมือชื่อดิจิทัลคำสั่งราชการทางการ"
+                        : "ยืนยันการตีกลับเอกสารเพื่อแก้ไข"}
+                    </span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed">
+                    {confirmingAction === "APPROVE"
+                      ? `คุณกำลังจะลงนามอนุมัติเอกสารเลขที่ ${selectedDoc.docNumber} ("${selectedDoc.title}") พร้อมประทับตรารับรองดิจิทัลและส่งต่อให้ส่วนงานที่เกี่ยวข้องดำเนินการทันที`
+                      : `คุณกำลังจะตีกลับเอกสารเลขที่ ${selectedDoc.docNumber} ไปยังผู้เสนอเพื่อแก้ไขตามความเห็น`}
+                  </p>
+                  <div className="pt-2 flex justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingAction(null)}
+                      className="px-3 py-1.5 border border-slate-300 rounded-lg hover:bg-white font-medium text-slate-700"
+                    >
+                      ยกเลิก
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (confirmingAction === "APPROVE") {
+                          handleApprove(selectedDoc.id);
+                        } else {
+                          handleReject(selectedDoc.id);
+                        }
+                        setConfirmingAction(null);
+                      }}
+                      className={`px-3 py-1.5 text-white font-bold rounded-lg shadow-xs ${
+                        confirmingAction === "APPROVE"
+                          ? "bg-emerald-700 hover:bg-emerald-800"
+                          : "bg-rose-700 hover:bg-rose-800"
+                      }`}
+                    >
+                      {confirmingAction === "APPROVE" ? "ยืนยันลงนามทันที" : "ยืนยันส่งกลับ"}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {!confirmingAction && (
+                <div className="pt-3 border-t flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingAction("REJECT")}
+                    className="px-4 py-2 border border-rose-200 text-rose-700 rounded-xl hover:bg-rose-50 font-semibold"
+                  >
+                    ส่งกลับแก้ไข
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingAction("APPROVE")}
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow"
+                  >
+                    พิจารณาลงนามอนุมัติ
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

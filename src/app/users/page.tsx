@@ -21,7 +21,11 @@ import {
   Lock,
   UserCheck,
   UserX,
-  UserMinus
+  UserMinus,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  AlertCircle
 } from "lucide-react";
 import { mockSystemUsers, SystemUser, SystemRole, MonasticStatus } from "@/data/mockData";
 
@@ -32,10 +36,16 @@ export default function UserManagementPage() {
   const [selectedMonasticStatus, setSelectedMonasticStatus] = useState<string>("ALL");
   const [activeTab, setActiveTab] = useState<"directory" | "rbac-matrix" | "disrobe-log">("directory");
 
+  // Pagination
+  const [userPage, setUserPage] = useState(1);
+  const userPageSize = 9;
+
   // Modals
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDisrobeModal, setShowDisrobeModal] = useState(false);
   const [showPermissionModal, setShowPermissionModal] = useState(false);
+  const [showConfirmToggleModal, setShowConfirmToggleModal] = useState(false);
+  const [userToConfirmToggle, setUserToConfirmToggle] = useState<SystemUser | null>(null);
   const [selectedUserForAction, setSelectedUserForAction] = useState<SystemUser | null>(null);
 
   // New User Form State
@@ -129,16 +139,40 @@ export default function UserManagementPage() {
     setSelectedUserForAction(null);
   };
 
-  // Toggle Account Status (Active/Suspended)
-  const toggleAccountStatus = (id: string) => {
+  // Request confirmation to toggle account status
+  const requestToggleAccountStatus = (user: SystemUser) => {
+    setUserToConfirmToggle(user);
+    setShowConfirmToggleModal(true);
+  };
+
+  const confirmToggleAccountStatus = () => {
+    if (!userToConfirmToggle) return;
+    const target = userToConfirmToggle;
     setUsers(prev => prev.map(u => {
-      if (u.id === id) {
+      if (u.id === target.id) {
         const nextStatus = u.accountStatus === "ACTIVE" ? "SUSPENDED" : "ACTIVE";
         return { ...u, accountStatus: nextStatus };
       }
       return u;
     }));
-    showNotification("ปรับปรุงสถานะการใช้งานบัญชีเรียบร้อย");
+    showNotification(`ปรับปรุงสถานะบัญชี "${target.fullName}" เป็น ${target.accountStatus === "ACTIVE" ? "ระงับการใช้งาน" : "เปิดใช้งานปกติ"} เรียบร้อยแล้ว`);
+    setShowConfirmToggleModal(false);
+    setUserToConfirmToggle(null);
+  };
+
+  // Export Users CSV
+  const handleExportUsersCsv = () => {
+    const headers = "รหัส,ชื่อ-นามสกุล,บทบาท,สถานภาพสงฆ์,สถานะบัญชี,สังกัด,อีเมล,เบอร์โทรศัพท์\n";
+    const rows = users.map(u => 
+      `"${u.id}","${u.fullName}","${u.role}","${u.monasticStatus}","${u.accountStatus}","${u.department}","${u.email}","${u.phone || '-'}"`
+    ).join("\n");
+    const blob = new Blob(["\uFEFF" + headers + rows], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `รายชื่อผู้ใช้งานระบบ_${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   // Filtered Users
@@ -154,6 +188,10 @@ export default function UserManagementPage() {
 
     return matchQuery && matchRole && matchMonastic;
   });
+
+  const totalUserPages = Math.max(1, Math.ceil(filteredUsers.length / userPageSize));
+  const validUserPage = Math.min(userPage, totalUserPages);
+  const paginatedUsers = filteredUsers.slice((validUserPage - 1) * userPageSize, validUserPage * userPageSize);
 
   return (
     <div className="space-y-6">
@@ -173,6 +211,15 @@ export default function UserManagementPage() {
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={handleExportUsersCsv}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-slate-700 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-sm transition-all"
+          >
+            <Download className="w-4 h-4" />
+            <span>ส่งออก CSV</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setShowAddModal(true)}
@@ -297,7 +344,7 @@ export default function UserManagementPage() {
 
           {/* User Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredUsers.map((user) => (
+            {paginatedUsers.map((user) => (
               <div
                 key={user.id}
                 className="p-5 bg-white rounded-2xl border border-slate-200 hover:border-amber-300 shadow-sm transition-all flex flex-col justify-between space-y-3 text-xs"
@@ -376,7 +423,7 @@ export default function UserManagementPage() {
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
                   <button
                     type="button"
-                    onClick={() => toggleAccountStatus(user.id)}
+                    onClick={() => requestToggleAccountStatus(user)}
                     className={`font-semibold ${
                       user.accountStatus === "ACTIVE" ? "text-slate-500 hover:text-rose-600" : "text-emerald-700 hover:text-emerald-900"
                     }`}
@@ -416,6 +463,50 @@ export default function UserManagementPage() {
               </div>
             ))}
           </div>
+
+          {/* User Pagination Bar */}
+          {totalUserPages > 1 && (
+            <div className="p-4 bg-white rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+              <span className="text-slate-500">
+                แสดงบัญชีที่ {(validUserPage - 1) * userPageSize + 1} - {Math.min(validUserPage * userPageSize, filteredUsers.length)} จากทั้งหมด {filteredUsers.length} บัญชี
+              </span>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  disabled={validUserPage === 1}
+                  onClick={() => setUserPage(validUserPage - 1)}
+                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed text-slate-700"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                {Array.from({ length: totalUserPages }, (_, i) => i + 1).map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setUserPage(p)}
+                    className={`w-8 h-8 rounded-lg font-semibold text-xs transition-all ${
+                      validUserPage === p
+                        ? "bg-amber-600 text-white shadow-xs"
+                        : "border border-slate-200 text-slate-700 hover:bg-slate-50"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+
+                <button
+                  type="button"
+                  disabled={validUserPage === totalUserPages}
+                  onClick={() => setUserPage(validUserPage + 1)}
+                  className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed text-slate-700"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -777,6 +868,78 @@ export default function UserManagementPage() {
                 className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl"
               >
                 ปิดหน้าต่าง
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 4: Confirmation Dialog for Account Status Toggle */}
+      {showConfirmToggleModal && userToConfirmToggle && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 text-xs animate-fadeIn">
+            <div className="flex items-center gap-3">
+              <div className={`p-3 rounded-full ${
+                userToConfirmToggle.accountStatus === "ACTIVE"
+                  ? "bg-rose-100 text-rose-700"
+                  : "bg-emerald-100 text-emerald-700"
+              }`}>
+                <AlertCircle className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="font-bold text-slate-900 text-base">
+                  {userToConfirmToggle.accountStatus === "ACTIVE"
+                    ? "ยืนยันการระงับการใช้งานบัญชี"
+                    : "ยืนยันการเปิดใช้งานบัญชี"}
+                </h2>
+                <p className="text-slate-500 text-[11px]">การดำเนินการนี้มีผลต่อสิทธิ์การเข้าสู่ระบบทันที</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-slate-50 rounded-xl space-y-2 border border-slate-200">
+              <div className="flex justify-between">
+                <span className="text-slate-500">ชื่อผู้ใช้งาน:</span>
+                <span className="font-bold text-slate-900">{userToConfirmToggle.fullName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">บทบาท:</span>
+                <span className="font-semibold text-amber-900">{userToConfirmToggle.role}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">สถานะปัจจุบัน:</span>
+                <span className={`font-semibold ${userToConfirmToggle.accountStatus === "ACTIVE" ? "text-emerald-700" : "text-rose-700"}`}>
+                  {userToConfirmToggle.accountStatus === "ACTIVE" ? "ใช้งานปกติ" : "ระงับการใช้งาน"}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-slate-600 text-xs leading-relaxed">
+              {userToConfirmToggle.accountStatus === "ACTIVE"
+                ? "หากระงับการใช้งาน ผู้ใช้นี้จะไม่สามารถเข้าถึงระบบหรือทำการบันทึกข้อมูลใดๆ ในราชวิทยาลัยได้ จนกว่าจะได้รับคำสั่งปลดระงับจากผู้ดูแลระบบสูงสุด"
+                : "ผู้ใช้นี้จะได้รับสิทธิ์เข้าถึงระบบตามบทบาทและระดับสิทธิ์เดิมที่ได้รับมอบหมาย"}
+            </p>
+
+            <div className="pt-3 border-t flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowConfirmToggleModal(false);
+                  setUserToConfirmToggle(null);
+                }}
+                className="px-4 py-2 border border-slate-200 hover:bg-slate-50 font-semibold rounded-xl"
+              >
+                ยกเลิก
+              </button>
+              <button
+                type="button"
+                onClick={confirmToggleAccountStatus}
+                className={`px-4 py-2 text-white font-bold rounded-xl shadow transition-colors ${
+                  userToConfirmToggle.accountStatus === "ACTIVE"
+                    ? "bg-rose-600 hover:bg-rose-700"
+                    : "bg-emerald-600 hover:bg-emerald-700"
+                }`}
+              >
+                {userToConfirmToggle.accountStatus === "ACTIVE" ? "ยืนยันระงับการใช้งาน" : "ยืนยันเปิดใช้งาน"}
               </button>
             </div>
           </div>
