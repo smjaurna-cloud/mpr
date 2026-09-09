@@ -71,7 +71,15 @@
     * การเปิดไฟล์ภายนอกจากเครื่องคอมพิวเตอร์ (Local File Opener): รองรับ Drag & Drop และการคลิกเลือกไฟล์ `.docx`, `.xlsx`, `.pdf`, `.csv`, `.txt` เพื่อแปลงและเปิดอ่านในเบราว์เซอร์ได้ทันที
     * Backend API (`src/app/api/file-viewer/route.ts`): รองรับทั้ง `GET` (ดึงไฟล์ในระบบตามชื่อ/รหัส) และ `POST` (รับไฟล์อัปโหลดจากผู้ใช้เพื่อแปลงผลสด)
     * บูรณาการข้ามโมดูล: เพิ่มปุ่ม "เปิดอ่านเอกสารทันที (DOCX)" ในหน้า `/contact`, อัปเกรดปุ่ม "เปิดอ่าน" ในหน้า `/library` ให้เปิดผ่าน DocumentViewerModal ทุกไฟล์, เพิ่มเมนูใน `Sidebar.tsx` (MOD-22), ผ่านการทดสอบ Next.js Production Build ๓๔/๓๔ routes สำเร็จ ๑๐๐%
-* **Latest Action:** พัฒนาระบบเปิดอ่านเอกสารราชการและพรีวิวไฟล์อัจฉริยะ (MOD-22: `/file-viewer`) สำเร็จครบถ้วน ๑๐๐% พร้อมใช้งานจริง
+  - TASK-927: ยกระดับมาตรฐานระบบสู่ระดับสมบูรณ์แบบสูงสุด (Full System Audit & Institutional Hardening) ตามข้อเสนอแนะการตรวจประเมินของ อาจารย์ ดร.สมบูรณ์ จารุณะ:
+    * Data Consistency & Single Source of Truth: ซิงค์จำนวนสังฆะรวม ๑๔๓ รูป (แยกสามเณรศากยบุตร ๑๒๓ รูป และพระภิกษุ ๒๐ รูป ชัดเจนทุกจุด ไม่สับสน), ซิงค์ยอดงบประมาณแผ่นดินและรายได้ปี ๒๕๖๙ ๘๑.๓๙ ล้านบาท (๘๑,๓๙๓,๙๐๐ บาท), แปลงการแสดงผลวันที่เป็นปีพุทธศักราชและตัวเลขไทย (เช่น ๔ กันยายน ๒๕๖๙)
+    * Complete 22 Modules Directory on Dashboard: ปรับปรุงหัวข้อสารบบงานราชวิทยาลัยบน Executive Cockpit ให้ครอบคลุมครบถ้วนทั้ง ๒๒ โมดูล แบ่งเป็น ๔ กลุ่มปีกงานสถาบัน (๑. ศูนย์อำนวยการ & วิถีศากยบุตร ๓ โมดูล, ๒. สำนักงานวิทยาลัย/ฝ่ายบริหาร ๖ โมดูล, ๓. สำนักวิชาการ/ฝ่ายวิชาการ ๔ โมดูล, ๔. สนับสนุน & สารสนเทศดิจิทัล ๙ โมดูล รวมถึง MOD-20 ความก้าวหน้าดุษฎีนิพนธ์, MOD-21 ติดต่อราชการ & แผนที่, MOD-22 เปิดอ่านเอกสาร)
+    * SEO & Institutional Route Metadata: ติดตั้ง `layout.tsx` แยกเฉพาะรายโมดูลครบทั้ง ๒๓ เส้นทาง ให้มี `<title>` และคำอธิบายเฉพาะหน้า ไม่ซ้ำกัน, เพิ่ม OpenGraph, Twitter Cards, Canonical links, JSON-LD Structured Data (`EducationalOrganization` และ `WebSite`) ใน Root Layout, สร้าง `robots.ts` และ `sitemap.ts` (XML Sitemap อัตโนมัติ ๓๖ routes)
+    * Enterprise Security & HTTP Headers: ติดตั้ง Security Headers ใน `next.config.ts` (Strict-Transport-Security, X-Frame-Options: SAMEORIGIN, X-Content-Type-Options: nosniff, Referrer-Policy, Permissions-Policy)
+    * PDPA & Monastic Privacy Hardening: ปิดการแสดงรหัสผ่านในหน้าระบบบริหารผู้ใช้ (`/users`) โดยปกปิดด้วย `••••••••` เป็นค่าเริ่มต้น พร้อมปุ่มเปิด/ปิดดูรหัสผ่านอย่างปลอดภัย, พัฒนาศูนย์บันทึกประวัติการตรวจสอบรวม (`src/lib/auditLogger.ts`) รองรับ ISO/IEC 27001 และ PDPA
+    * Accessibility (a11y): เพิ่ม `aria-label` ให้กับปุ่มและไอคอนที่ไม่มีข้อความกำกับทั่วระบบ (ปุ่มแจ้งเตือน Navbar, ปุ่ม Speed-Dial, ปุ่มย่อ/ขยาย/พิมพ์/คัดลอก/เต็มจอ/ปิด ใน Document Viewer)
+    * Automated Test Suite & Production Build: สร้างชุดทดสอบอัตโนมัติ `tests/system-audit.test.mjs` ผ่านการทดสอบครบ ๓๓/๓๓ รายการ (100% Pass) และผ่านการตรวจสอบ Next.js Production Build ๓๖/๓๖ routes สำเร็จ ไร้ข้อผิดพลาด (0 errors)
+* **Latest Action:** ปรับปรุงและยกระดับระบบตามข้อเสนอแนะการตรวจประเมินของ อาจารย์ ดร.สมบูรณ์ ครบถ้วนทุกข้อ (TASK-927) สู่มาตรฐานสูงสุดระดับสถาบันอุดมศึกษาพระพุทธศาสนา ผ่านการทดสอบอัตโนมัติ ๓๓/๓๓ รายการ และ Next.js Production Build ๓๖/๓๖ routes สมบูรณ์ ๑๐๐%
 
 ---
 

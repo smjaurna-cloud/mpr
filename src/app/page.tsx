@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { mockSamaneras, mockAlmsBookings, mockMukhopathaRecords, mockEApprovalDocs } from "@/data/mockData";
 import { officialMonksList, getSanghaStatistics } from "@/data/sanghaData";
-import { formatThaiCurrency } from "@/lib/utils";
+import { formatThaiCurrency, formatThaiDate } from "@/lib/utils";
 
 export default function ExecutiveDashboard() {
   const [activeTab, setActiveTab] = useState<"overview" | "reports">("overview");
@@ -71,16 +71,19 @@ export default function ExecutiveDashboard() {
         {/* Metric 1 */}
         <div className="p-5 rounded-2xl bg-white border border-amber-100 shadow-sm hover:border-amber-300 transition-all">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">ศากยบุตรสามเณร / สังฆะรวม</span>
+            <span className="text-xs font-medium text-slate-500">สังฆะศากยบุตรจำพรรษา</span>
             <div className="p-2 rounded-xl bg-amber-50 text-amber-700">
               <Users className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-slate-900">{totalSamaneras}</span>
-            <span className="text-xs text-amber-800 font-semibold">รูป (รวมภิกษุ {totalSangha} รูป)</span>
+            <span className="text-3xl font-bold text-slate-900">{totalSangha}</span>
+            <span className="text-xs text-amber-800 font-semibold">รูป (สังฆะรวมทั้งหมด)</span>
           </div>
-          <p className="mt-1 text-[11px] text-slate-500">
+          <p className="mt-1 text-[11px] text-slate-600 font-medium">
+            สามเณรศากยบุตร: <strong className="text-slate-900 font-bold">{totalSamaneras}</strong> รูป • พระภิกษุ: <strong className="text-slate-900 font-bold">{totalMonks}</strong> รูป
+          </p>
+          <p className="mt-0.5 text-[10px] text-slate-500">
             ทำวัตรเช้าวันนี้: {morningChantPresent}/{totalSangha} รูป (๙๘%) • พักฟื้น ๒ รูป
           </p>
         </div>
@@ -206,7 +209,9 @@ export default function ExecutiveDashboard() {
                       ผู้ตรวจ: {item.evaluator} • ความยาวเสียง: {item.recordingDuration}
                     </p>
                   </div>
-                  <span className="text-slate-400 text-[11px] whitespace-nowrap">{item.date}</span>
+                  <span className="text-slate-500 text-[11px] whitespace-nowrap font-medium">
+                    {formatThaiDate(item.date, { shortMonth: true, useThaiDigits: true })}
+                  </span>
                 </div>
               ))}
             </div>
@@ -218,9 +223,9 @@ export default function ExecutiveDashboard() {
           {/* Quick Access to College Wings */}
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-slate-900 text-sm">สารบบงานราชวิทยาลัย (๑๓ โมดูล)</h2>
+              <h2 className="font-bold text-slate-900 text-sm">สารบบงานราชวิทยาลัย (๒๒ โมดูล)</h2>
               <span className="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-semibold">
-                ERP ครบวงจร
+                ERP ครบวงจร ๒๒ ระบบ
               </span>
             </div>
 
@@ -384,6 +389,14 @@ export default function ExecutiveDashboard() {
                 </Link>
 
                 <Link
+                  href="/graduate-progress"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">ความก้าวหน้าดุษฎีฯ</span>
+                  <span className="text-[10px] text-rose-600">MOD-20 บอร์ดเมทริกซ์</span>
+                </Link>
+
+                <Link
                   href="/vehicle-booking"
                   className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
                 >
@@ -413,6 +426,22 @@ export default function ExecutiveDashboard() {
                 >
                   <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">แชตบอร์ด & ธรรม</span>
                   <span className="text-[10px] text-amber-700">บอท & ชุมชนสงฆ์</span>
+                </Link>
+
+                <Link
+                  href="/contact"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">ติดต่อ & แผนที่</span>
+                  <span className="text-[10px] text-slate-400">๘ ฝ่าย / ITA O4</span>
+                </Link>
+
+                <Link
+                  href="/file-viewer"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-amber-50/70 border border-slate-200/70 transition-all group"
+                >
+                  <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">เปิดอ่านเอกสาร</span>
+                  <span className="text-[10px] text-blue-600 font-medium">Word / Excel / PDF</span>
                 </Link>
               </div>
             </div>

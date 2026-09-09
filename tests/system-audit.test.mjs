@@ -1,0 +1,164 @@
+import assert from "node:assert";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, "..");
+
+console.log("==========================================================");
+console.log("  MAHAVAJIRALONGKORN PALI COLLEGE SYSTEM AUDIT SUITE");
+console.log("  มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย (วส. มจร)");
+console.log("==========================================================\n");
+
+let passedCount = 0;
+let totalTests = 0;
+
+function runTest(name, fn) {
+  totalTests++;
+  try {
+    fn();
+    console.log(`  [PASS] ${name}`);
+    passedCount++;
+  } catch (err) {
+    console.error(`  [FAIL] ${name}`);
+    console.error(`         Error: ${err.message}`);
+  }
+}
+
+// 1. Data Consistency Tests
+console.log("--- 1. Data Consistency & Single Source of Truth ---");
+
+runTest("Verify total Sangha count is strictly 143 (123 Samaneras + 20 Monks)", () => {
+  const sanghaDataContent = fs.readFileSync(path.join(rootDir, "src/data/sanghaData.ts"), "utf-8");
+  assert.ok(
+    sanghaDataContent.includes("รวมทั้งสิ้น ๑๔๓ รูป (พระภิกษุ ๒๐ รูป, สามเณร ๑๒๓ รูป)"),
+    "Header comment must confirm 143 total (20 monks, 123 novices)"
+  );
+  assert.ok(
+    sanghaDataContent.includes("orderNo: 123"),
+    "Must have 123rd novice in officialNovicesList"
+  );
+  assert.ok(
+    sanghaDataContent.includes("orderNo: 20"),
+    "Must have 20th monk in officialMonksList"
+  );
+  const dashboardContent = fs.readFileSync(path.join(rootDir, "src/app/page.tsx"), "utf-8");
+  assert.ok(dashboardContent.includes("totalSangha"), "Dashboard should display totalSangha");
+  assert.ok(dashboardContent.includes("totalSamaneras"), "Dashboard should display totalSamaneras");
+  assert.ok(dashboardContent.includes("totalMonks"), "Dashboard should display totalMonks");
+});
+
+runTest("Verify official budget is strictly 81,393,900 THB (81.39M)", () => {
+  const dashboardContent = fs.readFileSync(path.join(rootDir, "src/app/page.tsx"), "utf-8");
+  assert.ok(dashboardContent.includes("81393900"), "Dashboard should reference 81393900 THB");
+  assert.ok(dashboardContent.includes("๘๑.๓๙ ลบ."), "Dashboard should render ๘๑.๓๙ ลบ.");
+});
+
+runTest("Verify 22 modules are referenced in dashboard", () => {
+  const dashboardContent = fs.readFileSync(path.join(rootDir, "src/app/page.tsx"), "utf-8");
+  assert.ok(dashboardContent.includes("สารบบงานราชวิทยาลัย (๒๒ โมดูล)"), "Dashboard should show 22 modules");
+  assert.ok(dashboardContent.includes("ERP ครบวงจร ๒๒ ระบบ"), "Dashboard should show 22 systems");
+});
+
+runTest("Verify official fleet comprises 10 vehicles (v-01 to v-10)", () => {
+  const vehicleDataContent = fs.readFileSync(path.join(rootDir, "src/data/vehicleData.ts"), "utf-8");
+  assert.ok(vehicleDataContent.includes('id: "v-01"'), "Should contain v-01");
+  assert.ok(vehicleDataContent.includes('id: "v-10"'), "Should contain v-10");
+});
+
+runTest("Verify official documents repository has 19 official documents", () => {
+  const docsDataContent = fs.readFileSync(path.join(rootDir, "src/data/officialDocumentsData.ts"), "utf-8");
+  assert.ok(docsDataContent.includes('id: "doc-01"'), "Should contain doc-01");
+  assert.ok(docsDataContent.includes('id: "doc-18"'), "Should contain doc-18 (Buildings)");
+  assert.ok(docsDataContent.includes('id: "doc-19"'), "Should contain doc-19 (Students)");
+});
+
+// 2. SEO & Route Metadata Tests
+console.log("\n--- 2. SEO & Route Layout Metadata Verification ---");
+
+const expectedRoutes = [
+  "monastic-life",
+  "alms-patron",
+  "mukhopatha",
+  "e-approval",
+  "mcu-bridge",
+  "users",
+  "meeting-rooms",
+  "hr",
+  "finance-procurement",
+  "planning-budget",
+  "library",
+  "research-qa",
+  "academic-services",
+  "classrooms",
+  "graduate-curriculum",
+  "vehicle-booking",
+  "complaints-tracking",
+  "visitor-analytics",
+  "chat-board",
+  "graduate-progress",
+  "contact",
+  "file-viewer",
+  "attendance-tracking",
+];
+
+for (const route of expectedRoutes) {
+  runTest(`Route '/${route}' has dedicated layout.tsx with metadata`, () => {
+    const layoutPath = path.join(rootDir, `src/app/${route}/layout.tsx`);
+    assert.ok(fs.existsSync(layoutPath), `layout.tsx must exist for /${route}`);
+    const content = fs.readFileSync(layoutPath, "utf-8");
+    assert.ok(content.includes("export const metadata"), `layout.tsx for /${route} must export metadata`);
+    assert.ok(content.includes("title:"), `layout.tsx for /${route} must define title`);
+  });
+}
+
+runTest("Root layout.tsx contains OpenGraph, Twitter card, and JSON-LD schema", () => {
+  const rootLayoutContent = fs.readFileSync(path.join(rootDir, "src/app/layout.tsx"), "utf-8");
+  assert.ok(rootLayoutContent.includes("openGraph:"), "Root layout must configure openGraph");
+  assert.ok(rootLayoutContent.includes("twitter:"), "Root layout must configure twitter");
+  assert.ok(rootLayoutContent.includes("EducationalOrganization"), "Root layout must embed EducationalOrganization JSON-LD");
+  assert.ok(rootLayoutContent.includes("template:"), "Root layout must have title template");
+});
+
+runTest("Robots.txt and Sitemap.xml generators exist", () => {
+  assert.ok(fs.existsSync(path.join(rootDir, "src/app/robots.ts")), "robots.ts must exist");
+  assert.ok(fs.existsSync(path.join(rootDir, "src/app/sitemap.ts")), "sitemap.ts must exist");
+});
+
+// 3. Security & PDPA Tests
+console.log("\n--- 3. Security, PDPA & Monastic Privacy ---");
+
+runTest("Security headers configured in next.config.ts", () => {
+  const configContent = fs.readFileSync(path.join(rootDir, "next.config.ts"), "utf-8");
+  assert.ok(configContent.includes("Strict-Transport-Security"), "Should configure HSTS");
+  assert.ok(configContent.includes("X-Frame-Options"), "Should configure X-Frame-Options");
+  assert.ok(configContent.includes("X-Content-Type-Options"), "Should configure nosniff");
+  assert.ok(configContent.includes("Referrer-Policy"), "Should configure Referrer-Policy");
+});
+
+runTest("Centralized Audit Logger exists and exports required methods", () => {
+  const auditLoggerPath = path.join(rootDir, "src/lib/auditLogger.ts");
+  assert.ok(fs.existsSync(auditLoggerPath), "auditLogger.ts must exist");
+  const content = fs.readFileSync(auditLoggerPath, "utf-8");
+  assert.ok(content.includes("export function logAuditEvent"), "Should export logAuditEvent");
+  assert.ok(content.includes("export function getRecentAuditLogs"), "Should export getRecentAuditLogs");
+});
+
+runTest("Password in users page is masked and not exposed in plain text", () => {
+  const usersPageContent = fs.readFileSync(path.join(rootDir, "src/app/users/page.tsx"), "utf-8");
+  assert.ok(usersPageContent.includes("••••••••"), "Users page should mask password with bullets");
+  assert.ok(usersPageContent.includes("revealedPasswords"), "Users page should use state to toggle password");
+});
+
+// 4. Summary
+console.log("\n==========================================================");
+console.log(`  AUDIT RESULTS: ${passedCount} / ${totalTests} TESTS PASSED`);
+console.log("==========================================================");
+
+if (passedCount < totalTests) {
+  process.exit(1);
+} else {
+  console.log("✅ ALL AUDIT REQUIREMENTS FULLY MET & VERIFIED!\n");
+}

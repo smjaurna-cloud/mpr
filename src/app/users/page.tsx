@@ -25,7 +25,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
-  AlertCircle
+  AlertCircle,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { mockSystemUsers, SystemUser, SystemRole, MonasticStatus } from "@/data/mockData";
 
@@ -47,6 +49,11 @@ export default function UserManagementPage() {
   const [showConfirmToggleModal, setShowConfirmToggleModal] = useState(false);
   const [userToConfirmToggle, setUserToConfirmToggle] = useState<SystemUser | null>(null);
   const [selectedUserForAction, setSelectedUserForAction] = useState<SystemUser | null>(null);
+  const [revealedPasswords, setRevealedPasswords] = useState<Record<string, boolean>>({});
+
+  const togglePasswordVisibility = (userId: string) => {
+    setRevealedPasswords((prev) => ({ ...prev, [userId]: !prev[userId] }));
+  };
 
   // New User Form State
   const [newFullName, setNewFullName] = useState("");
@@ -407,14 +414,29 @@ export default function UserManagementPage() {
                   </div>
 
                   {user.password && (
-                    <div className="flex items-center justify-between text-[11px] bg-amber-50/70 p-2 rounded-xl border border-amber-200/80">
-                      <span className="text-amber-900 font-semibold flex items-center gap-1.5">
-                        <Lock className="w-3 h-3 text-amber-700" />
-                        รหัสผ่าน:
+                    <div className="flex items-center justify-between text-[11px] bg-slate-50 p-2 rounded-xl border border-slate-200">
+                      <span className="text-slate-700 font-medium flex items-center gap-1.5">
+                        <Lock className="w-3 h-3 text-slate-500" />
+                        รหัสผ่านเริ่มต้น:
                       </span>
-                      <code className="font-mono font-bold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-200">
-                        {user.password}
-                      </code>
+                      <div className="flex items-center gap-1.5">
+                        <code className="font-mono text-xs font-semibold text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-300">
+                          {revealedPasswords[user.id] ? user.password : "••••••••"}
+                        </code>
+                        <button
+                          type="button"
+                          onClick={() => togglePasswordVisibility(user.id)}
+                          className="p-1 rounded text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors"
+                          aria-label={revealedPasswords[user.id] ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"}
+                          title={revealedPasswords[user.id] ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"}
+                        >
+                          {revealedPasswords[user.id] ? (
+                            <EyeOff className="w-3.5 h-3.5 text-slate-600" />
+                          ) : (
+                            <Eye className="w-3.5 h-3.5 text-slate-500" />
+                          )}
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>

@@ -152,6 +152,7 @@ export default function DocumentViewerModal({
                   type="button"
                   onClick={() => setZoomLevel((z) => Math.max(z - 15, 60))}
                   title="ย่อขนาด"
+                  aria-label="ย่อขนาดเอกสาร"
                   className="p-1 hover:bg-white/20 rounded text-amber-100"
                 >
                   <ZoomOut className="w-3.5 h-3.5" />
@@ -163,6 +164,7 @@ export default function DocumentViewerModal({
                   type="button"
                   onClick={() => setZoomLevel((z) => Math.min(z + 15, 150))}
                   title="ขยายขนาด"
+                  aria-label="ขยายขนาดเอกสาร"
                   className="p-1 hover:bg-white/20 rounded text-amber-100"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
@@ -171,6 +173,7 @@ export default function DocumentViewerModal({
                   type="button"
                   onClick={() => setZoomLevel(100)}
                   title="รีเซ็ต 100%"
+                  aria-label="รีเซ็ตขนาด 100%"
                   className="p-1 hover:bg-white/20 rounded text-amber-100 ml-0.5"
                 >
                   <RotateCcw className="w-3 h-3" />
@@ -183,6 +186,7 @@ export default function DocumentViewerModal({
               type="button"
               onClick={handlePrint}
               title="พิมพ์เอกสาร"
+              aria-label="พิมพ์เอกสาร"
               className="p-2 hover:bg-white/20 rounded-lg text-amber-100 transition-colors flex items-center gap-1"
             >
               <Printer className="w-4 h-4" />
@@ -195,6 +199,7 @@ export default function DocumentViewerModal({
                 type="button"
                 onClick={handleCopyText}
                 title="คัดลอกข้อความในเอกสาร"
+                aria-label="คัดลอกข้อความในเอกสาร"
                 className="p-2 hover:bg-white/20 rounded-lg text-amber-100 transition-colors flex items-center gap-1"
               >
                 {copied ? (
@@ -217,6 +222,7 @@ export default function DocumentViewerModal({
                 href={activeDownloadUrl}
                 download
                 title="ดาวน์โหลดไฟล์ต้นฉบับ"
+                aria-label="ดาวน์โหลดไฟล์ต้นฉบับ"
                 className="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg transition-colors flex items-center gap-1 shadow-xs"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -229,6 +235,7 @@ export default function DocumentViewerModal({
               type="button"
               onClick={() => setIsFullscreen(!isFullscreen)}
               title={isFullscreen ? "ย่อหน้าต่าง" : "ขยายเต็มจอ"}
+              aria-label={isFullscreen ? "ย่อหน้าต่าง" : "ขยายเต็มจอ"}
               className="p-2 hover:bg-white/20 rounded-lg text-amber-100 transition-colors"
             >
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -239,6 +246,7 @@ export default function DocumentViewerModal({
               type="button"
               onClick={onClose}
               title="ปิดหน้าต่าง (Esc)"
+              aria-label="ปิดหน้าต่างเปิดอ่านเอกสาร"
               className="p-1.5 hover:bg-rose-600 rounded-lg text-white transition-colors ml-1"
             >
               <X className="w-5 h-5" />

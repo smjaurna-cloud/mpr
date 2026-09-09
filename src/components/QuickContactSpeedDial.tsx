@@ -40,6 +40,7 @@ export default function QuickContactSpeedDial() {
               onClick={() => setIsOpen(false)}
               className="p-1 rounded-full text-amber-100 hover:bg-white/20 transition-colors"
               title="ปิดเมนู"
+              aria-label="ปิดเมนูติดต่อด่วน"
             >
               <X className="w-4 h-4" />
             </button>

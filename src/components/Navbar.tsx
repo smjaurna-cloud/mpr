@@ -86,6 +86,7 @@ export default function Navbar() {
           <button 
             type="button" 
             title="การแจ้งเตือน"
+            aria-label="เปิดกล่องข้อความแจ้งเตือนระบบ"
             className="p-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-amber-50 transition-colors relative"
           >
             <Bell className="w-5 h-5" />
