@@ -335,23 +335,57 @@ export default function GraduateCurriculumPage() {
 
         {/* Responsible Faculty */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm font-bold text-gray-900">
-            <Users className="w-4 h-4 text-amber-600" />
-            <span>อาจารย์ผู้รับผิดชอบหลักสูตร</span>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <div className="flex items-center gap-2 text-sm font-bold text-gray-900">
+              <Users className="w-4 h-4 text-amber-600" />
+              <span>คณาจารย์ผู้รับผิดชอบและผู้สอนประจำหลักสูตร</span>
+              <span className="text-xs font-normal text-gray-500">
+                ({currentProgram.responsibleLecturers.length} รูป/ท่าน)
+              </span>
+            </div>
+            <div className="text-[11px] text-amber-800 font-medium">
+              เอกสารประวัติจัดเก็บที่ <code className="bg-amber-100 px-1.5 py-0.5 rounded text-[10px]">docs/faculty/</code>
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
             {currentProgram.responsibleLecturers.map((lec, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl border border-gray-200 bg-gray-50/60 space-y-1"
+                className="p-4 rounded-xl border border-amber-200/80 bg-gradient-to-b from-white to-amber-50/20 shadow-2xs space-y-2 hover:border-amber-400 transition-colors"
               >
-                <div className="font-bold text-gray-900 text-xs">{lec.name}</div>
+                <div className="flex items-start justify-between gap-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900">
+                    {lec.position || "อาจารย์ประจำหลักสูตร"}
+                  </span>
+                  {lec.cvUrl && (
+                    <a
+                      href={lec.cvUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700 hover:text-amber-900 hover:underline bg-white px-2 py-0.5 rounded border border-amber-200 shadow-2xs"
+                    >
+                      <FileText className="w-3 h-3 text-amber-600" />
+                      <span>ดูประวัติ (PDF)</span>
+                    </a>
+                  )}
+                </div>
+                <div className="font-bold text-gray-900 text-xs leading-snug">{lec.name}</div>
                 <div className="text-[11px] text-amber-800 font-medium">
                   {lec.academicTitle}
                 </div>
-                <div className="text-[10px] text-gray-500">
-                  {lec.degrees.join(" | ")}
+                <div className="text-[10px] text-gray-600 leading-relaxed">
+                  {lec.degrees.join(" • ")}
                 </div>
+                {lec.specialization && (
+                  <div className="pt-1.5 text-[10px] text-gray-500 border-t border-gray-100">
+                    <span className="font-semibold text-gray-700">เชี่ยวชาญ:</span> {lec.specialization}
+                  </div>
+                )}
+                {lec.contact && (
+                  <div className="text-[10px] text-gray-500">
+                    <span className="font-semibold text-gray-700">ติดต่อ:</span> {lec.contact}
+                  </div>
+                )}
               </div>
             ))}
           </div>

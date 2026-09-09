@@ -20,7 +20,7 @@ import { formatThaiCurrency } from "@/lib/utils";
 export default function ResearchQAPage() {
   const [researchList, setResearchList] = useState<ResearchProject[]>(mockResearchProjects);
   const [qaMetrics, setQaMetrics] = useState<QAMetric[]>(mockQAMetrics);
-  const [activeTab, setActiveTab] = useState<"research" | "qa">("research");
+  const [activeTab, setActiveTab] = useState<"research" | "qa" | "mou">("research");
   const [notification, setNotification] = useState<string | null>(null);
 
   return (
@@ -36,7 +36,7 @@ export default function ResearchQAPage() {
             ระบบงานวิจัยพุทธศาสตร์ & ประกันคุณภาพการศึกษา (QA / EdPEx)
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            บริหารโครงการวิจัยคัมภีร์บาลี ทุนวิจัย TCI และระบบรวบรวมเอกสารหลักฐานตัวชี้วัด AUN-QA, EdPEx และ สมศ.
+            บริหารโครงการวิจัยคัมภีร์บาลี ทุนวิจัย TCI และระบบรวบรวมเอกสารหลักฐานตัวชี้วัด AUN-QA, EdPEx, สมศ. และบันทึกข้อตกลง MOU
           </p>
         </div>
 
@@ -61,11 +61,11 @@ export default function ResearchQAPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 text-xs font-semibold">
+      <div className="flex items-center gap-2 border-b border-slate-200 text-xs font-semibold overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab("research")}
-          className={`pb-3 px-3 transition-all border-b-2 ${
+          className={`pb-3 px-3 transition-all border-b-2 whitespace-nowrap ${
             activeTab === "research"
               ? "border-purple-600 text-purple-800 font-bold"
               : "border-transparent text-slate-500 hover:text-slate-800"
@@ -76,13 +76,27 @@ export default function ResearchQAPage() {
         <button
           type="button"
           onClick={() => setActiveTab("qa")}
-          className={`pb-3 px-3 transition-all border-b-2 ${
+          className={`pb-3 px-3 transition-all border-b-2 whitespace-nowrap ${
             activeTab === "qa"
               ? "border-purple-600 text-purple-800 font-bold"
               : "border-transparent text-slate-500 hover:text-slate-800"
           }`}
         >
           ระบบประกันคุณภาพ (AUN-QA / EdPEx / สมศ.)
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("mou")}
+          className={`pb-3 px-3 transition-all border-b-2 whitespace-nowrap flex items-center gap-1.5 ${
+            activeTab === "mou"
+              ? "border-purple-600 text-purple-800 font-bold"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <span>ข้อตกลงความร่วมมือ (MOU)</span>
+          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-purple-100 text-purple-800 font-bold">
+            พุทธปัญญาประดิษฐ์ BAI
+          </span>
         </button>
       </div>
 
@@ -147,16 +161,16 @@ export default function ResearchQAPage() {
         </div>
       )}
 
-      {/* TAB 2: Quality Assurance (QA) */}
+      {/* TAB 2: QA Metrics */}
       {activeTab === "qa" && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-5 space-y-4 text-xs">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="font-bold text-slate-900 text-sm">การประเมินประกันคุณภาพการศึกษาและหลักฐานอ้างอิง</h2>
-              <p className="text-slate-500">สะสมผลการดำเนินงานแบบอัตโนมัติ ไม่ต้องเร่งทำเอกสารปลายปี</p>
+        <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-purple-600" />
+              <h2 className="font-bold text-slate-900 text-sm">ตัวบ่งชี้การประกันคุณภาพการศึกษา (Quality Assurance KPI)</h2>
             </div>
-            <span className="px-2.5 py-1 bg-emerald-100 text-emerald-900 rounded-lg font-bold text-[11px]">
-              ผลคะแนนเฉลี่ย: ๔.๖๕ / ๕.๐๐
+            <span className="text-[11px] text-slate-400">
+              อัปเดตรอบการประเมินปีการศึกษาล่าสุด
             </span>
           </div>
 
@@ -187,6 +201,109 @@ export default function ResearchQAPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: Academic MOU */}
+      {activeTab === "mou" && (
+        <div className="space-y-5">
+          {/* Main MOU Card */}
+          <div className="p-6 bg-gradient-to-br from-white via-purple-50/30 to-indigo-50/20 rounded-2xl border border-purple-200 shadow-sm space-y-5">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-purple-100 pb-4">
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-900 border border-purple-200 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-purple-600" />
+                    <span>MOU ระดับสถาบัน</span>
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    <span>ผ่านการตรวจจากกองนิติการ มจร เรียบร้อยแล้ว</span>
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200">
+                    งบประมาณ ๒๕๖๙: โครงการ BAI ๓๐๐,๐๐๐ บาท
+                  </span>
+                </div>
+                <h2 className="text-lg font-bold text-slate-900 mt-2">
+                  บันทึกข้อตกลงความร่วมมือทางวิชาการ (MOU) การวิจัยและพัฒนาพุทธปัญญาประดิษฐ์ (Buddhist AI: BAI)
+                </h2>
+                <p className="text-xs text-slate-600">
+                  ระหว่าง <strong>มหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย (มจร)</strong> กับ <strong>สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง (สจล.)</strong>
+                </p>
+              </div>
+
+              {/* Download Draft DOCX */}
+              <div className="flex items-center gap-2">
+                <a
+                  href="/mou/MOU_MCU_KMITL_Buddhist_AI.docx"
+                  download="ร่างบันทึกข้อตกลงความร่วมมือ_MOU_มจร_สจล_พุทธปัญญาประดิษฐ์_ตรวจกองนิติการ.docx"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>ดาวน์โหลดร่าง MOU (.docx)</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Parties & Signatories */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="p-4 rounded-xl border border-purple-100 bg-white space-y-1.5">
+                <span className="font-bold text-purple-900 text-xs block">ฝ่ายที่ ๑: มหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย (มจร)</span>
+                <div className="text-slate-800 font-semibold">พระพรหมวัชรธีราจารย์, ศ.ดร.</div>
+                <div className="text-slate-500 text-[11px]">ตำแหน่ง อธิการบดี มหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย</div>
+                <div className="text-slate-500 text-[11px] pt-1 border-t border-slate-100">
+                  หน่วยงานร่วมดำเนินการ: มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย (วส. มจร)
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl border border-indigo-100 bg-white space-y-1.5">
+                <span className="font-bold text-indigo-900 text-xs block">ฝ่ายที่ ๒: สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง (สจล.)</span>
+                <div className="text-slate-800 font-semibold">รองศาสตราจารย์ ดร.คมสัน มาลีสี</div>
+                <div className="text-slate-500 text-[11px]">ตำแหน่ง อธิการบดี สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</div>
+                <div className="text-slate-500 text-[11px] pt-1 border-t border-slate-100">
+                  หน่วยงานร่วมดำเนินการ: คณะวิศวกรรมศาสตร์ / วิทยาลัยนวัตกรรมการผลิตขั้นสูง
+                </div>
+              </div>
+            </div>
+
+            {/* Scope of Cooperation */}
+            <div className="space-y-3 pt-2">
+              <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-purple-600" />
+                <span>กรอบและวัตถุประสงค์ความร่วมมือ ๓ มิติหลัก (Buddhist AI Architecture)</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1">
+                  <div className="font-bold text-purple-900">๑. การวิจัยและพัฒนาโมเดล AI</div>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    พัฒนาแบบจำลองปัญญาประดิษฐ์สำหรับภาษาบาลีและพระพุทธศาสนา ทั้งด้านการประมวลผลภาษาธรรมชาติ (NLP), การรู้จำเสียงสวด (Speech), และการตรวจจับตัวอักษรคัมภีร์ใบลาน (Vision OCR)
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1">
+                  <div className="font-bold text-indigo-900">๒. คลังข้อมูลดิจิทัล (Digital Corpus)</div>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    สร้างฐานข้อมูลพระไตรปิฎก อรรถกถา ฎีกา และคัมภีร์บาลีโบราณที่ผ่านการกำกับและรับรองความถูกต้อง (Ground Truth Validation) โดยคณาจารย์ผู้เชี่ยวชาญบาลี ป.ธ.๙
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1">
+                  <div className="font-bold text-emerald-900">๓. นวัตกรรมแพลตฟอร์มการเรียนรู้</div>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    ร่วมกันพัฒนาแพลตฟอร์มช่วยสอนบาลีศากยบุตร, ระบบตรวจทานมุขปาฐะอัตโนมัติ, และระบบสืบค้นพุทธวจนะอัจฉริยะเพื่อการบริการวิชาการแก่พระสงฆ์และสาธารณชน
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Document Info Footer */}
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                เอกสารจัดเก็บต้นฉบับ: <code className="bg-slate-200 px-1.5 py-0.5 rounded text-slate-800">docs/mou/01_MOU_MCU_KMITL_Buddhist_AI.docx</code>
+              </div>
+              <div className="font-medium text-purple-700">
+                สถานะ: ผ่านการตรวจร่างความชอบธรรมด้วยกฎหมายและระเบียบสงฆ์แล้ว
+              </div>
+            </div>
           </div>
         </div>
       )}
