@@ -9,7 +9,7 @@
 - **Active User:** `somboon` (Super Administrator: `smjaurna@gmail.com`, เบอร์โทร: `099-445-4256`)
 - **Status:** ✅ Production Build Ready & Verified (17/17 Static Pages Prerendered Successfully)
 - **Health:** 🟢 Excellent (Zero Errors, Strict Mode Type-Checked)
-- **Verified Date:** 2026-09-06
+- **Verified Date:** 2026-09-09
 - **System Theme:** Sacred Royal Heritage (พุทธศิลป์โมเดิร์น: Royal Gold #C5A059, Civara Saffron, Midnight Navy, Warm Ivory)
 
 ---
@@ -30,7 +30,8 @@
   - TASK-908: กำหนดค่า Git Repository ใน `D:\mpr`, เพิ่ม `.gitignore` คุ้มครองความปลอดภัย (ตัด node_modules, database, zip), ผูก Remote `https://github.com/smjaurna-cloud/mpr.git` และทำ Initial Commit สำเร็จ
   - TASK-909: สร้างสคริปต์อัตโนมัติ [push_to_github.bat](file:///d:/mpr/push_to_github.bat) อำนวยความสะดวกให้ผู้ดูแลระบบคลิกอัปโหลดขึ้น GitHub ได้ทันที
   - TASK-910: ยืนยันการสำรองข้อมูลขึ้น GitHub ครบถ้วน รวมถึงเอกสาร Context Memory ทั้ง ๖ ไฟล์ (PRD, AGENTS, architecture, implementation-plan, schema, progress)
-* **Latest Action:** ตรวจสอบและยืนยันไฟล์เอกสารและซอร์สโค้ดทั้งหมดบน GitHub `smjaurna-cloud/mpr` สำเร็จ 100%
+  - TASK-911: นำเข้าบัญชีรายชื่อบุคลากรทางการ ๓๖ อัตรา + ๑ ตำแหน่งว่าง จาก `เอกสารบุคคล มบร.xlsx` เข้าสู่ระบบบริหารงานบุคคล (MOD-08: `/hr`) ครบ ๔ กลุ่มงาน พร้อมเลขที่ตำแหน่งทางการ มุมมองตารางราชการและมุมมองการ์ด
+* **Latest Action:** บูรณาการฐานข้อมูลบุคลากรจาก `เอกสารบุคคล มบร.xlsx` เข้าสู่ระบบ `/hr` และผ่านการทดสอบ `npm run build` สมบูรณ์ 100% (18/18 routes)
 
 ---
 

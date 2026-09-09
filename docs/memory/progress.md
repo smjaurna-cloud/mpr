@@ -9,7 +9,7 @@
 - **Active User:** `somboon` (Super Administrator: `smjaurna@gmail.com`, เบอร์โทร: `099-445-4256`)
 - **Status:** ✅ Production Build Ready & Verified (17/17 Static Pages Prerendered Successfully)
 - **Health:** 🟢 Excellent (Zero Errors, Strict Mode Type-Checked)
-- **Verified Date:** 2026-09-06
+- **Verified Date:** 2026-09-09
 - **System Theme:** Sacred Royal Heritage (พุทธศิลป์โมเดิร์น: Royal Gold #C5A059, Civara Saffron, Midnight Navy, Warm Ivory)
 
 ---
@@ -30,16 +30,8 @@
   - TASK-908: กำหนดค่า Git Repository ใน `D:\mpr`, เพิ่ม `.gitignore` คุ้มครองความปลอดภัย (ตัด node_modules, database, zip), ผูก Remote `https://github.com/smjaurna-cloud/mpr.git` และทำ Initial Commit สำเร็จ
   - TASK-909: สร้างสคริปต์อัตโนมัติ [push_to_github.bat](file:///d:/mpr/push_to_github.bat) อำนวยความสะดวกให้ผู้ดูแลระบบคลิกอัปโหลดขึ้น GitHub ได้ทันที
   - TASK-910: ยืนยันการสำรองข้อมูลขึ้น GitHub ครบถ้วน รวมถึงเอกสาร Context Memory ทั้ง ๖ ไฟล์ (PRD, AGENTS, architecture, implementation-plan, schema, progress)
-  - TASK-911: พัฒนาระบบ Attendance Tracking System (ระบบติดตามการเข้าเรียนของนิสิตระดับบัณฑิตศึกษา) ในไดเรกทอรี `D:\mpr\smst` รองรับ ๓ สาขาวิชา ๖ รุ่น พร้อมโมดูล Face Registration (ปลอดภาพถ่าย PDPA 128-d Vector), Real-Time Face Scanning (Continuous/Manual, Difference Score HUD เมื่อไม่ผ่านเกณฑ์), Summary Dashboard (7-Day Chart, 10 Recent Check-ins), Student Management (Cascade Delete ประวัติเข้าเรียน), และ Data Management (JSON Export/Import, Reset, Seed Demo) ตรวจสอบ Strict Mode Type-Checked และ Build สำเร็จ 100%
-  - TASK-912: เพิ่ม ๓ ระบบสำคัญใน `D:\mpr\smst`: (๑) ระบบจัดการห้องเรียนออนไซต์และออนไลน์ ผสาน ๔ บัญชี Zoom พร้อมรหัสผ่านและปุ่มคลิกเข้าเรียน/คัดลอกรหัสผ่าน, (๒) ระบบการเงินและบัญชี ชำระค่าเทอมด้วย PromptPay QR Code, ออกใบเสร็จดิจิทัลทางการ A4 สั่งพิมพ์ได้, พร้อมข้อมูลติดต่อฝ่ายการเงิน วส.มจร, (๓) ระบบยื่นคำร้องเรียนและข้อเสนอแนะ ติดตามสถานะคำร้อง (Pending, In Progress, Resolved) รองรับแบบไม่เปิดเผยตัวตน (Anonymous) ตรวจสอบ Type-Checked และ Build สำเร็จ 100%
-  - TASK-913: ดำเนินการ Commit และ Push สำรองข้อมูลขึ้น GitHub `https://github.com/smjaurna-cloud/mpr.git` (Branch: `main`) ครบถ้วนทั้ง ๖ ไฟล์ Documentation Memory (PRD.md, AGENTS.md, architecture.md, implementation-plan.md, schema.md, progress.md) และชุดโมดูลแอปพลิเคชันบัณฑิตศึกษา `smst`
-  - TASK-914: บูรณาการระบบติดตามเข้าเรียนบัณฑิตศึกษา (`/attendance-tracking`) เข้าสู่ระบบหลัก Next.js 15: เชื่อมโยง Sidebar ฝ่ายวิชาการ, ตรวจสอบ ๔ ห้องเรียน Zoom, ระบบชำระค่าเทอม และกล่องรับคำร้องเรียน, รัน Next.js Production Build ผ่าน 18/18 Static Pages แบบ Zero Errors (TypeScript Strict Mode)
-  - TASK-915: สร้างและปรับปรุงไฟล์สคริปต์ `push_to_github.bat` ทั้งในโฟลเดอร์หลัก `D:\mpr` และโฟลเดอร์ `D:\mpr\smst` รองรับการพิมพ์ข้อความบันทึก (Commit Message) ด้วยตนเอง หรือกด Enter เพื่อใช้ข้อความอัตโนมัติ พร้อมแสดงสถานะภาษาไทย UTF-8 และ Push ขึ้นสู่ GitHub `origin main` ทันทีเพียงดับเบิลคลิก
-  - TASK-916: ดำเนินการแยก Git Repository อิสระสำหรับ SMTS (Attendance Tracking System & Academic ERP) ใน `D:\mpr\smst` สร้าง `.gitignore`, `README.md` แบบละเอียด พร้อมเชื่อมต่อไปยัง `https://github.com/smjaurna-cloud/smts.git` และทำ Initial Commit / Push สู่สาขา `main` สำเร็จเรียบร้อย 100%
-  - TASK-917: บูรณาการข้อมูลตารางเรียนและรายนามคณาจารย์ผู้สอน (ภาคการศึกษาที่ ๑/๒๕๖๙) ลงสู่ระบบห้องเรียนทั้ง ๔ ซูม ทั้งใน `smst/` (Standalone Biometric Workstation) และ `src/app/attendance-tracking/` (Next.js 15 Portal) ครอบคลุมพุทธศาสตรดุษฎีบัณฑิตและมหาบัณฑิต ทั้ง ๓ สาขาวิชา ๖ รุ่น พร้อมชื่อรายวิชา รหัสวิชา หน่วยกิต และคณะอาจารย์ผู้สอนร่วม ตรวจสอบ Build ผ่านฉลุย 100% ทั้ง Vite และ Next.js (18/18 Static Pages)
-  - TASK-918: เพิ่มและตรวจสอบบัญชีผู้ดูแลระบบหลัก `Somboon` (Role: `SUPER_ADMIN`, Password: `123456`, Email: `smjaurna@gmail.com`) แสดงผลในแถบนำทาง Navbar ทั้งสองแอปพลิเคชัน และในหน้าบริหารผู้ใช้ (`/users`) พร้อมรหัสผ่านยืนยันสิทธิ์, ดำเนินการตรวจสอบความสมบูรณ์เชิงระบบครบทุกด้าน (Zero Errors, Type-Checked, Production Build 18/18 Pages, 2 Active Web Servers)
-  - TASK-919: เพิ่มและเปิดให้บริการ "ศูนย์ดาวน์โหลดและจัดการข้อมูลระบบ (Download Center)" ทั้งในระบบ Standalone `smst` และในระบบ Next.js Portal (`/attendance-tracking`) รองรับการดาวน์โหลดไฟล์ชุดข้อมูล ๖ หมวดหมู่ ได้แก่ (๑) ตารางเรียนและคณาจารย์ ๔ ห้องซูม (CSV), (๒) ทะเบียนรายชื่อนิสิต (CSV), (๓) ประวัติการเช็คชื่อเข้าเรียน Biometric (CSV), (๔) ทะเบียนชำระค่าเทอมและใบเสร็จ (CSV), (๕) ข้อมูลการยื่นคำร้องเรียน ๕ หมวด (CSV), (๖) สำรองคอนฟิกระบบทั้งหมด (JSON) โดยทุกไฟล์ CSV มี UTF-8 Byte Order Mark (BOM) ทำให้เปิดด้วย Microsoft Excel และ Google Sheets ได้ภาษาไทยสมบูรณ์ 100% ไม่เป็นภาษาต่างดาว พร้อมลิงก์เปิดข้ามระบบได้อย่างสะดวกรวดเร็ว
-* **Latest Action:** พัฒนาศูนย์ดาวน์โหลดข้อมูล (Download Center) พร้อมทดสอบการดาวน์โหลดไฟล์และ Build ผ่าน 100% ทั้ง ๒ ระบบเรียบร้อยแล้ว
+  - TASK-911: นำเข้าบัญชีรายชื่อบุคลากรทางการ ๓๖ อัตรา + ๑ ตำแหน่งว่าง จาก `เอกสารบุคคล มบร.xlsx` เข้าสู่ระบบบริหารงานบุคคล (MOD-08: `/hr`) ครบ ๔ กลุ่มงาน พร้อมเลขที่ตำแหน่งทางการ มุมมองตารางราชการและมุมมองการ์ด
+* **Latest Action:** บูรณาการฐานข้อมูลบุคลากรจาก `เอกสารบุคคล มบร.xlsx` เข้าสู่ระบบ `/hr` และผ่านการทดสอบ `npm run build` สมบูรณ์ 100% (18/18 routes)
 
 ---
 
@@ -61,5 +53,3 @@
 | **MOD-11**| Tipitaka Library & IT | ✅ Completed | `src/app/library/page.tsx` (พระไตรปิฎก ๔๕ เล่ม, สัททนีติ, ปทรูปสิทธิ) |
 | **MOD-12**| Research & Educational QA | ✅ Completed | `src/app/research-qa/page.tsx` (คลังวิจัยพุทธศาสตร์, AUN-QA, สมศ.) |
 | **MOD-13**| Academic Services & Outreach | ✅ Completed | `src/app/academic-services/page.tsx` (ตารางสอนบาลี ๔ ชั้น, อบรมเยาวชน) |
-| **MOD-14**| Graduate Biometric & Hybrid Class | ✅ Completed | `src/app/attendance-tracking/page.tsx` & `smst/` (สแกนใบหน้า, ๔ ซูม, ค่าเทอม, คำร้อง) |
-
