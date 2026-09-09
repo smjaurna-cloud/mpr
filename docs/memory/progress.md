@@ -32,7 +32,8 @@
   - TASK-910: ยืนยันการสำรองข้อมูลขึ้น GitHub ครบถ้วน รวมถึงเอกสาร Context Memory ทั้ง ๖ ไฟล์ (PRD, AGENTS, architecture, implementation-plan, schema, progress)
   - TASK-911: นำเข้าบัญชีรายชื่อบุคลากรทางการ ๓๖ อัตรา + ๑ ตำแหน่งว่าง จาก `เอกสารบุคคล มบร.xlsx` เข้าสู่ระบบบริหารงานบุคคล (MOD-08: `/hr`) ครบ ๔ กลุ่มงาน พร้อมเลขที่ตำแหน่งทางการ มุมมองตารางราชการและมุมมองการ์ด
   - TASK-912: ระบบผังห้องเรียน ๖ ห้องเรียน (A 1 – A 6) และการจัดชั้นเรียนบาลีสนามหลวง & นักธรรม (`/classrooms`) ครบถ้วนตามเอกสารทางการ ๑๓ หน้า จัดสรรอาจารย์ผู้สอน, บัญชีรายชื่อสามเณร ๒ สายวิชา, ระบบคุ้มครองข้อมูล PDPA สำหรับผู้เยาว์, กฎระเบียบห้องเรียน และตารางเวรทำความสะอาด
-* **Latest Action:** ติดตั้งโมดูล `/classrooms` พร้อมข้อมูลห้องเรียน A 1 ถึง A 6 และผ่านการทดสอบ `npm run build` สมบูรณ์ 100% (19/19 routes)
+  - TASK-913: บูรณาการกรอบงบประมาณรายจ่ายประจำปี พ.ศ. ๒๕๖๙ ตัวจริง (๘๑,๓๙๓,๙๐๐ บาท) เข้าสู่ระบบวางแผนและงบประมาณ (`/planning-budget`) ครบถ้วนตามเอกสารทางการ ๔ หน้า จำแนก ๓ แผนงานหลัก (บุคลากร, พัฒนาศักยภาพคน, วิจัยและนวัตกรรม), งบแผ่นดิน (๓๔.๗๑ ลบ.), งบรายได้ มจร (๔๖.๖๘ ลบ.), งบลงทุนสำคัญ (หอประชุม ๒๔.๘๖ ลบ., Solar Rooftop ๓ อาคาร ๗.๕๖ ลบ., ภูมิทัศน์ ๕.๕ ลบ., พุทธปัญญาประดิษฐ์ BAI, สังคายนานานาชาติ), ลายเซ็นรับรองสงฆ์ และปุ่มพิมพ์รายงาน
+* **Latest Action:** บูรณาการกรอบงบประมาณปี ๒๕๖๙ (๘๑.๓๙ ล้านบาท) ใน `/planning-budget` และผ่านการทดสอบ `npm run build` สมบูรณ์ 100% (19/19 routes)
 
 ---
 
@@ -50,7 +51,7 @@
 | **MOD-07**| Smart Meeting Room & Signage | ✅ Completed | `src/app/meeting-rooms/page.tsx` (จองห้องประชุม, ป้ายดิจิทัล, IoT, น้ำปานะ) |
 | **MOD-08**| Human Resource Management (HR) | ✅ Completed | `src/app/hr/page.tsx` (อัตรากำลังสงฆ์, ประวัติสมณศักดิ์, เลื่อนขั้น) |
 | **MOD-09**| Finance & Procurement | ✅ Completed | `src/app/finance-procurement/page.tsx` (๓ กองทุนบริจาค, คลังสังฆภัณฑ์) |
-| **MOD-10**| Planning & Strategic Budget | ✅ Completed | `src/app/planning-budget/page.tsx` (แผนยุทธศาสตร์ ๕ ปี, KPI วส. มจร) |
+| **MOD-10**| Planning & Strategic Budget | ✅ Completed | `src/app/planning-budget/page.tsx` (กรอบงบประมาณปี ๖๙ ตัวจริง ๘๑.๓๙ ลบ., แผนยุทธศาสตร์ ๕ ปี, KPI วส. มจร) |
 | **MOD-11**| Tipitaka Library & IT | ✅ Completed | `src/app/library/page.tsx` (พระไตรปิฎก ๔๕ เล่ม, สัททนีติ, ปทรูปสิทธิ) |
 | **MOD-12**| Research & Educational QA | ✅ Completed | `src/app/research-qa/page.tsx` (คลังวิจัยพุทธศาสตร์, AUN-QA, สมศ.) |
 | **MOD-13**| Academic Services & Outreach | ✅ Completed | `src/app/academic-services/page.tsx` (ตารางสอนบาลี ๔ ชั้น, อบรมเยาวชน) |

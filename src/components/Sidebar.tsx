@@ -89,10 +89,10 @@ const navigationGroups: NavGroup[] = [
       },
       {
         name: "แผนงานและงบประมาณ",
-        description: "ยุทธศาสตร์ ๕ ปี & KPI วส. มจร",
+        description: "กรอบงบประมาณปี ๖๙ (๘๑.๔ ลบ.) & ยุทธศาสตร์ ๕ ปี",
         href: "/planning-budget",
         icon: Target,
-        badge: "KPI",
+        badge: "งบ ๖๙",
       },
       {
         name: "สารบรรณ & อนุมัติมือถือ",
