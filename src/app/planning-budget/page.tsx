@@ -23,7 +23,8 @@ import {
   Microscope,
   Info,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Download
 } from "lucide-react";
 import { mockStrategicKPIs, StrategicPlanKPI } from "@/data/mockData";
 import { 
@@ -110,30 +111,43 @@ export default function PlanningBudgetPage() {
             ของมหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย เพื่อการสร้างศาสนทายาทและพลังงานหมุนเวียนพุทธสถาน
           </p>
 
-          {/* Tab Switcher */}
-          <div className="flex items-center gap-2 mt-5">
-            <button
-              onClick={() => setActiveTab("BUDGET_69")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === "BUDGET_69"
-                  ? "bg-white text-amber-900 shadow-md"
-                  : "bg-amber-900/40 text-amber-100 hover:bg-amber-900/70 border border-amber-500/30"
-              }`}
+          {/* Tab Switcher & Official File Download */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-5">
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => setActiveTab("BUDGET_69")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                  activeTab === "BUDGET_69"
+                    ? "bg-white text-amber-900 shadow-md"
+                    : "bg-amber-900/40 text-amber-100 hover:bg-amber-900/70 border border-amber-500/30"
+                }`}
+              >
+                <Coins className="w-4 h-4" />
+                <span>กรอบงบประมาณ พ.ศ. ๒๕๖๙ (เอกสารจริง ๘๑.๓๙ ลบ.)</span>
+              </button>
+              <button
+                onClick={() => setActiveTab("STRATEGIC_KPIS")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                  activeTab === "STRATEGIC_KPIS"
+                    ? "bg-white text-amber-900 shadow-md"
+                    : "bg-amber-900/40 text-amber-100 hover:bg-amber-900/70 border border-amber-500/30"
+                }`}
+              >
+                <Target className="w-4 h-4" />
+                <span>แผนยุทธศาสตร์ ๕ ปี & KPI วส. มจร</span>
+              </button>
+            </div>
+
+            <a
+              href="/budget/กรอบงบประมาณ 2569 ปรับปรุง ไตรมาส 3.pdf"
+              download="กรอบงบประมาณ 2569 ปรับปรุง ไตรมาส 3.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md border border-emerald-400/40"
             >
-              <Coins className="w-4 h-4" />
-              <span>กรอบงบประมาณ พ.ศ. ๒๕๖๙ (เอกสารจริง ๘๑.๓๙ ลบ.)</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("STRATEGIC_KPIS")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === "STRATEGIC_KPIS"
-                  ? "bg-white text-amber-900 shadow-md"
-                  : "bg-amber-900/40 text-amber-100 hover:bg-amber-900/70 border border-amber-500/30"
-              }`}
-            >
-              <Target className="w-4 h-4" />
-              <span>แผนยุทธศาสตร์ ๕ ปี & KPI วส. มจร</span>
-            </button>
+              <Download className="w-4 h-4" />
+              <span>ดาวน์โหลดเอกสารจริง PDF (๘๑.๓๙ ลบ.)</span>
+            </a>
           </div>
         </div>
       </div>

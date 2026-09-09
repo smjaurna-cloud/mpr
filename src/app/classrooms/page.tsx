@@ -14,7 +14,8 @@ import {
   Laptop,
   CheckCircle2,
   Printer,
-  Info
+  Info,
+  Download
 } from "lucide-react";
 import {
   mockClassrooms,
@@ -103,10 +104,22 @@ export default function ClassroomsPage() {
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
             การจัดผังห้องเรียน & บาลีสนามหลวง (A 1 – A 6)
           </h1>
-          <p className="text-amber-100/90 text-sm max-w-3xl leading-relaxed">
-            ระบบบริหารจัดการห้องเรียน ๖ ห้องเรียน ประจำหลักสูตรนักธรรมและบาลีสนามหลวง จัดสรรอาจารย์ผู้สอน 
-            และบัญชีรายนามสามเณรศากยบุตรอย่างเป็นสัดส่วน พร้อมมาตรการคุ้มครองข้อมูลส่วนบุคคล (PDPA) ตามกฎบัตรสงฆ์
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-2">
+            <p className="text-amber-100/90 text-sm max-w-2xl leading-relaxed">
+              ระบบบริหารจัดการห้องเรียน ๖ ห้องเรียน ประจำหลักสูตรนักธรรมและบาลีสนามหลวง จัดสรรอาจารย์ผู้สอน 
+              และบัญชีรายนามสามเณรศากยบุตรอย่างเป็นสัดส่วน พร้อมมาตรการคุ้มครองข้อมูลส่วนบุคคล (PDPA) ตามกฎบัตรสงฆ์
+            </p>
+            <a
+              href="/classrooms/จัดห้องเรียน(แก้ไขเพิ่มเติม).pdf"
+              download="จัดห้องเรียน(แก้ไขเพิ่มเติม).pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-md transition-colors border border-emerald-400/40 shrink-0"
+            >
+              <Download className="w-4 h-4" />
+              <span>ดาวน์โหลดเอกสารจริง (PDF ๑๓ หน้า)</span>
+            </a>
+          </div>
         </div>
       </div>
 
