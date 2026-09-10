@@ -92,7 +92,35 @@
     * ติดตั้งวิดเจ็ตอัปเดตด่วนในระบบสำคัญ (`QuickDataUpdateModal`): เพิ่มปุ่ม "อัปเดตข้อมูล (Admin)" ในหน้า `/vehicle-booking`, `/monastic-life`, `/planning-budget`
     * การเชื่อมโยงสถาปัตยกรรม: เพิ่มใน `Sidebar.tsx` (MOD-23 ในหมวดฝ่ายบริหาร), `Navbar.tsx` (ปุ่มด่วน "อัปเดตข้อมูล"), `page.tsx` (สารบบ ๒๓ โมดูล), และ `sitemap.ts` (XML Sitemap ๓๗ เส้นทาง)
     * Automated Test Suite & Production Build: ปรับปรุง `tests/system-audit.test.mjs` ผ่านครบ ๓๗/๓๗ รายการ (100% Pass) และผ่านการตรวจสอบ Next.js Production Build ๓๘/๓๘ routes สำเร็จ ไร้ข้อผิดพลาด (0 errors)
-* **Latest Action:** พัฒนาระบบศูนย์กลางอัปเดตและจัดการข้อมูลทุกระบบ (MOD-23: `/data-updater`) พร้อมระบบสิทธิ์ Super Admin และแอดมินประจำฝ่าย ๑๔ ฝ่าย (TASK-928) บูรณาการวิดเจ็ตอัปเดตด่วนในหน้างานจริง ผ่านการทดสอบอัตโนมัติ ๓๗/๓๗ รายการ และ Next.js Production Build ๓๘/๓๘ routes สมบูรณ์ ๑๐๐%
+  - TASK-929: ระบบยืนยันตัวตนหลายรูปแบบ (Multi-Identifier Login), Google SSO และระบบลงทะเบียนสมาชิกใหม่พร้อมบัตรสมาชิกดิจิทัล (MOD-24: `/login` & `/register`):
+    * Multi-Identifier Login Matrix:
+      - เข้าสู่ระบบด้วย "ชื่อ" (Username, ชื่อ-นามสกุล, ฉายาบาลี, อีเมล) ควบคู่กับหนึ่งใน ๔ รหัสทางการ:
+        ๑. รหัสสมาชิก (Member ID เช่น `MBR-SOMBOON`, `MBR-2569-xxx`)
+        ๒. รหัสนิสิต (Student ID เช่น `6701501001`, `SKB-2569-xxx`)
+        ๓. รหัสตำแหน่ง (Position Code เช่น `POS-ADMIN-001`, `POS-DIR-001`, `POS-TCH-001`)
+        ๔. เลขประจำตัวประชาชน ๑๓ หลัก (Citizen ID เช่น `1-7399-00123-45-6` หรือเลข ๑๓ หลักติดกัน)
+        (หรือรหัสผ่านระบบเดิม)
+      - ตัวตรวจจับอัตโนมัติ (Smart Auto-Detect) และตัวเลือกเจาะจงประเภท (Specific Identifier Selector)
+    * Google Single Sign-On (SSO):
+      - รองรับทั้งโดเมนสถาบัน `@mcu.ac.th` (MCU Google Workspace) และบุคคลภายนอก `@gmail.com`
+      - ปุ่ม 1-Click Instant Demo Login บัญชีอาจารย์ ดร.สมบูรณ์ จารุณะ (`smjaurna@gmail.com`) เข้าสู่ระบบเป็น Super Admin ทันที
+    * ระบบสมัครสมาชิกใหม่ (Member Registration: `/register`):
+      - รองรับ ๕ หมวดหมู่สมาชิกสงฆ์และคฤหัสถ์ (พระภิกษุ, ศากยบุตรสามเณร, นิสิตบัณฑิตศึกษา, คณาจารย์/บุคลากร, โยมอุปถัมภ์/ประชาชน)
+      - ขั้นตอน Wizard Stepper ๔ ขั้นตอน (เลือกประเภท -> ข้อมูลส่วนตัว/สมณศักดิ์ -> รหัสผ่าน/ความยินยอม PDPA -> รับบัตรสมาชิกดิจิทัล)
+      - ออกรหัสสมาชิกอัตโนมัติ `MBR-2569-xxxx`
+    * บัตรสมาชิกดิจิทัลพุทธศิลป์โมเดิร์น (Digital Member Card & Modal: `DigitalMemberCardModal.tsx`):
+      - ลวดลายกรอบพุทธศิลป์สีทองคำ Royal Heritage (Royal Gold & Deep Midnight Navy)
+      - ตราสัญลักษณ์มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย
+      - Dynamic QR Code สแกนตรวจสอบความถูกต้องผ่านมือถือ
+      - สลับมุมมองบัตรแนวนอน / แบบฟอร์ม A4 ทางการพิมพ์ได้ทันที
+    * สถาปัตยกรรมและการเชื่อมโยงทั่วทั้งระบบ:
+      - `AuthContext.tsx` & `Providers.tsx` ห่อหุ้ม Root Layout จัดการ Session และ Persistent LocalStorage
+      - `Navbar.tsx`: แสดงรูปอวตารผู้ใช้, ฉายา/ยศ, รหัสสมาชิก, เมนูเปิดบัตรสมาชิกดิจิทัล, ปุ่มสลับบทบาทฉับไว ๗ ท่าน (Quick Persona Switcher), ลิงก์เข้าสู่ระบบ/สมัครสมาชิกสำหรับผู้มาเยือน
+      - `Sidebar.tsx`: กล่องข้อมูลผู้ใช้ด้านล่าง ป้ายบทบาทภาษาไทย และปุ่มออกจากระบบ
+      - API Routes: `/api/auth/login`, `/api/auth/google`, `/api/auth/register`
+      - XML Sitemap & Robots: บูรณาการ `/login` และ `/register` เข้าสู่ `sitemap.ts` (รวม ๓๙ เส้นทาง)
+      - Automated Test Suite: ผ่านการทดสอบครบ ๔๓/๔๓ รายการ (100% Pass)
+* **Latest Action:** พัฒนาระบบยืนยันตัวตนหลายรูปแบบ (Multi-Identifier Login), Google SSO, ระบบสมัครสมาชิก และบัตรสมาชิกดิจิทัล (TASK-929 / MOD-24) บูรณาการ Navbar/Sidebar/Layouts ครบถ้วน ผ่านชุดทดสอบอัตโนมัติ ๔๓/๔๓ รายการสมบูรณ์ ๑๐๐%
 
 ---
 
@@ -124,6 +152,7 @@
 | **MOD-21**| Official Standard Contact & Directory | ✅ Completed | `src/app/contact/page.tsx` (ทำเนียบ ๘ ฝ่ายงาน, แผนที่ GPS, LINE, Q&A ฟอร์ม ITA O4-O5, Footer, SpeedDial, `/api/contact`) |
 | **MOD-22**| Smart Document Reader & Official File Viewer | ✅ Completed | `src/app/file-viewer/page.tsx`, `src/components/DocumentViewerModal.tsx`, `src/app/api/file-viewer/route.ts` (DOCX, XLSX, PDF, Text) |
 | **MOD-23**| Central Data Update & Sync Hub | ✅ Completed | `src/app/data-updater/page.tsx`, `src/app/data-updater/layout.tsx`, `src/components/QuickDataUpdateModal.tsx`, `src/app/api/data-updater/route.ts` (Super Admin & ๑๔ ฝ่าย, Batch Excel/CSV, Freshness Monitor, Audit Trail) |
+| **MOD-24**| Multi-Identifier Auth, Google SSO & Member Registration | ✅ Completed | `src/app/login/page.tsx`, `src/app/register/page.tsx`, `src/data/authData.ts`, `src/context/AuthContext.tsx`, `src/components/DigitalMemberCardModal.tsx`, `/api/auth/*` |
 
 
 

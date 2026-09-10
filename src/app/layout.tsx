@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import QuickContactSpeedDial from "@/components/QuickContactSpeedDial";
+import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: {
@@ -130,15 +131,17 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col bg-[#faf8f5] text-slate-900 antialiased selection:bg-amber-200">
-        <Navbar />
-        <div className="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto">
-          <Sidebar />
-          <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
-            {children}
-          </main>
-        </div>
-        <Footer />
-        <QuickContactSpeedDial />
+        <Providers>
+          <Navbar />
+          <div className="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto">
+            <Sidebar />
+            <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
+              {children}
+            </main>
+          </div>
+          <Footer />
+          <QuickContactSpeedDial />
+        </Providers>
       </body>
     </html>
   );

@@ -104,6 +104,8 @@ const expectedRoutes = [
   "file-viewer",
   "data-updater",
   "attendance-tracking",
+  "login",
+  "register",
 ];
 
 for (const route of expectedRoutes) {
@@ -124,9 +126,11 @@ runTest("Root layout.tsx contains OpenGraph, Twitter card, and JSON-LD schema", 
   assert.ok(rootLayoutContent.includes("template:"), "Root layout must have title template");
 });
 
-runTest("Robots.txt and Sitemap.xml generators exist", () => {
+runTest("Robots.txt and Sitemap.xml generators exist and include /login and /register", () => {
   assert.ok(fs.existsSync(path.join(rootDir, "src/app/robots.ts")), "robots.ts must exist");
-  assert.ok(fs.existsSync(path.join(rootDir, "src/app/sitemap.ts")), "sitemap.ts must exist");
+  const sitemapContent = fs.readFileSync(path.join(rootDir, "src/app/sitemap.ts"), "utf-8");
+  assert.ok(sitemapContent.includes('path: "/login"'), "sitemap.ts must contain /login");
+  assert.ok(sitemapContent.includes('path: "/register"'), "sitemap.ts must contain /register");
 });
 
 // 3. Security & PDPA Tests
@@ -187,6 +191,55 @@ runTest("Verify QuickDataUpdateModal is embedded in key modules", () => {
   const pbContent = fs.readFileSync(path.join(rootDir, "src/app/planning-budget/page.tsx"), "utf-8");
   assert.ok(pbContent.includes("QuickDataUpdateModal"), "planning-budget should embed QuickDataUpdateModal");
   assert.ok(pbContent.includes('targetModuleId="MOD-10"'), "planning-budget should target MOD-10");
+});
+
+// 5. Multi-Identifier Login, Google SSO & Member Registration
+console.log("\n--- 5. Authentication, Multi-Identifier Login & Member Registration ---");
+
+runTest("Verify authData.ts exports required seed users, models, and authentication logic", () => {
+  const authDataContent = fs.readFileSync(path.join(rootDir, "src/data/authData.ts"), "utf-8");
+  assert.ok(authDataContent.includes("export const initialAuthUsers"), "Must export initialAuthUsers");
+  assert.ok(authDataContent.includes("export function authenticateMultiIdentifier"), "Must export authenticateMultiIdentifier");
+  assert.ok(authDataContent.includes("export function authenticateGoogleUser"), "Must export authenticateGoogleUser");
+  assert.ok(authDataContent.includes("smjaurna@gmail.com"), "Must contain Dr. Somboon account");
+  assert.ok(authDataContent.includes("MBR-SOMBOON"), "Must contain Dr. Somboon memberId");
+  assert.ok(authDataContent.includes("POS-DIR-001"), "Must contain Director positionCode");
+  assert.ok(authDataContent.includes("6701501001"), "Must contain Ph.D. studentCode");
+  assert.ok(authDataContent.includes("1-7399-00123-45-6"), "Must contain citizen ID");
+});
+
+runTest("Verify Auth backend API routes (/api/auth/login, /api/auth/google, /api/auth/register)", () => {
+  const loginRoute = fs.readFileSync(path.join(rootDir, "src/app/api/auth/login/route.ts"), "utf-8");
+  assert.ok(loginRoute.includes("export async function POST"), "Login route must export POST");
+  assert.ok(loginRoute.includes("authenticateMultiIdentifier"), "Login route must use authenticateMultiIdentifier");
+
+  const googleRoute = fs.readFileSync(path.join(rootDir, "src/app/api/auth/google/route.ts"), "utf-8");
+  assert.ok(googleRoute.includes("export async function POST"), "Google route must export POST");
+  assert.ok(googleRoute.includes("authenticateGoogleUser"), "Google route must use authenticateGoogleUser");
+
+  const registerRoute = fs.readFileSync(path.join(rootDir, "src/app/api/auth/register/route.ts"), "utf-8");
+  assert.ok(registerRoute.includes("export async function POST"), "Register route must export POST");
+  assert.ok(registerRoute.includes("MBR-2569-"), "Register route must generate MBR-2569- member ID");
+});
+
+runTest("Verify AuthContext, Providers, and DigitalMemberCardModal exist", () => {
+  assert.ok(fs.existsSync(path.join(rootDir, "src/context/AuthContext.tsx")), "AuthContext.tsx must exist");
+  assert.ok(fs.existsSync(path.join(rootDir, "src/components/Providers.tsx")), "Providers.tsx must exist");
+  assert.ok(fs.existsSync(path.join(rootDir, "src/components/DigitalMemberCardModal.tsx")), "DigitalMemberCardModal.tsx must exist");
+
+  const layoutContent = fs.readFileSync(path.join(rootDir, "src/app/layout.tsx"), "utf-8");
+  assert.ok(layoutContent.includes("<Providers>"), "Root layout must be wrapped in <Providers>");
+});
+
+runTest("Verify Navbar and Sidebar are fully integrated with AuthContext", () => {
+  const navbarContent = fs.readFileSync(path.join(rootDir, "src/components/Navbar.tsx"), "utf-8");
+  assert.ok(navbarContent.includes("useAuth()"), "Navbar must use useAuth hook");
+  assert.ok(navbarContent.includes("DigitalMemberCardModal"), "Navbar must include DigitalMemberCardModal");
+  assert.ok(navbarContent.includes('href="/login"'), "Navbar must have link to login when unauthenticated");
+
+  const sidebarContent = fs.readFileSync(path.join(rootDir, "src/components/Sidebar.tsx"), "utf-8");
+  assert.ok(sidebarContent.includes("useAuth()"), "Sidebar must use useAuth hook");
+  assert.ok(sidebarContent.includes("currentUser"), "Sidebar must display currentUser info");
 });
 
 // 5. Summary
