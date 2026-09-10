@@ -24,8 +24,10 @@ import {
   Info,
   ChevronDown,
   ChevronRight,
+  Database,
   Download
 } from "lucide-react";
+import QuickDataUpdateModal from "@/components/QuickDataUpdateModal";
 import { mockStrategicKPIs, StrategicPlanKPI } from "@/data/mockData";
 import { 
   budget2569Summary, 
@@ -48,6 +50,7 @@ export default function PlanningBudgetPage() {
   const [kpis] = useState<StrategicPlanKPI[]>(mockStrategicKPIs);
   const [selectedPillar, setSelectedPillar] = useState<string>("ALL");
   const [notification, setNotification] = useState<string | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const programStats = useMemo(() => getBudgetProgramStats(), []);
 
@@ -148,6 +151,15 @@ export default function PlanningBudgetPage() {
               <Download className="w-4 h-4" />
               <span>ดาวน์โหลดเอกสารจริง PDF (๘๑.๓๙ ลบ.)</span>
             </a>
+
+            <button
+              type="button"
+              onClick={() => setIsUpdateModalOpen(true)}
+              className="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white shadow-md border border-amber-400/40 cursor-pointer"
+            >
+              <Database className="w-4 h-4" />
+              <span>อัปเดตกรอบงบประมาณ (Admin)</span>
+            </button>
           </div>
         </div>
       </div>
@@ -719,6 +731,17 @@ export default function PlanningBudgetPage() {
           </div>
         </div>
       )}
+
+      {/* Quick Data Update Modal (MOD-10 Planning & Budget) */}
+      <QuickDataUpdateModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
+        targetModuleId="MOD-10"
+        onUpdateSuccess={() => {
+          setNotification("อัปเดตกรอบงบประมาณและแผนยุทธศาสตร์สำเร็จ ระบบซิงค์ข้อมูลเรียบร้อยแล้ว");
+          setTimeout(() => setNotification(null), 5000);
+        }}
+      />
     </div>
   );
 }

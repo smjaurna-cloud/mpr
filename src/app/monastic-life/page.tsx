@@ -24,8 +24,10 @@ import {
   ChevronRight,
   Eye,
   EyeOff,
+  Database,
   Lock
 } from "lucide-react";
+import QuickDataUpdateModal from "@/components/QuickDataUpdateModal";
 import { mockSamaneras, Samanera } from "@/data/mockData";
 import { officialMonksList, SanghaMonk, getSanghaStatistics } from "@/data/sanghaData";
 
@@ -42,6 +44,7 @@ export default function MonasticLifePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 12; // 12 novices per page for optimal DOM rendering
   const [showPDPAHealth, setShowPDPAHealth] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const sanghaStats = getSanghaStatistics();
 
@@ -175,6 +178,15 @@ export default function MonasticLifePage() {
             <FileSpreadsheet className="w-4 h-4" />
             <span>ดาวน์โหลดไฟล์จริง (๑๔๓ รูป)</span>
           </a>
+
+          <button
+            type="button"
+            onClick={() => setIsUpdateModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-semibold shadow-xs transition-colors cursor-pointer"
+          >
+            <Database className="w-4 h-4 text-amber-200" />
+            <span>อัปเดตข้อมูลสงฆ์ (Admin)</span>
+          </button>
 
           {/* Quick Stats Pill */}
           <div className="flex items-center gap-2 bg-amber-50/80 border border-amber-200 p-2 rounded-xl text-xs">
@@ -629,6 +641,17 @@ export default function MonasticLifePage() {
           </div>
         </div>
       )}
+
+      {/* Quick Data Update Modal (MOD-01 Monastic Life) */}
+      <QuickDataUpdateModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
+        targetModuleId="MOD-01"
+        onUpdateSuccess={() => {
+          setNotification("อัปเดตข้อมูลสงฆ์และกิจวัตรสำเร็จ ระบบซิงค์ข้อมูลเรียบร้อยแล้ว");
+          setTimeout(() => setNotification(null), 5000);
+        }}
+      />
     </div>
   );
 }

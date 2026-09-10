@@ -223,9 +223,9 @@ export default function ExecutiveDashboard() {
           {/* Quick Access to College Wings */}
           <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-slate-900 text-sm">สารบบงานราชวิทยาลัย (๒๒ โมดูล)</h2>
+              <h2 className="font-bold text-slate-900 text-sm">สารบบงานราชวิทยาลัย (๒๓ โมดูล)</h2>
               <span className="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-semibold">
-                ERP ครบวงจร ๒๒ ระบบ
+                ERP ครบวงจร ๒๓ ระบบ
               </span>
             </div>
 
@@ -442,6 +442,23 @@ export default function ExecutiveDashboard() {
                 >
                   <span className="font-semibold text-slate-800 group-hover:text-amber-900 block truncate">เปิดอ่านเอกสาร</span>
                   <span className="text-[10px] text-blue-600 font-medium">Word / Excel / PDF</span>
+                </Link>
+
+                <Link
+                  href="/data-updater"
+                  className="p-2 rounded-xl bg-amber-50/80 hover:bg-amber-100/90 border border-amber-300 transition-all group col-span-2"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-amber-900 group-hover:text-amber-950 block truncate">
+                      อัปเดตข้อมูลรวม (MOD-23)
+                    </span>
+                    <span className="text-[10px] bg-amber-200/80 text-amber-800 px-1.5 py-0.5 rounded font-bold">
+                      Super Admin / ฝ่าย
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-amber-700 block mt-0.5">
+                    นำเข้า Excel/CSV และอัปเดตข้อมูลสด ๒๒ ระบบ
+                  </span>
                 </Link>
               </div>
             </div>

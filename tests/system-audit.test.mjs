@@ -56,10 +56,11 @@ runTest("Verify official budget is strictly 81,393,900 THB (81.39M)", () => {
   assert.ok(dashboardContent.includes("๘๑.๓๙ ลบ."), "Dashboard should render ๘๑.๓๙ ลบ.");
 });
 
-runTest("Verify 22 modules are referenced in dashboard", () => {
+runTest("Verify 23 modules are referenced in dashboard", () => {
   const dashboardContent = fs.readFileSync(path.join(rootDir, "src/app/page.tsx"), "utf-8");
-  assert.ok(dashboardContent.includes("สารบบงานราชวิทยาลัย (๒๒ โมดูล)"), "Dashboard should show 22 modules");
-  assert.ok(dashboardContent.includes("ERP ครบวงจร ๒๒ ระบบ"), "Dashboard should show 22 systems");
+  assert.ok(dashboardContent.includes("สารบบงานราชวิทยาลัย (๒๓ โมดูล)"), "Dashboard should show 23 modules");
+  assert.ok(dashboardContent.includes("ERP ครบวงจร ๒๓ ระบบ"), "Dashboard should show 23 systems");
+  assert.ok(dashboardContent.includes("/data-updater"), "Dashboard should include link to /data-updater");
 });
 
 runTest("Verify official fleet comprises 10 vehicles (v-01 to v-10)", () => {
@@ -101,6 +102,7 @@ const expectedRoutes = [
   "graduate-progress",
   "contact",
   "file-viewer",
+  "data-updater",
   "attendance-tracking",
 ];
 
@@ -152,7 +154,42 @@ runTest("Password in users page is masked and not exposed in plain text", () => 
   assert.ok(usersPageContent.includes("revealedPasswords"), "Users page should use state to toggle password");
 });
 
-// 4. Summary
+// 4. MOD-23 Data Updater & Role-Based Access Control
+console.log("\n--- 4. MOD-23 Data Updater & Role-Based Access Control ---");
+
+runTest("Verify Data Updater module registry contains all 22 target systems and admin personas", () => {
+  const updaterContent = fs.readFileSync(path.join(rootDir, "src/data/systemUpdaterData.ts"), "utf-8");
+  assert.ok(updaterContent.includes("systemModulesRegistry"), "Should export systemModulesRegistry");
+  assert.ok(updaterContent.includes('"MOD-01"'), "Should contain MOD-01");
+  assert.ok(updaterContent.includes('"MOD-22"'), "Should contain MOD-22");
+  assert.ok(updaterContent.includes("adminPersonas"), "Should export adminPersonas");
+  assert.ok(updaterContent.includes("checkModulePermission"), "Should export checkModulePermission");
+});
+
+runTest("Verify Data Updater API route handles GET and POST with RBAC", () => {
+  const apiContent = fs.readFileSync(path.join(rootDir, "src/app/api/data-updater/route.ts"), "utf-8");
+  assert.ok(apiContent.includes("export async function GET"), "API should export GET handler");
+  assert.ok(apiContent.includes("export async function POST"), "API should export POST handler");
+  assert.ok(apiContent.includes("checkModulePermission"), "API should check module permissions");
+  assert.ok(apiContent.includes("403"), "API should return 403 on unauthorized update attempt");
+  assert.ok(apiContent.includes("logAuditEvent"), "API should record updates in audit logger");
+});
+
+runTest("Verify QuickDataUpdateModal is embedded in key modules", () => {
+  const vbContent = fs.readFileSync(path.join(rootDir, "src/app/vehicle-booking/page.tsx"), "utf-8");
+  assert.ok(vbContent.includes("QuickDataUpdateModal"), "vehicle-booking should embed QuickDataUpdateModal");
+  assert.ok(vbContent.includes('targetModuleId="MOD-16"'), "vehicle-booking should target MOD-16");
+
+  const mlContent = fs.readFileSync(path.join(rootDir, "src/app/monastic-life/page.tsx"), "utf-8");
+  assert.ok(mlContent.includes("QuickDataUpdateModal"), "monastic-life should embed QuickDataUpdateModal");
+  assert.ok(mlContent.includes('targetModuleId="MOD-01"'), "monastic-life should target MOD-01");
+
+  const pbContent = fs.readFileSync(path.join(rootDir, "src/app/planning-budget/page.tsx"), "utf-8");
+  assert.ok(pbContent.includes("QuickDataUpdateModal"), "planning-budget should embed QuickDataUpdateModal");
+  assert.ok(pbContent.includes('targetModuleId="MOD-10"'), "planning-budget should target MOD-10");
+});
+
+// 5. Summary
 console.log("\n==========================================================");
 console.log(`  AUDIT RESULTS: ${passedCount} / ${totalTests} TESTS PASSED`);
 console.log("==========================================================");

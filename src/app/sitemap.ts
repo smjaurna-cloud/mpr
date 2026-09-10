@@ -29,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/chat-board", priority: 0.7, changeFrequency: "hourly" as const },
     { path: "/attendance-tracking", priority: 0.7, changeFrequency: "daily" as const },
     { path: "/users", priority: 0.6, changeFrequency: "weekly" as const },
+    { path: "/data-updater", priority: 0.9, changeFrequency: "daily" as const },
   ];
 
   return routes.map((r) => ({

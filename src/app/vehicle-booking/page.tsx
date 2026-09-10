@@ -26,8 +26,10 @@ import {
   Fuel,
   Wrench,
   Navigation,
+  Database,
   X
 } from "lucide-react";
+import QuickDataUpdateModal from "@/components/QuickDataUpdateModal";
 import {
   centralVehicles,
   initialBookings,
@@ -50,6 +52,7 @@ export default function VehicleBookingPage() {
 
   // Modals
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedVehicleForBooking, setSelectedVehicleForBooking] = useState<Vehicle | null>(null);
   const [printingBooking, setPrintingBooking] = useState<VehicleBooking | null>(null);
 
@@ -202,6 +205,14 @@ export default function VehicleBookingPage() {
             <Download className="w-4 h-4 text-amber-300" />
             <span>เอกสารรถทางการ (PDF)</span>
           </a>
+          <button
+            type="button"
+            onClick={() => setIsUpdateModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-amber-500/30 hover:bg-amber-500/50 text-amber-200 rounded-xl text-xs font-bold border border-amber-400/40 transition-colors cursor-pointer"
+          >
+            <Database className="w-4 h-4 text-amber-300" />
+            <span>อัปเดตข้อมูลรถ (Admin)</span>
+          </button>
         </div>
       </div>
 
@@ -945,6 +956,17 @@ export default function VehicleBookingPage() {
           </div>
         </div>
       )}
+
+      {/* Quick Data Update Modal (MOD-16 Central Fleet) */}
+      <QuickDataUpdateModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
+        targetModuleId="MOD-16"
+        onUpdateSuccess={() => {
+          setNotification("อัปเดตข้อมูลยานพาหนะสำเร็จ ระบบซิงค์ข้อมูลเรียบร้อยแล้ว");
+          setTimeout(() => setNotification(null), 5000);
+        }}
+      />
     </div>
   );
 }

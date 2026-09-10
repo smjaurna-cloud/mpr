@@ -28,7 +28,8 @@ import {
   MessageSquareText,
   Award,
   PhoneCall,
-  Eye
+  Eye,
+  Database
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -156,6 +157,13 @@ const navigationGroups: NavGroup[] = [
         href: "/contact",
         icon: PhoneCall,
         badge: "ITA O4",
+      },
+      {
+        name: "ศูนย์อัปเดตข้อมูลทุกระบบ",
+        description: "MOD-23: อัปเดตข้อมูลสด & Excel ทุกฝ่าย",
+        href: "/data-updater",
+        icon: Database,
+        badge: "MOD-23",
       },
     ],
   },

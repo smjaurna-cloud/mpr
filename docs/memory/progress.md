@@ -5,11 +5,11 @@
 ---
 
 ## 1. Overall Status
-- **Current Milestone:** Enterprise Buddhist College ERP System (22 Full Modules Complete)
+- **Current Milestone:** Enterprise Buddhist College ERP System (23 Full Modules Complete)
 - **Active User:** `somboon` (Super Administrator: `smjaurna@gmail.com`, เบอร์โทร: `099-445-4256`)
-- **Status:** ✅ Production Build Ready & Verified (34/34 Static & Dynamic Pages Prerendered Successfully)
+- **Status:** ✅ Production Build Ready & Verified (38/38 Static & Dynamic Pages Prerendered Successfully)
 - **Health:** 🟢 Excellent (Zero Errors, Strict Mode Type-Checked)
-- **Verified Date:** 2026-09-09
+- **Verified Date:** 2026-09-10
 - **System Theme:** Sacred Royal Heritage (พุทธศิลป์โมเดิร์น: Royal Gold #C5A059, Civara Saffron, Midnight Navy, Warm Ivory)
 
 ---
@@ -79,7 +79,20 @@
     * PDPA & Monastic Privacy Hardening: ปิดการแสดงรหัสผ่านในหน้าระบบบริหารผู้ใช้ (`/users`) โดยปกปิดด้วย `••••••••` เป็นค่าเริ่มต้น พร้อมปุ่มเปิด/ปิดดูรหัสผ่านอย่างปลอดภัย, พัฒนาศูนย์บันทึกประวัติการตรวจสอบรวม (`src/lib/auditLogger.ts`) รองรับ ISO/IEC 27001 และ PDPA
     * Accessibility (a11y): เพิ่ม `aria-label` ให้กับปุ่มและไอคอนที่ไม่มีข้อความกำกับทั่วระบบ (ปุ่มแจ้งเตือน Navbar, ปุ่ม Speed-Dial, ปุ่มย่อ/ขยาย/พิมพ์/คัดลอก/เต็มจอ/ปิด ใน Document Viewer)
     * Automated Test Suite & Production Build: สร้างชุดทดสอบอัตโนมัติ `tests/system-audit.test.mjs` ผ่านการทดสอบครบ ๓๓/๓๓ รายการ (100% Pass) และผ่านการตรวจสอบ Next.js Production Build ๓๖/๓๖ routes สำเร็จ ไร้ข้อผิดพลาด (0 errors)
-* **Latest Action:** ปรับปรุงและยกระดับระบบตามข้อเสนอแนะการตรวจประเมินของ อาจารย์ ดร.สมบูรณ์ ครบถ้วนทุกข้อ (TASK-927) สู่มาตรฐานสูงสุดระดับสถาบันอุดมศึกษาพระพุทธศาสนา ผ่านการทดสอบอัตโนมัติ ๓๓/๓๓ รายการ และ Next.js Production Build ๓๖/๓๖ routes สมบูรณ์ ๑๐๐%
+  - TASK-928: ระบบศูนย์กลางอัปเดตและจัดการข้อมูลทุกระบบ (Centralized College Data Update & Management Hub / MOD-23: `/data-updater`) และโมดอลอัปเดตด่วนข้ามระบบ (`QuickDataUpdateModal.tsx`):
+    * ขอบเขตครอบคลุม ๒๒ โมดูลหลัก (MOD-01 ถึง MOD-22): สร้างระบบทะเบียนเมทาดาทาและโครงสร้างฟิลด์ข้อมูล (`src/data/systemUpdaterData.ts`) รองรับการอัปเดตข้อมูลให้เป็นปัจจุบันครบทุกระบบตามข้อสั่งการ
+    * ระบบสิทธิ์สองระดับ (Role-Based Admin Access & Persona Switcher):
+      - Super Admin (อาจารย์ ดร.สมบูรณ์ จารุณะ / พระธรรมวชิราจารย์): สิทธิ์เข้าถึง ๑๐๐% สามารถอัปเดตและนำเข้าข้อมูลได้ทุกระบบของวิทยาลัย
+      - แอดมินประจำฝ่าย (Departmental Admins ๑๔ ฝ่าย): จำกัดสิทธิ์เฉพาะโมดูลที่รับผิดชอบ (เช่น พระพี่เลี้ยงดูแล MOD-01, งานยานพาหนะดูแล MOD-16, แผนงานดูแล MOD-10 ฯลฯ) หากพยายามแก้ไขระบบอื่นจะถูกปฏิเสธด้วย HTTP 403 Forbidden
+    * ๔ โหมดการทำงานหลัก:
+      ๑. Interactive Form Matrix: ฟอร์มกรอกและแก้ไขข้อมูลตาม Field Schema ของแต่ละโมดูล
+      ๒. Batch Import Center: นำเข้าไฟล์ชุด Excel / CSV พร้อมตัวอย่าง Template ให้ดาวน์โหลดและจำลองการซิงค์
+      ๓. Data Freshness & Sync Monitor: กระดานตรวจสอบความสดใหม่ของข้อมูล ๒๒ โมดูล แสดงสถานะ "ข้อมูลสดใหม่ (Up to date)", "ต้องตรวจสอบ (Needs Review)", และ "ใกล้หมดอายุ"
+      ๔. Audit & Activity Trail: ประวัติการบันทึกข้อมูลทุกรายการพร้อมระบุผู้แก้ วันเวลาแบบพุทธศักราช และส่งข้อมูลเข้า `src/lib/auditLogger.ts`
+    * ติดตั้งวิดเจ็ตอัปเดตด่วนในระบบสำคัญ (`QuickDataUpdateModal`): เพิ่มปุ่ม "อัปเดตข้อมูล (Admin)" ในหน้า `/vehicle-booking`, `/monastic-life`, `/planning-budget`
+    * การเชื่อมโยงสถาปัตยกรรม: เพิ่มใน `Sidebar.tsx` (MOD-23 ในหมวดฝ่ายบริหาร), `Navbar.tsx` (ปุ่มด่วน "อัปเดตข้อมูล"), `page.tsx` (สารบบ ๒๓ โมดูล), และ `sitemap.ts` (XML Sitemap ๓๗ เส้นทาง)
+    * Automated Test Suite & Production Build: ปรับปรุง `tests/system-audit.test.mjs` ผ่านครบ ๓๗/๓๗ รายการ (100% Pass) และผ่านการตรวจสอบ Next.js Production Build ๓๘/๓๘ routes สำเร็จ ไร้ข้อผิดพลาด (0 errors)
+* **Latest Action:** พัฒนาระบบศูนย์กลางอัปเดตและจัดการข้อมูลทุกระบบ (MOD-23: `/data-updater`) พร้อมระบบสิทธิ์ Super Admin และแอดมินประจำฝ่าย ๑๔ ฝ่าย (TASK-928) บูรณาการวิดเจ็ตอัปเดตด่วนในหน้างานจริง ผ่านการทดสอบอัตโนมัติ ๓๗/๓๗ รายการ และ Next.js Production Build ๓๘/๓๘ routes สมบูรณ์ ๑๐๐%
 
 ---
 
@@ -88,28 +101,29 @@
 | :---: | :--- | :--- | :--- |
 | **DOCS** | Context Memory 6 Files | ✅ Completed | `docs/memory/*.md`, `AGENTS.md` ครบ 6 ไฟล์ |
 | **CORE** | Next.js 15 + Tailwind + Layout | ✅ Completed | `src/app/layout.tsx`, `src/app/page.tsx`, `src/components/*` |
-| **MOD-01**| Samanera 24/7 Wellbeing | ✅ Completed | `src/app/monastic-life/page.tsx` (เช็กกิจวัตร, สุขภาพ, แจ้งเตือนครัว) |
+| **MOD-01**| Samanera 24/7 Wellbeing | ✅ Completed | `src/app/monastic-life/page.tsx` (เช็กกิจวัตร, สุขภาพ, แจ้งเตือนครัว, Quick Update) |
 | **MOD-02**| Patron CRM & Smart Alms | ✅ Completed | `src/app/alms-patron/page.tsx` (ปฏิทินเพล, LINE View, e-Donation) |
 | **MOD-03**| Mukhopātha & Pali Engine | ✅ Completed | `src/app/mukhopatha/page.tsx` (ตรวจมุขปาฐะ, คลังเสียงสวด, คัมภีร์) |
 | **MOD-04**| Mobile E-Approval | ✅ Completed | `src/app/e-approval/page.tsx` (เกษียณหนังสือด่วน, ลงนามดิจิทัล) |
 | **MOD-05**| MCU Data Bridge | ✅ Completed | `src/app/mcu-bridge/page.tsx` (ทะเบียนสองมิติ, ส่งออก MCU REG CSV) |
-| **MOD-06**| User & Role Management (RBAC) | ✅ Completed | `src/app/users/page.tsx` (จัดการบัญชีผู้ใช้, ข้อมูลสงฆ์, บันทึกการลาสิกขา) |
+| **MOD-06**| User & Role Management (RBAC) | ✅ Completed | `src/app/users/page.tsx` (จัดการบัญชีผู้ใช้, ข้อมูลสงฆ์, บันทึกการลาสิกขา, Masking) |
 | **MOD-07**| Smart Meeting Room & Signage | ✅ Completed | `src/app/meeting-rooms/page.tsx` (จองห้องประชุม, ป้ายดิจิทัล, IoT, น้ำปานะ) |
 | **MOD-08**| Human Resource Management (HR) | ✅ Completed | `src/app/hr/page.tsx` (อัตรากำลังสงฆ์, ประวัติสมณศักดิ์, เลื่อนขั้น) |
 | **MOD-09**| Finance & Procurement | ✅ Completed | `src/app/finance-procurement/page.tsx` (๓ กองทุนบริจาค, คลังสังฆภัณฑ์) |
-| **MOD-10**| Planning & Strategic Budget | ✅ Completed | `src/app/planning-budget/page.tsx` (กรอบงบประมาณปี ๖๙ ตัวจริง ๘๑.๓๙ ลบ., แผนยุทธศาสตร์ ๕ ปี, KPI วส. มจร) |
+| **MOD-10**| Planning & Strategic Budget | ✅ Completed | `src/app/planning-budget/page.tsx` (กรอบงบประมาณปี ๖๙ ตัวจริง ๘๑.๓๙ ลบ., แผนยุทธศาสตร์ ๕ ปี, KPI วส. มจร, Quick Update) |
 | **MOD-11**| Tipitaka Library & IT | ✅ Completed | `src/app/library/page.tsx` (พระไตรปิฎก ๔๕ เล่ม, สัททนีติ, ปทรูปสิทธิ) |
 | **MOD-12**| Research & Educational QA | ✅ Completed | `src/app/research-qa/page.tsx` (คลังวิจัยพุทธศาสตร์, AUN-QA, สมศ.) |
 | **MOD-13**| Academic Services & Outreach | ✅ Completed | `src/app/academic-services/page.tsx` (ตารางสอนบาลี ๔ ชั้น, อบรมเยาวชน) |
 | **MOD-14**| Classrooms & Sanam Luang | ✅ Completed | `src/app/classrooms/page.tsx` (๖ ห้องเรียน A1-A6, นักธรรม, บาลีสนามหลวง, กฎระเบียบ, PDPA) |
 | **MOD-15**| Graduate Curricula (TQF 2) | ✅ Completed | `src/app/graduate-curriculum/page.tsx` (มคอ.๒ พธ.ด. พระไตรปิฎก, พธ.ม. พระไตรปิฎก, พธ.ม. พระอภิธรรม, ๕๓ รายวิชา, PDF) |
-| **MOD-16**| Central Fleet & Vehicle Booking | ✅ Completed | `src/app/vehicle-booking/page.tsx` (รถส่วนกลาง ๑๐ คัน, ฟอร์มจองตามพระวินัย, ไทม์ไลน์, ใบขอใช้รถ A4) |
+| **MOD-16**| Central Fleet & Vehicle Booking | ✅ Completed | `src/app/vehicle-booking/page.tsx` (รถส่วนกลาง ๑๐ คัน, ฟอร์มจองตามพระวินัย, ไทม์ไลน์, ใบขอใช้รถ A4, Quick Update) |
 | **MOD-17**| e-Complaint & Cross-System Tracker | ✅ Completed | `src/app/complaints-tracking/page.tsx` (QR Code ร้องเรียน, ป้าย Standee A4, ติดตาม ๗ ระบบ CMP/VB/DOC/MTG/PRJ/ALM, e-Bidding, ประตูบริการ มจร) |
 | **MOD-18**| Visitor Analytics & Traffic Insights | ✅ Completed | `src/app/visitor-analytics/page.tsx` (ทราฟฟิกสด ๔๒ คน, สถิติวัน/เดือน/ปี, แหล่งที่มา, อุปกรณ์, ส่งออก CSV) |
 | **MOD-19**| Chat Board & Monastic Community | ✅ Completed | `src/app/chat-board/page.tsx` (กระดานสนทนา ๔ หมวดหมู่, ตอบกระทู้, อนุโมทนา 🙏, ห้องแชตสด, MCU Pali Bot, Moderation) |
 | **MOD-20**| Graduate Academic & Thesis Progress | ✅ Completed | `src/app/graduate-progress/page.tsx` (พธ.ด. ๒๖ รูป ๒๑ ขั้นตอน, พธ.ม. ๘ รูป ๑๕ ขั้นตอน, Matrix Board, Admin Edit, Excel CSV, พิมพ์ A4) |
 | **MOD-21**| Official Standard Contact & Directory | ✅ Completed | `src/app/contact/page.tsx` (ทำเนียบ ๘ ฝ่ายงาน, แผนที่ GPS, LINE, Q&A ฟอร์ม ITA O4-O5, Footer, SpeedDial, `/api/contact`) |
 | **MOD-22**| Smart Document Reader & Official File Viewer | ✅ Completed | `src/app/file-viewer/page.tsx`, `src/components/DocumentViewerModal.tsx`, `src/app/api/file-viewer/route.ts` (DOCX, XLSX, PDF, Text) |
+| **MOD-23**| Central Data Update & Sync Hub | ✅ Completed | `src/app/data-updater/page.tsx`, `src/app/data-updater/layout.tsx`, `src/components/QuickDataUpdateModal.tsx`, `src/app/api/data-updater/route.ts` (Super Admin & ๑๔ ฝ่าย, Batch Excel/CSV, Freshness Monitor, Audit Trail) |
 
 
 

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Bell, ShieldCheck, UserCircle2, Sparkles, BookOpen, MessageSquareText, Phone } from "lucide-react";
+import { Bell, ShieldCheck, UserCircle2, Sparkles, BookOpen, MessageSquareText, Phone, Database } from "lucide-react";
 import { VisitorCounterBadge } from "./VisitorCounterBadge";
 
 export default function Navbar() {
@@ -62,6 +62,16 @@ export default function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Visitor Counter Live Badge */}
           <VisitorCounterBadge className="hidden md:inline-flex" />
+
+          {/* Quick Data Updater Access (MOD-23) */}
+          <Link
+            href="/data-updater"
+            title="ศูนย์อัปเดตข้อมูลทุกระบบ (MOD-23)"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-semibold transition-all shadow-xs"
+          >
+            <Database className="w-3.5 h-3.5 text-yellow-300" />
+            <span className="hidden sm:inline">อัปเดตข้อมูล</span>
+          </Link>
 
           {/* Quick Contact Access */}
           <Link
