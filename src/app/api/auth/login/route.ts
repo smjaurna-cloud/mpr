@@ -7,6 +7,9 @@ import {
   IdentifierType,
   AuthUser 
 } from "@/data/authData";
+import { loginSchema } from "@/lib/validations/auth";
+import { apiValidationError, apiError } from "@/lib/apiResponse";
+import { getErrorMessage } from "@/lib/utils";
 
 // In-memory session store across server runtime
 let authUsersStore: AuthUser[] = [...initialAuthUsers];
@@ -22,33 +25,23 @@ function updateAuthUsersStore(newUsers: AuthUser[]) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { identifierName, secretCode, idType } = body;
+    const parseResult = loginSchema.safeParse(body);
 
-    if (!identifierName || !secretCode) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "กรุณาระบุชื่อผู้ใช้งาน/ฉายา และรหัสระบุตัวตน (รหัสสมาชิก / รหัสนิสิต / รหัสตำแหน่ง / เลขบัตรประชาชน)",
-        },
-        { status: 400 }
-      );
+    if (!parseResult.success) {
+      return apiValidationError(parseResult.error);
     }
+
+    const { identifierName, secretCode, idType } = parseResult.data;
 
     const authResult = authenticateMultiIdentifier(
       identifierName,
       secretCode,
-      (idType as IdentifierType) || "ALL",
+      idType as IdentifierType,
       authUsersStore
     );
 
     if (!authResult.user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: authResult.error || "ข้อมูลการเข้าสู่ระบบไม่ถูกต้อง",
-        },
-        { status: 401 }
-      );
+      return apiError(authResult.error || "ข้อมูลการเข้าสู่ระบบไม่ถูกต้อง", 401);
     }
 
     // Sanitize user for client response
@@ -61,14 +54,8 @@ export async function POST(req: NextRequest) {
       user: safeUser,
       token: `mpr-session-${safeUser.id}-${Date.now()}`,
     });
-  } catch (error: any) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: error?.message || "เกิดข้อผิดพลาดในการประมวลผลการเข้าสู่ระบบ",
-      },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    return apiError(getErrorMessage(error, "เกิดข้อผิดพลาดในการประมวลผลการเข้าสู่ระบบ"), 500);
   }
 }
 

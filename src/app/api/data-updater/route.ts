@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 import {
@@ -9,89 +9,84 @@ import {
   checkModulePermission,
   SystemModuleInfo,
 } from "@/data/systemUpdaterData";
+import { dataUpdatePayloadSchema } from "@/lib/validations/dataUpdater";
+import { apiSuccess, apiError, apiValidationError } from "@/lib/apiResponse";
 import { logAuditEvent } from "@/lib/auditLogger";
-import { formatThaiDate, toThaiDigits } from "@/lib/utils";
+import { formatThaiDate, toThaiDigits, getErrorMessage } from "@/lib/utils";
 
 // In-memory update history & live module state buffer
-let updateHistoryStore: DataUpdateLogItem[] = [...initialUpdateHistory];
-let modulesState: SystemModuleInfo[] = [...collegeModulesRegistry];
+const updateHistoryStore: DataUpdateLogItem[] = [...initialUpdateHistory];
+const modulesState: SystemModuleInfo[] = [...collegeModulesRegistry];
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const moduleId = searchParams.get("moduleId");
-  const adminId = searchParams.get("adminId");
+  try {
+    const { searchParams } = new URL(request.url);
+    const moduleId = searchParams.get("moduleId");
+    const adminId = searchParams.get("adminId");
 
-  let filteredModules = modulesState;
-  if (moduleId) {
-    filteredModules = filteredModules.filter((m) => m.id === moduleId);
+    let filteredModules = modulesState;
+    if (moduleId) {
+      filteredModules = filteredModules.filter((m) => m.id === moduleId);
+    }
+
+    // If filtered by adminId, annotate which modules are editable
+    const currentAdmin = adminPersonas.find((a) => a.id === adminId) || adminPersonas[0];
+    const modulesWithPermission = filteredModules.map((m) => ({
+      ...m,
+      canEdit: checkModulePermission(currentAdmin, m.id),
+    }));
+
+    const upToDateCount = modulesState.filter((m) => m.freshnessStatus === "UP_TO_DATE").length;
+    const needsReviewCount = modulesState.filter((m) => m.freshnessStatus !== "UP_TO_DATE").length;
+
+    return apiSuccess(modulesWithPermission, undefined, 200, {
+      totalModules: modulesState.length,
+      upToDateCount,
+      needsReviewCount,
+      currentAdmin,
+      adminPersonas,
+      modules: modulesWithPermission,
+      history: updateHistoryStore.slice(0, 50),
+    });
+  } catch (error: unknown) {
+    return apiError(getErrorMessage(error, "Internal server error"), 500);
   }
-
-  // If filtered by adminId, annotate which modules are editable
-  let currentAdmin = adminPersonas.find((a) => a.id === adminId) || adminPersonas[0];
-  const modulesWithPermission = filteredModules.map((m) => ({
-    ...m,
-    canEdit: checkModulePermission(currentAdmin, m.id),
-  }));
-
-  const upToDateCount = modulesState.filter((m) => m.freshnessStatus === "UP_TO_DATE").length;
-  const needsReviewCount = modulesState.filter((m) => m.freshnessStatus !== "UP_TO_DATE").length;
-
-  return NextResponse.json({
-    success: true,
-    totalModules: modulesState.length,
-    upToDateCount,
-    needsReviewCount,
-    currentAdmin,
-    adminPersonas,
-    modules: modulesWithPermission,
-    history: updateHistoryStore.slice(0, 50),
-  });
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const parseResult = dataUpdatePayloadSchema.safeParse(body);
+
+    if (!parseResult.success) {
+      return apiValidationError(parseResult.error);
+    }
+
     const {
       moduleId,
       adminPersonaId,
-      updateType = "FORM_EDIT",
+      updateType,
       formData,
       batchRows,
       customSummary,
-    } = body;
-
-    if (!moduleId || !adminPersonaId) {
-      return NextResponse.json(
-        { success: false, error: "กรุณาระบุรหัสโมดูล (moduleId) และแอดมินผู้ดำเนินการ (adminPersonaId)" },
-        { status: 400 }
-      );
-    }
+    } = parseResult.data;
 
     const targetModule = modulesState.find((m) => m.id === moduleId);
     if (!targetModule) {
-      return NextResponse.json(
-        { success: false, error: `ไม่พบโมดูลรหัส ${moduleId} ในระบบ` },
-        { status: 404 }
-      );
+      return apiError(`ไม่พบโมดูลรหัส ${moduleId} ในระบบ`, 404);
     }
 
     const currentAdmin = adminPersonas.find((a) => a.id === adminPersonaId);
     if (!currentAdmin) {
-      return NextResponse.json(
-        { success: false, error: `ไม่พบข้อมูลแอดมินรหัส ${adminPersonaId}` },
-        { status: 404 }
-      );
+      return apiError(`ไม่พบข้อมูลแอดมินรหัส ${adminPersonaId}`, 404);
     }
 
     // Permission Check: Super Admin vs Dedicated Departmental Admin
     const hasPermission = checkModulePermission(currentAdmin, moduleId);
     if (!hasPermission) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: `ท่านไม่มีสิทธิ์อัปเดตข้อมูลของ ${targetModule.name} (${targetModule.id}) เนื่องจากสิทธิ์ของท่าน (${currentAdmin.title}) จำกัดเฉพาะฝ่าย ${currentAdmin.department}`,
-        },
-        { status: 403 }
+      return apiError(
+        `ท่านไม่มีสิทธิ์อัปเดตข้อมูลของ ${targetModule.name} (${targetModule.id}) เนื่องจากสิทธิ์ของท่าน (${currentAdmin.title}) จำกัดเฉพาะฝ่าย ${currentAdmin.department}`,
+        403
       );
     }
 
@@ -135,7 +130,7 @@ export async function POST(request: NextRequest) {
       adminPersonaId: currentAdmin.id,
       adminName: currentAdmin.name,
       adminRole: currentAdmin.role,
-      updateType,
+      updateType: updateType as DataUpdateLogItem["updateType"],
       summary: autoSummary!,
       timestampThai,
       affectedRecordsCount: affectedCount,
@@ -164,16 +159,16 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      message: `อัปเดตข้อมูล ${targetModule.name} (${targetModule.id}) เรียบร้อยแล้ว`,
-      updatedModule: targetModule,
-      newLogEntry: newLogItem,
-    });
-  } catch (err: any) {
-    return NextResponse.json(
-      { success: false, error: err?.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล" },
-      { status: 500 }
+    return apiSuccess(
+      targetModule,
+      `อัปเดตข้อมูล ${targetModule.name} (${targetModule.id}) เรียบร้อยแล้ว`,
+      200,
+      {
+        updatedModule: targetModule,
+        newLogEntry: newLogItem,
+      }
     );
+  } catch (err: unknown) {
+    return apiError(getErrorMessage(err, "เกิดข้อผิดพลาดในการบันทึกข้อมูล"), 500);
   }
 }

@@ -62,3 +62,31 @@ export function maskEmail(email: string): string {
   return `${user.slice(0, 2)}***@${domain}`;
 }
 
+export function cleanIdDigits(val: string): string {
+  if (!val) return "";
+  return val.replace(/[^0-9]/g, "");
+}
+
+export function formatCitizenId(id: string): string {
+  const digits = cleanIdDigits(id);
+  if (digits.length !== 13) return id;
+  return `${digits.slice(0, 1)}-${digits.slice(1, 5)}-${digits.slice(5, 10)}-${digits.slice(10, 12)}-${digits.slice(12)}`;
+}
+
+export function maskCitizenId(id: string): string {
+  const digits = cleanIdDigits(id);
+  if (digits.length !== 13) return id;
+  return `${digits.slice(0, 1)}-xxxx-xxxxx-${digits.slice(10, 12)}-${digits.slice(12)}`;
+}
+
+export function getErrorMessage(error: unknown, defaultMessage = "เกิดข้อผิดพลาดในการประมวลผล"): string {
+  if (!error) return defaultMessage;
+  if (typeof error === "string") return error;
+  if (error instanceof Error) return error.message;
+  if (typeof error === "object" && "message" in error && typeof (error as any).message === "string") {
+    return (error as any).message;
+  }
+  return defaultMessage;
+}
+
+

@@ -3,6 +3,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { cleanIdDigits, formatCitizenId, maskCitizenId, getErrorMessage, cn } from "../src/lib/utils.ts";
+import { loginSchema, googleAuthSchema, registerSchema } from "../src/lib/validations/auth.ts";
+import { contactInquirySchema, updateTicketSchema } from "../src/lib/validations/contact.ts";
+import { dataUpdatePayloadSchema } from "../src/lib/validations/dataUpdater.ts";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
@@ -242,7 +247,233 @@ runTest("Verify Navbar and Sidebar are fully integrated with AuthContext", () =>
   assert.ok(sidebarContent.includes("currentUser"), "Sidebar must display currentUser info");
 });
 
-// 5. Summary
+// 6. Zod Schema Validation Suite
+console.log("\n--- 6. Zod Validation Schemas ---");
+
+runTest("loginSchema succeeds on valid credentials", () => {
+  const result = loginSchema.safeParse({
+    identifierName: "สมบูรณ์",
+    secretCode: "mcu123456",
+    idType: "ALL",
+  });
+  assert.strictEqual(result.success, true);
+});
+
+runTest("loginSchema fails when identifierName is shorter than 2 chars", () => {
+  const result = loginSchema.safeParse({
+    identifierName: "a",
+    secretCode: "password",
+  });
+  assert.strictEqual(result.success, false);
+});
+
+runTest("loginSchema fails when secretCode is shorter than 3 chars", () => {
+  const result = loginSchema.safeParse({
+    identifierName: "somboon",
+    secretCode: "12",
+  });
+  assert.strictEqual(result.success, false);
+});
+
+runTest("googleAuthSchema succeeds on valid email and trims correctly", () => {
+  const result = googleAuthSchema.safeParse({
+    email: "  somboon@mcu.ac.th  ",
+    name: "Dr. Somboon",
+  });
+  assert.strictEqual(result.success, true);
+  if (result.success) {
+    assert.strictEqual(result.data.email, "somboon@mcu.ac.th");
+  }
+});
+
+runTest("googleAuthSchema fails on invalid email format", () => {
+  const result = googleAuthSchema.safeParse({
+    email: "invalid-email-string",
+  });
+  assert.strictEqual(result.success, false);
+});
+
+runTest("registerSchema succeeds on valid member registration data", () => {
+  const result = registerSchema.safeParse({
+    fullName: "พระสมศักดิ์ ธมฺมกาโม",
+    memberCategory: "MONK",
+    paliName: "ธมฺมกาโม",
+    sanghaRank: "เปรียญธรรม ๙ ประโยค",
+    phone: "081-234-5678",
+    email: "somsak@mcu.ac.th",
+    citizenId: "1-1002-00345-67-8",
+    password: "password123",
+  });
+  assert.strictEqual(result.success, true);
+});
+
+runTest("registerSchema defaults memberCategory to PATRON when omitted", () => {
+  const result = registerSchema.safeParse({
+    fullName: "โยมสมศรี ผู้มีศรัทธา",
+    email: "somsri@example.com",
+    phone: "081-999-8888",
+    password: "password123",
+  });
+  assert.strictEqual(result.success, true);
+  if (result.success) {
+    assert.strictEqual(result.data.memberCategory, "PATRON");
+  }
+});
+
+runTest("contactInquirySchema succeeds on valid inquiry", () => {
+  const result = contactInquirySchema.safeParse({
+    senderName: "พระมหาบุญส่ง",
+    senderEmail: "boonsong@mcu.ac.th",
+    targetDepartment: "วิชาการและหลักสูตร",
+    subject: "สอบถามการรับสมัคร",
+    message: "ต้องการสอบถามกำหนดการเปิดรับสมัคร พธ.ด. พระไตรปิฎกเถรวาท รุ่น ๔",
+  });
+  assert.strictEqual(result.success, true);
+});
+
+runTest("contactInquirySchema fails when message length is under 5 chars", () => {
+  const result = contactInquirySchema.safeParse({
+    senderName: "ก้องเกียรติ",
+    senderEmail: "kong@test.com",
+    subject: "สอบถาม",
+    message: "สั้น",
+  });
+  assert.strictEqual(result.success, false);
+});
+
+runTest("updateTicketSchema validates status transitions", () => {
+  const validResult = updateTicketSchema.safeParse({
+    ticketCode: "INQ-256909-001",
+    status: "PROCESSING",
+    responseNote: "กำลังประสานงานคณาจารย์ประจำหลักสูตร",
+  });
+  assert.strictEqual(validResult.success, true);
+
+  const invalidResult = updateTicketSchema.safeParse({
+    ticketCode: "",
+    status: "INVALID_STATUS",
+  });
+  assert.strictEqual(invalidResult.success, false);
+});
+
+runTest("dataUpdatePayloadSchema validates standard system payload", () => {
+  const result = dataUpdatePayloadSchema.safeParse({
+    moduleId: "MOD-16",
+    adminPersonaId: "ADM-SOMBOON",
+    updateType: "FORM_EDIT",
+    formData: { status: "AVAILABLE", mileage: 12500 },
+    customSummary: "ผ่านการซ่อมบำรุงเปลี่ยนถ่ายน้ำมันเครื่องเรียบร้อย",
+  });
+  assert.strictEqual(result.success, true);
+});
+
+runTest("dataUpdatePayloadSchema fails on missing adminPersonaId or moduleId", () => {
+  const result = dataUpdatePayloadSchema.safeParse({
+    moduleId: "",
+    adminPersonaId: "",
+  });
+  assert.strictEqual(result.success, false);
+});
+
+// 7. Utility Functions
+console.log("\n--- 7. Utility Functions & String Formatters ---");
+
+runTest("cleanIdDigits strips spaces and hyphens cleanly", () => {
+  assert.strictEqual(cleanIdDigits("1-7399-00123-45-6"), "1739900123456");
+  assert.strictEqual(cleanIdDigits(" 081 234 5678 "), "0812345678");
+  assert.strictEqual(cleanIdDigits(""), "");
+});
+
+runTest("formatCitizenId formats 13-digit string into Thai national ID pattern", () => {
+  assert.strictEqual(formatCitizenId("1739900123456"), "1-7399-00123-45-6");
+  assert.strictEqual(formatCitizenId("123"), "123");
+});
+
+runTest("maskCitizenId masks middle digits for Monastic and Minor Novice PDPA privacy", () => {
+  const masked = maskCitizenId("1-7399-00123-45-6");
+  assert.strictEqual(masked, "1-xxxx-xxxxx-45-6");
+  assert.strictEqual(maskCitizenId(""), "");
+});
+
+runTest("getErrorMessage safely extracts message from Error and non-Error objects", () => {
+  assert.strictEqual(getErrorMessage(new Error("Database connection timed out")), "Database connection timed out");
+  assert.strictEqual(getErrorMessage("Direct string error"), "Direct string error");
+  assert.strictEqual(getErrorMessage({ message: "Custom object message" }), "Custom object message");
+  assert.strictEqual(getErrorMessage({ custom: "fail" }), "เกิดข้อผิดพลาดในการประมวลผล");
+});
+
+runTest("cn helper merges Tailwind utility classes without conflicts", () => {
+  const merged = cn("p-4 bg-white", false && "hidden", "p-6 text-slate-900");
+  assert.strictEqual(merged, "bg-white p-6 text-slate-900");
+});
+
+// 8. Standard API Response Envelope
+console.log("\n--- 8. Uniform API Response Envelopes ---");
+
+runTest("Verify apiResponse.ts exports apiSuccess, apiError, apiValidationError with strict contracts", () => {
+  const apiRespPath = path.join(rootDir, "src/lib/apiResponse.ts");
+  assert.ok(fs.existsSync(apiRespPath), "apiResponse.ts must exist");
+  const content = fs.readFileSync(apiRespPath, "utf-8");
+  assert.ok(content.includes("export function apiSuccess"), "Must export apiSuccess");
+  assert.ok(content.includes("export function apiError"), "Must export apiError");
+  assert.ok(content.includes("export function apiValidationError"), "Must export apiValidationError");
+  assert.ok(content.includes("success: true"), "apiSuccess must wrap payload with success: true");
+  assert.ok(content.includes("success: false"), "apiError must wrap payload with success: false");
+  assert.ok(content.includes("status: 400"), "apiValidationError must return HTTP 400 Bad Request");
+});
+
+runTest("Verify API response envelope contract adheres to ApiResponse<T> interface", () => {
+  const commonTypesPath = path.join(rootDir, "src/types/common.ts");
+  assert.ok(fs.existsSync(commonTypesPath), "common.ts must exist");
+  const content = fs.readFileSync(commonTypesPath, "utf-8");
+  assert.ok(content.includes("export interface ApiResponse<T = any>"), "Must define ApiResponse<T>");
+  assert.ok(content.includes("success: boolean;"), "ApiResponse must require success boolean");
+  assert.ok(content.includes("data?: T;"), "ApiResponse must have optional generic data");
+  assert.ok(content.includes("error?: string;"), "ApiResponse must have optional error message");
+});
+
+// 9. Component Modularization & Architecture Integrity
+console.log("\n--- 9. Component Decomposition & Architecture Integrity ---");
+
+runTest("Verify /contact modular decomposition into 5 standalone components under 400 LOC", () => {
+  const contactCompDir = path.join(rootDir, "src/components/contact");
+  assert.ok(fs.existsSync(path.join(contactCompDir, "CampusMapCard.tsx")), "CampusMapCard must exist");
+  assert.ok(fs.existsSync(path.join(contactCompDir, "ContactDirectoryTable.tsx")), "ContactDirectoryTable must exist");
+  assert.ok(fs.existsSync(path.join(contactCompDir, "InquiryFormCard.tsx")), "InquiryFormCard must exist");
+  assert.ok(fs.existsSync(path.join(contactCompDir, "TicketStatusTracker.tsx")), "TicketStatusTracker must exist");
+  assert.ok(fs.existsSync(path.join(contactCompDir, "SocialChannelsGrid.tsx")), "SocialChannelsGrid must exist");
+
+  const contactPageContent = fs.readFileSync(path.join(rootDir, "src/app/contact/page.tsx"), "utf-8");
+  const lineCount = contactPageContent.split("\n").length;
+  assert.ok(lineCount < 400, `/contact/page.tsx should be under 400 lines (currently ${lineCount})`);
+});
+
+runTest("Verify /complaints-tracking modular decomposition into 4 standalone components under 800 LOC", () => {
+  const compDir = path.join(rootDir, "src/components/complaints");
+  assert.ok(fs.existsSync(path.join(compDir, "UnifiedTaskTrackerTable.tsx")), "UnifiedTaskTrackerTable must exist");
+  assert.ok(fs.existsSync(path.join(compDir, "DigitalServicesGateway.tsx")), "DigitalServicesGateway must exist");
+  assert.ok(fs.existsSync(path.join(compDir, "ComplaintSubmissionModal.tsx")), "ComplaintSubmissionModal must exist");
+  assert.ok(fs.existsSync(path.join(compDir, "ComplaintDetailModal.tsx")), "ComplaintDetailModal must exist");
+
+  const pageContent = fs.readFileSync(path.join(rootDir, "src/app/complaints-tracking/page.tsx"), "utf-8");
+  const lineCount = pageContent.split("\n").length;
+  assert.ok(lineCount < 800, `/complaints-tracking/page.tsx should be under 800 lines (currently ${lineCount})`);
+});
+
+runTest("Verify /attendance-tracking modular decomposition into 4 standalone components under 300 LOC", () => {
+  const attDir = path.join(rootDir, "src/components/attendance");
+  assert.ok(fs.existsSync(path.join(attDir, "ZoomClassroomsGrid.tsx")), "ZoomClassroomsGrid must exist");
+  assert.ok(fs.existsSync(path.join(attDir, "TuitionServicesCard.tsx")), "TuitionServicesCard must exist");
+  assert.ok(fs.existsSync(path.join(attDir, "PetitionsTrackerCard.tsx")), "PetitionsTrackerCard must exist");
+  assert.ok(fs.existsSync(path.join(attDir, "DownloadCenterCard.tsx")), "DownloadCenterCard must exist");
+  assert.ok(fs.existsSync(path.join(rootDir, "src/data/zoomScheduleData.ts")), "zoomScheduleData.ts must exist");
+
+  const pageContent = fs.readFileSync(path.join(rootDir, "src/app/attendance-tracking/page.tsx"), "utf-8");
+  const lineCount = pageContent.split("\n").length;
+  assert.ok(lineCount < 300, `/attendance-tracking/page.tsx should be under 300 lines (currently ${lineCount})`);
+});
+
+// Summary
 console.log("\n==========================================================");
 console.log(`  AUDIT RESULTS: ${passedCount} / ${totalTests} TESTS PASSED`);
 console.log("==========================================================");

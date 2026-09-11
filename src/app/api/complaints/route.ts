@@ -6,8 +6,10 @@ import {
   UnifiedTrackedTask,
 } from "@/data/complaintsTrackingData";
 
+export const dynamic = "force-dynamic";
+
 let complaintsStore: ComplaintItem[] = [...mockComplaints];
-let tasksStore: UnifiedTrackedTask[] = [...mockUnifiedTrackedTasks];
+const tasksStore: UnifiedTrackedTask[] = [...mockUnifiedTrackedTasks];
 
 export async function GET(req: NextRequest) {
   try {

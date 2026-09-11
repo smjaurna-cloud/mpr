@@ -6,6 +6,8 @@ import {
   initialAuthUsers, 
   IdentifierType 
 } from "@/data/authData";
+import { RegisterFormData } from "@/types/common";
+import { getErrorMessage } from "@/lib/utils";
 
 interface AuthContextType {
   currentUser: AuthUser | null;
@@ -22,7 +24,7 @@ interface AuthContextType {
     avatar?: string
   ) => Promise<{ success: boolean; message?: string; error?: string }>;
   register: (
-    formData: any
+    formData: RegisterFormData | Record<string, unknown>
   ) => Promise<{ success: boolean; message?: string; error?: string; user?: AuthUser }>;
   logout: () => void;
   switchPersona: (userId: string) => void;
@@ -87,8 +89,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         return { success: false, error: data.error || "ข้อมูลการเข้าสู่ระบบไม่ถูกต้อง" };
       }
-    } catch (err: any) {
-      return { success: false, error: "เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์" };
+    } catch (err: unknown) {
+      return { success: false, error: getErrorMessage(err, "เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์") };
     }
   };
 
@@ -107,12 +109,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         return { success: false, error: data.error || "เกิดข้อผิดพลาดในการเข้าสู่ระบบด้วย Google" };
       }
-    } catch (err: any) {
-      return { success: false, error: "ไม่สามารถเชื่อมต่อกับบริการ Google Authentication ได้" };
+    } catch (err: unknown) {
+      return { success: false, error: getErrorMessage(err, "ไม่สามารถเชื่อมต่อกับบริการ Google Authentication ได้") };
     }
   };
 
-  const register = async (formData: any) => {
+  const register = async (formData: RegisterFormData | Record<string, unknown>) => {
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
@@ -127,8 +129,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         return { success: false, error: data.error || "การสมัครสมาชิกไม่สำเร็จ" };
       }
-    } catch (err: any) {
-      return { success: false, error: "เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์" };
+    } catch (err: unknown) {
+      return { success: false, error: getErrorMessage(err, "เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์") };
     }
   };
 

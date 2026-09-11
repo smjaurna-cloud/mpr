@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 import {
@@ -8,8 +8,11 @@ import {
   mockInquiryTickets,
   InquiryTicket,
 } from "@/data/contactDirectoryData";
+import { contactInquirySchema, updateTicketSchema } from "@/lib/validations/contact";
+import { apiSuccess, apiError, apiValidationError } from "@/lib/apiResponse";
+import { getErrorMessage } from "@/lib/utils";
 
-let inquiryTicketsStore: InquiryTicket[] = [...mockInquiryTickets];
+const inquiryTicketsStore: InquiryTicket[] = [...mockInquiryTickets];
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,12 +25,9 @@ export async function GET(req: NextRequest) {
         (t) => t.ticketCode.toLowerCase() === code.toLowerCase().trim()
       );
       if (!ticket) {
-        return NextResponse.json(
-          { success: false, error: `ไม่พบรหัสติดตามการติดต่อ "${code}" ในระบบ` },
-          { status: 404 }
-        );
+        return apiError(`ไม่พบรหัสติดตามการติดต่อ "${code}" ในระบบ`, 404);
       }
-      return NextResponse.json({ success: true, ticket });
+      return apiSuccess(ticket, undefined, 200, { ticket });
     }
 
     let departments = [...officialDepartments];
@@ -35,33 +35,28 @@ export async function GET(req: NextRequest) {
       departments = departments.filter((d) => d.id === deptId || d.deptCode === deptId);
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess(departments, undefined, 200, {
       college: mainCollegeContact,
       departments,
       socialChannels: officialSocialChannels,
       tickets: inquiryTicketsStore,
       totalTickets: inquiryTicketsStore.length,
     });
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error?.message || "Internal server error" },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    return apiError(getErrorMessage(error, "Internal server error"), 500);
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { senderName, senderEmail, senderPhone, targetDepartment, subject, message } = body;
+    const parseResult = contactInquirySchema.safeParse(body);
 
-    if (!senderName || !senderEmail || !subject || !message) {
-      return NextResponse.json(
-        { success: false, error: "กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน (ชื่อผู้ติดต่อ, อีเมล, เรื่อง, ข้อความ)" },
-        { status: 400 }
-      );
+    if (!parseResult.success) {
+      return apiValidationError(parseResult.error);
     }
+
+    const { senderName, senderEmail, senderPhone, targetDepartment, subject, message } = parseResult.data;
 
     const nextId = inquiryTicketsStore.length + 1;
     const ticketCode = `INQ-2569-${String(nextId).padStart(3, "0")}`;
@@ -71,7 +66,7 @@ export async function POST(req: NextRequest) {
       ticketCode,
       senderName: senderName.trim(),
       senderEmail: senderEmail.trim(),
-      senderPhone: senderPhone?.trim() || "-",
+      senderPhone: senderPhone || "-",
       targetDepartment: targetDepartment || "สำนักงานผู้อำนวยการราชวิทยาลัย",
       subject: subject.trim(),
       message: message.trim(),
@@ -82,54 +77,40 @@ export async function POST(req: NextRequest) {
 
     inquiryTicketsStore.unshift(newTicket);
 
-    return NextResponse.json({
-      success: true,
-      message: "บันทึกข้อความติดต่อสอบถามสำเร็จ",
+    return apiSuccess(newTicket, "บันทึกข้อความติดต่อสอบถามสำเร็จ", 201, {
       ticket: newTicket,
     });
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error?.message || "Internal server error" },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    return apiError(getErrorMessage(error, "Internal server error"), 500);
   }
 }
 
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { ticketCode, status, responseNote } = body;
+    const parseResult = updateTicketSchema.safeParse(body);
 
-    if (!ticketCode) {
-      return NextResponse.json(
-        { success: false, error: "กรุณาระบุรหัสตั๋ว (ticketCode)" },
-        { status: 400 }
-      );
+    if (!parseResult.success) {
+      return apiValidationError(parseResult.error);
     }
+
+    const { ticketCode, status, responseNote } = parseResult.data;
 
     const ticketIndex = inquiryTicketsStore.findIndex(
       (t) => t.ticketCode.toLowerCase() === ticketCode.toLowerCase().trim()
     );
 
     if (ticketIndex === -1) {
-      return NextResponse.json(
-        { success: false, error: `ไม่พบตั๋วรหัส "${ticketCode}"` },
-        { status: 404 }
-      );
+      return apiError(`ไม่พบตั๋วรหัส "${ticketCode}"`, 404);
     }
 
     if (status) inquiryTicketsStore[ticketIndex].status = status;
     if (responseNote) inquiryTicketsStore[ticketIndex].responseNote = responseNote;
 
-    return NextResponse.json({
-      success: true,
-      message: "อัปเดตสถานะการติดต่อสำเร็จ",
+    return apiSuccess(inquiryTicketsStore[ticketIndex], "อัปเดตสถานะการติดต่อสำเร็จ", 200, {
       ticket: inquiryTicketsStore[ticketIndex],
     });
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error?.message || "Internal server error" },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    return apiError(getErrorMessage(error, "Internal server error"), 500);
   }
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import Link from "next/link";
 import {
   QrCode,
   Search,
@@ -11,34 +10,31 @@ import {
   FileText,
   ExternalLink,
   ShieldCheck,
-  Send,
-  Building,
   CheckCircle2,
   Calendar,
   PhoneCall,
   Mail,
-  Car,
-  Utensils,
   Share2,
   Sparkles,
   RefreshCw,
-  Copy,
-  Check
+  Building,
+  Check,
 } from "lucide-react";
 import {
   mockComplaints,
   mockUnifiedTrackedTasks,
   officialWebsiteNews,
-  mcuDigitalServices,
   getComplaintsStatistics,
   ComplaintItem,
   UnifiedTrackedTask,
-  ComplaintCategory,
-  TrackedSystemType
 } from "@/data/complaintsTrackingData";
 import { QRCodeDisplay } from "@/components/QRCodeDisplay";
 import { PrintableComplaintStandeeModal } from "@/components/PrintableComplaintStandeeModal";
 import { PrintableTrackingSlipModal } from "@/components/PrintableTrackingSlipModal";
+import UnifiedTaskTrackerTable from "@/components/complaints/UnifiedTaskTrackerTable";
+import DigitalServicesGateway from "@/components/complaints/DigitalServicesGateway";
+import ComplaintSubmissionModal from "@/components/complaints/ComplaintSubmissionModal";
+import ComplaintDetailModal from "@/components/complaints/ComplaintDetailModal";
 
 export default function ComplaintsTrackingPage() {
   // Navigation Tabs
@@ -59,27 +55,15 @@ export default function ComplaintsTrackingPage() {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>("ALL");
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>("ALL");
 
-  // New Complaint Submission Form State
+  // New Complaint Submission Modal State
   const [showSubmitModal, setShowSubmitModal] = useState(false);
-  const [formCategory, setFormCategory] = useState<ComplaintCategory>("FACILITIES_VEHICLES");
-  const [formTitle, setFormTitle] = useState("");
-  const [formDetails, setFormDetails] = useState("");
-  const [formLocation, setFormLocation] = useState("");
-  const [formIsAnonymous, setFormIsAnonymous] = useState(false);
-  const [formName, setFormName] = useState("");
-  const [formPhone, setFormPhone] = useState("");
-  const [formEmail, setFormEmail] = useState("");
-  const [formPriority, setFormPriority] = useState<"NORMAL" | "HIGH" | "URGENT">("NORMAL");
   const [submissionSuccessData, setSubmissionSuccessData] = useState<{
     trackingCode: string;
     submittedAt: string;
   } | null>(null);
 
-  // Cross-System Tasks State & Filters
+  // Cross-System Tasks State
   const [tasksList] = useState<UnifiedTrackedTask[]>(mockUnifiedTrackedTasks);
-  const [taskSearch, setTaskSearch] = useState("");
-  const [selectedSystemFilter, setSelectedSystemFilter] = useState<string>("ALL");
-  const [copiedTaskCode, setCopiedTaskCode] = useState<string | null>(null);
 
   // News State & Category Filter
   const [newsFilter, setNewsFilter] = useState<string>("ALL");
@@ -107,95 +91,18 @@ export default function ComplaintsTrackingPage() {
     });
   }, [complaintsList, complaintSearch, selectedCategoryFilter, selectedStatusFilter]);
 
-  // Filtered Cross-System Tasks
-  const filteredTasks = useMemo(() => {
-    return tasksList.filter((task) => {
-      const matchSearch =
-        taskSearch.trim() === "" ||
-        task.trackingCode.toLowerCase().includes(taskSearch.toLowerCase()) ||
-        task.title.toLowerCase().includes(taskSearch.toLowerCase()) ||
-        task.requesterName.toLowerCase().includes(taskSearch.toLowerCase()) ||
-        task.departmentOrUnit.toLowerCase().includes(taskSearch.toLowerCase());
-
-      const matchSystem =
-        selectedSystemFilter === "ALL" || task.systemType === selectedSystemFilter;
-
-      return matchSearch && matchSystem;
-    });
-  }, [tasksList, taskSearch, selectedSystemFilter]);
-
   // Filtered News
   const filteredNews = useMemo(() => {
     if (newsFilter === "ALL") return officialWebsiteNews;
     return officialWebsiteNews.filter((n) => n.category === newsFilter);
   }, [newsFilter]);
 
-  // Handle New Complaint Submission
-  const handleSubmitComplaint = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formTitle.trim() || !formDetails.trim() || !formLocation.trim()) {
-      alert("กรุณากรอกข้อมูลสำคัญ (หัวข้อ, รายละเอียด, และสถานที่) ให้ครบถ้วน");
-      return;
-    }
-
-    const newTrackingCode = `CMP-2569-00${complaintsList.length + 1}`;
-    const now = new Date();
-    const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(
-      now.getDate()
-    ).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(
-      2,
-      "0"
-    )}`;
-
-    const categoryThaiMap: Record<ComplaintCategory, string> = {
-      ACADEMIC: "การศึกษาและวิชาการ",
-      MONASTIC_DISCIPLINE: "ระเบียบวินัยสงฆ์และสามเณร",
-      SERVICE_STAFF: "การให้บริการและบุคลากร",
-      FACILITIES_VEHICLES: "อาคารสถานที่และระบบเทคโนโลยี",
-      TRANSPARENCY_ITA: "ความโปร่งใสและจัดซื้อจัดจ้าง (ITA)",
-      GENERAL_SUGGESTION: "ข้อเสนอแนะทั่วไปและภูมิทัศน์",
-    };
-
-    const newComplaint: ComplaintItem = {
-      id: `cmp-${Date.now()}`,
-      trackingCode: newTrackingCode,
-      title: formTitle,
-      category: formCategory,
-      categoryThai: categoryThaiMap[formCategory],
-      details: formDetails,
-      complainantName: formIsAnonymous ? "ไม่ประสงค์ระบุตัวตน (Anonymous)" : (formName || "ประชาชนทั่วไป"),
-      isAnonymous: formIsAnonymous,
-      contactPhone: formIsAnonymous ? undefined : formPhone,
-      contactEmail: formIsAnonymous ? undefined : formEmail,
-      locationArea: formLocation,
-      status: "RECEIVED",
-      priority: formPriority,
-      submittedAt: formattedDate,
-      assignedDepartment: "สำนักงานวิทยาลัย (ศูนย์รับเรื่องและสารบรรณกลาง)",
-      officerInCharge: "เจ้าหน้าที่เวรรับเรื่องประจำวัน",
-      evidenceAttachmentsCount: 0,
-    };
-
-    setComplaintsList([newComplaint, ...complaintsList]);
+  const handleComplaintCreated = (newComplaint: ComplaintItem) => {
+    setComplaintsList((prev) => [newComplaint, ...prev]);
     setSubmissionSuccessData({
-      trackingCode: newTrackingCode,
-      submittedAt: formattedDate,
+      trackingCode: newComplaint.trackingCode,
+      submittedAt: newComplaint.submittedAt,
     });
-
-    // Reset fields
-    setFormTitle("");
-    setFormDetails("");
-    setFormLocation("");
-    setFormName("");
-    setFormPhone("");
-    setFormEmail("");
-    setShowSubmitModal(false);
-  };
-
-  const handleCopyCode = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedTaskCode(code);
-    setTimeout(() => setCopiedTaskCode(null), 2000);
   };
 
   const getStatusBadge = (status: ComplaintItem["status"]) => {
@@ -228,28 +135,10 @@ export default function ComplaintsTrackingPage() {
     }
   };
 
-  const getSystemIcon = (systemType: TrackedSystemType) => {
-    switch (systemType) {
-      case "VEHICLE_BOOKING":
-        return <Car className="w-4 h-4 text-emerald-600" />;
-      case "E_APPROVAL":
-        return <FileText className="w-4 h-4 text-blue-600" />;
-      case "MEETING_ROOM":
-        return <Building className="w-4 h-4 text-purple-600" />;
-      case "PROCUREMENT_PRJ":
-        return <Building className="w-4 h-4 text-amber-600" />;
-      case "ALMS_PATRON":
-        return <Utensils className="w-4 h-4 text-amber-500" />;
-      case "COMPLAINT":
-      default:
-        return <ShieldCheck className="w-4 h-4 text-rose-600" />;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-slate-50/70 p-4 md:p-8 space-y-6">
       {/* ------------------------------------------------------------- */}
-      {/* Header Banner: Sacred Royal Heritage & Institutional Presence */}
+      {/* Header Banner */}
       {/* ------------------------------------------------------------- */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-white p-6 md:p-8 shadow-xl border border-amber-500/30">
         <div className="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
@@ -293,7 +182,7 @@ export default function ComplaintsTrackingPage() {
             <button
               onClick={() => setIsStandeeModalOpen(true)}
               type="button"
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm shadow-lg transition-all hover:scale-105"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm shadow-lg transition-all hover:scale-105 cursor-pointer"
             >
               <Printer className="w-4 h-4" />
               <span>พิมพ์ป้าย QR Code Standee A4</span>
@@ -301,7 +190,7 @@ export default function ComplaintsTrackingPage() {
             <button
               onClick={() => setShowSubmitModal(true)}
               type="button"
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium text-sm border border-slate-700 transition-colors"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium text-sm border border-slate-700 transition-colors cursor-pointer"
             >
               <PlusCircle className="w-4 h-4 text-amber-400" />
               <span>ยื่นเรื่องร้องเรียน/เสนอแนะใหม่</span>
@@ -314,7 +203,7 @@ export default function ComplaintsTrackingPage() {
       {/* Quick Metrics Cards */}
       {/* ------------------------------------------------------------- */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
           <div className="w-11 h-11 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shrink-0">
             <FileText className="w-5 h-5" />
           </div>
@@ -324,7 +213,7 @@ export default function ComplaintsTrackingPage() {
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
           <div className="w-11 h-11 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
             <CheckCircle2 className="w-5 h-5" />
           </div>
@@ -334,7 +223,7 @@ export default function ComplaintsTrackingPage() {
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
           <div className="w-11 h-11 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 shrink-0">
             <Share2 className="w-5 h-5" />
           </div>
@@ -344,7 +233,7 @@ export default function ComplaintsTrackingPage() {
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
           <div className="w-11 h-11 rounded-lg bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-700 shrink-0">
             <Building className="w-5 h-5" />
           </div>
@@ -354,7 +243,7 @@ export default function ComplaintsTrackingPage() {
           </div>
         </div>
 
-        <div className="col-span-2 lg:col-span-1 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+        <div className="col-span-2 lg:col-span-1 bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
           <div className="w-11 h-11 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-700 shrink-0">
             <ShieldCheck className="w-5 h-5" />
           </div>
@@ -371,7 +260,7 @@ export default function ComplaintsTrackingPage() {
       <div className="flex border-b border-slate-200 overflow-x-auto gap-2 text-sm font-medium">
         <button
           onClick={() => setActiveTab("COMPLAINTS")}
-          className={`flex items-center gap-2 px-4 py-3 border-b-2 font-semibold transition-colors whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 border-b-2 font-semibold transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === "COMPLAINTS"
               ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-lg"
               : "border-transparent text-slate-600 hover:text-slate-900"
@@ -383,7 +272,7 @@ export default function ComplaintsTrackingPage() {
 
         <button
           onClick={() => setActiveTab("TRACKER")}
-          className={`flex items-center gap-2 px-4 py-3 border-b-2 font-semibold transition-colors whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 border-b-2 font-semibold transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === "TRACKER"
               ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-lg"
               : "border-transparent text-slate-600 hover:text-slate-900"
@@ -398,7 +287,7 @@ export default function ComplaintsTrackingPage() {
 
         <button
           onClick={() => setActiveTab("NEWS")}
-          className={`flex items-center gap-2 px-4 py-3 border-b-2 font-semibold transition-colors whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 border-b-2 font-semibold transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === "NEWS"
               ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-lg"
               : "border-transparent text-slate-600 hover:text-slate-900"
@@ -413,7 +302,7 @@ export default function ComplaintsTrackingPage() {
 
         <button
           onClick={() => setActiveTab("GATEWAY")}
-          className={`flex items-center gap-2 px-4 py-3 border-b-2 font-semibold transition-colors whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 border-b-2 font-semibold transition-colors whitespace-nowrap cursor-pointer ${
             activeTab === "GATEWAY"
               ? "border-amber-600 text-amber-800 bg-amber-50/50 rounded-t-lg"
               : "border-transparent text-slate-600 hover:text-slate-900"
@@ -432,7 +321,7 @@ export default function ComplaintsTrackingPage() {
           {/* Top Banner: QR Code Box + Quick Notice */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Direct Institutional QR Code Card */}
-            <div className="bg-gradient-to-br from-amber-500/10 via-white to-amber-50/80 p-6 rounded-2xl border-2 border-amber-300 shadow-sm flex flex-col items-center text-center">
+            <div className="bg-gradient-to-br from-amber-500/10 via-white to-amber-50/80 p-6 rounded-2xl border-2 border-amber-300 shadow-xs flex flex-col items-center text-center">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-900 text-xs font-bold rounded-full mb-3">
                 <QrCode className="w-3.5 h-3.5 text-amber-700" />
                 <span>QR Code ทางการสำหรับประชาชน & ศากยบุตร</span>
@@ -448,51 +337,45 @@ export default function ComplaintsTrackingPage() {
                 value="https://palitheravada.mcu.ac.th/complaints-tracking"
                 size={180}
                 colorDark="#78350f"
-                colorLight="#ffffff"
-                title="MCU Pali e-Complaint"
-                subtitle="palitheravada.mcu.ac.th"
-                showCopy={true}
-                showDownload={true}
+                title="MCU Pali e-Complaint QR Code"
               />
 
-              <div className="mt-4 pt-3 border-t border-amber-200/80 w-full flex items-center justify-center gap-2">
+              <div className="mt-4 flex items-center gap-2">
                 <button
                   onClick={() => setIsStandeeModalOpen(true)}
                   type="button"
-                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold rounded-lg shadow transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs rounded-lg transition-colors cursor-pointer"
                 >
                   <Printer className="w-3.5 h-3.5" />
-                  <span>พิมพ์ป้ายประชาสัมพันธ์ A4 (Standee)</span>
+                  <span>พิมพ์ Standee A4 ติดบอร์ด</span>
                 </button>
               </div>
             </div>
 
-            {/* Quick Submit or Guideline Banner */}
-            <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            {/* Overview & Security Policy Guide */}
+            <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between space-y-4">
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-6 h-6 text-amber-600" />
-                    <h3 className="text-lg font-bold text-slate-900">
-                      แนวทางการรับฟังข้อร้องเรียนและข้อเสนอแนะ
-                    </h3>
-                  </div>
-                  <span className="text-xs font-medium px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
-                    คุ้มครองผู้แจ้งตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA)
-                  </span>
-                </div>
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 mb-2">
+                  <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                  หลักเกณฑ์และช่องทางการรับเรื่องร้องเรียน (ITA เกณฑ์ O4/O5)
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  ศูนย์รับเรื่องร้องเรียน มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย (วส. มจร) จัดตั้งขึ้นเพื่อรับฟังความคิดเห็น
+                  ข้อเสนอแนะ และข้อร้องเรียนจากศรัทธาสาธุชน คณาจารย์ เจ้าหน้าที่ พระภิกษุ และสามเณร
+                  โดยมุ่งเน้นการคุ้มครองสิทธิและความเป็นส่วนตัวตามพระวินัยและ พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA)
+                </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-600 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 text-xs">
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
                     <h4 className="font-bold text-slate-800 mb-1 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-amber-600" />
+                      <FileText className="w-4 h-4 text-amber-600" />
                       ขอบเขตเรื่องที่รับดำเนินการ
                     </h4>
                     <ul className="space-y-1 list-disc list-inside text-slate-600">
-                      <li>การบริหารการศึกษาและหลักสูตรบาลีศากยบุตร</li>
-                      <li>อาคารสถานที่ หอพักกุฏิสงฆ์ ไฟฟ้า และระบบอินเทอร์เน็ต</li>
-                      <li>การให้บริการของเจ้าหน้าที่และโภชนาการโรงครัว</li>
-                      <li>ความโปร่งใสในการจัดซื้อจัดจ้างตามเกณฑ์ ITA</li>
+                      <li>การบริหารงานและบริการของบุคลากร/เจ้าหน้าที่</li>
+                      <li>อาคารสถานที่ ยานพาหนะ และระบบเทคโนโลยี</li>
+                      <li>ความโปร่งใสและการจัดซื้อจัดจ้าง e-Bidding</li>
+                      <li>การคุ้มครองระเบียบวินัยและสุขอนามัยของสามเณร</li>
                     </ul>
                   </div>
 
@@ -520,7 +403,7 @@ export default function ComplaintsTrackingPage() {
                 <button
                   onClick={() => setShowSubmitModal(true)}
                   type="button"
-                  className="flex items-center gap-1.5 px-4 py-2 bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs rounded-lg shadow transition-colors shrink-0"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs rounded-lg shadow-xs transition-colors shrink-0 cursor-pointer"
                 >
                   <PlusCircle className="w-4 h-4" />
                   <span>ยื่นเรื่องในระบบเดี๋ยวนี้</span>
@@ -529,7 +412,7 @@ export default function ComplaintsTrackingPage() {
             </div>
           </div>
 
-          {/* Submission Success Toast Card if Just Submitted */}
+          {/* Submission Success Toast Card */}
           {submissionSuccessData && (
             <div className="p-4 bg-emerald-50 border-2 border-emerald-400 rounded-xl shadow-md flex items-center justify-between animate-fadeIn">
               <div className="flex items-center gap-3">
@@ -549,19 +432,16 @@ export default function ComplaintsTrackingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => {
-                    setActiveTab("TRACKER");
-                    setTaskSearch(submissionSuccessData.trackingCode);
-                  }}
+                  onClick={() => setActiveTab("TRACKER")}
                   type="button"
-                  className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition-colors"
+                  className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
                 >
                   ติดตามสถานะทันที
                 </button>
                 <button
                   onClick={() => setSubmissionSuccessData(null)}
                   type="button"
-                  className="text-xs text-emerald-700 hover:underline px-2"
+                  className="text-xs text-emerald-700 hover:underline px-2 cursor-pointer"
                 >
                   ปิด
                 </button>
@@ -570,7 +450,7 @@ export default function ComplaintsTrackingPage() {
           )}
 
           {/* Complaints Table & Directory */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
             {/* Filter Bar */}
             <div className="p-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-50/50">
               <div className="relative flex-1 max-w-md">
@@ -672,7 +552,7 @@ export default function ComplaintsTrackingPage() {
                           <button
                             onClick={() => setSelectedComplaintDetail(item)}
                             type="button"
-                            className="px-2.5 py-1 text-[11px] font-semibold text-amber-700 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-md transition-colors"
+                            className="px-2.5 py-1 text-[11px] font-semibold text-amber-700 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-md transition-colors cursor-pointer"
                           >
                             ดูผลการแก้ไข
                           </button>
@@ -691,207 +571,10 @@ export default function ComplaintsTrackingPage() {
       {/* TAB 2: UNIFIED CROSS-SYSTEM TASK TRACKER */}
       {/* ------------------------------------------------------------- */}
       {activeTab === "TRACKER" && (
-        <div className="space-y-6">
-          {/* Tracker Instructions & Search Box */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                  <RefreshCw className="w-5 h-5 text-amber-600" />
-                  ระบบติดตามสถานะคำร้องและภารกิจราชการรวมศูนย์ (Unified Task Tracker)
-                </h3>
-                <p className="text-xs text-slate-600 mt-1">
-                  กรอกรหัสติดตามจากระบบใดก็ได้ในวิทยาลัย: เรื่องร้องเรียน (<code>CMP-</code>), ขอใช้รถ (<code>VB-</code>), สารบรรณ (<code>DOC-</code>), ห้องประชุม (<code>MTG-</code>), แผนงบประมาณ/e-Bidding (<code>PRJ-</code>), ภัตตาหารโยมอุปถัมภ์ (<code>ALM-</code>)
-                </p>
-              </div>
-
-              {/* Filter Pills */}
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { label: "ทั้งหมด", val: "ALL" },
-                  { label: "ร้องเรียน (CMP-)", val: "COMPLAINT" },
-                  { label: "ขอใช้รถ (VB-)", val: "VEHICLE_BOOKING" },
-                  { label: "สารบรรณ (DOC-)", val: "E_APPROVAL" },
-                  { label: "ห้องประชุม (MTG-)", val: "MEETING_ROOM" },
-                  { label: "โครงการจัดซื้อ (PRJ-)", val: "PROCUREMENT_PRJ" },
-                  { label: "ภัตตาหาร (ALM-)", val: "ALMS_PATRON" },
-                ].map((pill) => (
-                  <button
-                    key={pill.val}
-                    onClick={() => setSelectedSystemFilter(pill.val)}
-                    type="button"
-                    className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
-                      selectedSystemFilter === pill.val
-                        ? "bg-amber-700 text-white font-semibold"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
-                  >
-                    {pill.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Live Search Bar */}
-            <div className="relative">
-              <Search className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="พิมพ์รหัสติดตามงาน เช่น VB-2569-001, CMP-2569-001, DOC-67-001, PRJ-69-SOLAR หรือชื่อผู้ยื่น..."
-                value={taskSearch}
-                onChange={(e) => setTaskSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-sm border-2 border-amber-300/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 bg-amber-50/20"
-              />
-            </div>
-          </div>
-
-          {/* Cross-System Tasks List */}
-          <div className="space-y-4">
-            {filteredTasks.length === 0 ? (
-              <div className="p-12 text-center bg-white rounded-2xl border border-slate-200 text-slate-400">
-                ไม่พบภารกิจหรือคำร้องตามรหัสที่ระบุ
-              </div>
-            ) : (
-              filteredTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:border-amber-400 transition-all space-y-4"
-                >
-                  {/* Top Bar of Task */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
-                        {getSystemIcon(task.systemType)}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-sm font-bold text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-md border border-amber-300">
-                            {task.trackingCode}
-                          </span>
-                          <span className="text-xs text-slate-500 font-medium">
-                            {task.systemNameThai}
-                          </span>
-                        </div>
-                        <h4 className="text-sm md:text-base font-bold text-slate-900 mt-0.5">
-                          {task.title}
-                        </h4>
-                      </div>
-                    </div>
-
-                    {/* Actions & Status */}
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 border border-slate-200">
-                        {task.statusThai} ({task.currentStep}/{task.totalSteps})
-                      </span>
-                      <button
-                        onClick={() => setSelectedTaskForPrint(task)}
-                        type="button"
-                        className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
-                      >
-                        <Printer className="w-3.5 h-3.5 text-amber-400" />
-                        <span>พิมพ์ใบติดตามงาน</span>
-                      </button>
-                      <Link
-                        href={task.relatedUrl}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold rounded-lg border border-amber-300 transition-colors"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5 text-amber-600" />
-                        <span>เปิดโมดูล</span>
-                      </Link>
-                    </div>
-                  </div>
-
-                  {/* Task Metadata */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-slate-600">
-                    <div>
-                      <span className="text-slate-400">ผู้ยื่นเรื่อง/ผู้รับผิดชอบ:</span>
-                      <p className="font-semibold text-slate-800">{task.requesterName}</p>
-                    </div>
-                    <div>
-                      <span className="text-slate-400">หน่วยงาน/ฝ่าย:</span>
-                      <p className="font-semibold text-slate-800">{task.departmentOrUnit}</p>
-                    </div>
-                    <div>
-                      <span className="text-slate-400">วันที่ยื่นเรื่อง:</span>
-                      <p className="font-mono text-slate-800">{task.submittedDate}</p>
-                    </div>
-                    <div>
-                      <span className="text-slate-400">กำหนดแล้วเสร็จ:</span>
-                      <p className="font-mono text-slate-800">{task.targetCompletionDate}</p>
-                    </div>
-                  </div>
-
-                  {/* Interactive Stepper Progress Bar */}
-                  <div className="pt-2">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
-                      {task.stepsHistory.map((step) => (
-                        <div
-                          key={step.stepNo}
-                          className={`p-2.5 rounded-xl border text-xs transition-colors ${
-                            step.isCompleted
-                              ? "bg-emerald-50/80 border-emerald-300 text-emerald-950"
-                              : "bg-slate-50 border-slate-200 text-slate-500"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-bold flex items-center gap-1 text-[11px]">
-                              {step.isCompleted ? (
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                              ) : (
-                                <Clock className="w-3.5 h-3.5 text-slate-400" />
-                              )}
-                              ขั้นตอนที่ {step.stepNo}
-                            </span>
-                            <span className="font-mono text-[10px] text-slate-500">
-                              {step.timestamp}
-                            </span>
-                          </div>
-                          <p className="font-semibold line-clamp-1">{step.stepTitle}</p>
-                          <p className="text-[10px] text-slate-500 line-clamp-1">
-                            โดย: {step.actionBy}
-                          </p>
-                          {step.note && (
-                            <p className="text-[10px] text-amber-700 mt-1 italic line-clamp-1">
-                              * {step.note}
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* QR Code Quick Copy Footer */}
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
-                    <span className="flex items-center gap-1">
-                      <QrCode className="w-3.5 h-3.5 text-amber-600" />
-                      ลิงก์ติดตามงานทางมือถือ:{" "}
-                      <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">
-                        palitheravada.mcu.ac.th/complaints-tracking?code={task.trackingCode}
-                      </code>
-                    </span>
-                    <button
-                      onClick={() => handleCopyCode(task.trackingCode)}
-                      type="button"
-                      className="flex items-center gap-1 text-amber-700 hover:text-amber-900 font-medium"
-                    >
-                      {copiedTaskCode === task.trackingCode ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-600">คัดลอกรหัสแล้ว</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>คัดลอกรหัส</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+        <UnifiedTaskTrackerTable
+          tasks={tasksList}
+          onSelectTaskForPrint={setSelectedTaskForPrint}
+        />
       )}
 
       {/* ------------------------------------------------------------- */}
@@ -931,7 +614,7 @@ export default function ComplaintsTrackingPage() {
                   key={filter.val}
                   onClick={() => setNewsFilter(filter.val)}
                   type="button"
-                  className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                  className={`px-3 py-1 text-xs rounded-full transition-colors cursor-pointer ${
                     newsFilter === filter.val
                       ? "bg-amber-700 text-white font-bold"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -948,7 +631,7 @@ export default function ComplaintsTrackingPage() {
             {filteredNews.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:border-amber-400 hover:shadow-md transition-all flex flex-col justify-between"
+                className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 hover:border-amber-400 hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
@@ -1005,378 +688,23 @@ export default function ComplaintsTrackingPage() {
       {/* ------------------------------------------------------------- */}
       {/* TAB 4: MCU DIGITAL SERVICES & ITA GATEWAY */}
       {/* ------------------------------------------------------------- */}
-      {activeTab === "GATEWAY" && (
-        <div className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Building className="w-5 h-5 text-amber-600" />
-              ประตูบริการดิจิทัลส่วนกลาง มจร & เกณฑ์ธรรมาภิบาล ITA
-            </h3>
-            <p className="text-xs text-slate-600 mt-1">
-              เชื่อมโยงระบบสารสนเทศระดับมหาวิทยาลัย เพื่อการบริหารจัดการที่มีประสิทธิภาพ โปร่งใส และตรวจสอบได้
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mcuDigitalServices.map((svc) => (
-              <div
-                key={svc.id}
-                className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-amber-400 hover:shadow-md transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                      {svc.category}
-                    </span>
-                    <ExternalLink className="w-4 h-4 text-slate-400" />
-                  </div>
-                  <h4 className="text-sm font-bold text-slate-900">{svc.nameThai}</h4>
-                  <p className="text-xs text-slate-500 font-mono mt-0.5">{svc.nameEng}</p>
-                  <p className="text-xs text-slate-600 mt-2">{svc.description}</p>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-slate-100">
-                  <a
-                    href={svc.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition-colors"
-                  >
-                    <span>เข้าสู่ระบบบริการ มจร</span>
-                    <ExternalLink className="w-3 h-3 text-amber-400" />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Institutional Contact & ITA Transparency Box */}
-          <div className="bg-gradient-to-r from-amber-50 to-slate-50 p-6 rounded-2xl border border-amber-200">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm mb-2">
-                  มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย
-                </h4>
-                <p className="text-slate-600">
-                  Mahavajiralongkorn Pali Theravada College (วส. มจร)
-                </p>
-                <p className="text-slate-500 mt-1">
-                  เลขที่ ๒๓๔ ถนนเพชรเกษม ตำบลรางพิกุล อำเภอกำแพงแสน จังหวัดนครปฐม ๗๓๑๔๐
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm mb-2">ช่องทางติดต่อทางการ</h4>
-                <p className="text-slate-700">
-                  <strong>ผู้อำนวยการวิทยาลัย:</strong> พระธรรมวชิราจารย์ รศ.ดร.
-                </p>
-                <p className="text-slate-700 mt-1">
-                  <strong>สายด่วนรับเรื่อง:</strong> ๐๙๒-๖๙๔๘๘๘๓
-                </p>
-                <p className="text-slate-700 mt-0.5">
-                  <strong>เบอร์สำนักงาน:</strong> ๐๙๙-๔๔๕-๔๒๕๖
-                </p>
-                <p className="text-slate-700 mt-0.5">
-                  <strong>อีเมล:</strong> info@palitheravada.mcu.ac.th
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm mb-2">มาตรฐานธรรมาภิบาล ITA</h4>
-                <p className="text-slate-600">
-                  มุ่งเน้นการเปิดเผยข้อมูลสาธารณะ (Open Data Integrity) และการป้องกันผลประโยชน์ทับซ้อน เพื่อสร้างความเชื่อมั่นต่อศรัทธาสาธุชนและคณะสงฆ์
-                </p>
-                <span className="inline-block mt-2 px-2.5 py-1 bg-emerald-100 text-emerald-800 font-bold rounded text-[11px] border border-emerald-300">
-                  เกณฑ์ประเมิน ITA: ระดับยอดเยี่ยม (AA)
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {activeTab === "GATEWAY" && <DigitalServicesGateway />}
 
       {/* ------------------------------------------------------------- */}
-      {/* Modal: New Complaint Submission Form */}
+      {/* Modals */}
       {/* ------------------------------------------------------------- */}
-      {showSubmitModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-amber-300 my-8">
-            <div className="flex items-center justify-between px-6 py-4 bg-slate-900 text-white">
-              <div className="flex items-center gap-2">
-                <PlusCircle className="w-5 h-5 text-amber-400" />
-                <h3 className="font-bold text-base">
-                  แบบฟอร์มยื่นเรื่องร้องเรียน & ข้อเสนอแนะออนไลน์
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowSubmitModal(false)}
-                type="button"
-                className="text-slate-400 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
+      <ComplaintSubmissionModal
+        isOpen={showSubmitModal}
+        onClose={() => setShowSubmitModal(false)}
+        onComplaintCreated={handleComplaintCreated}
+      />
 
-            <form onSubmit={handleSubmitComplaint} className="p-6 space-y-4 text-xs">
-              {/* Category & Priority */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">
-                    หมวดหมู่เรื่องร้องเรียน <span className="text-rose-500">*</span>
-                  </label>
-                  <select
-                    value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value as ComplaintCategory)}
-                    className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500"
-                    required
-                  >
-                    <option value="FACILITIES_VEHICLES">อาคารสถานที่และระบบเทคโนโลยี</option>
-                    <option value="ACADEMIC">การศึกษาและวิชาการ</option>
-                    <option value="MONASTIC_DISCIPLINE">ระเบียบวินัยสงฆ์และสามเณร</option>
-                    <option value="SERVICE_STAFF">การให้บริการและบุคลากร</option>
-                    <option value="TRANSPARENCY_ITA">ความโปร่งใสและจัดซื้อจัดจ้าง (ITA)</option>
-                    <option value="GENERAL_SUGGESTION">ข้อเสนอแนะทั่วไปและภูมิทัศน์</option>
-                  </select>
-                </div>
+      <ComplaintDetailModal
+        complaint={selectedComplaintDetail}
+        onClose={() => setSelectedComplaintDetail(null)}
+        renderStatusBadge={getStatusBadge}
+      />
 
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">
-                    ระดับความเร่งด่วน
-                  </label>
-                  <select
-                    value={formPriority}
-                    onChange={(e) => setFormPriority(e.target.value as "NORMAL" | "HIGH" | "URGENT")}
-                    className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500"
-                  >
-                    <option value="NORMAL">ปกติ (Normal)</option>
-                    <option value="HIGH">สำคัญ (High)</option>
-                    <option value="URGENT">ด่วนที่สุด (Urgent)</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Title */}
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  หัวข้อเรื่องร้องเรียน / ข้อเสนอแนะ <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="ระบุประเด็นสำคัญ เช่น ปรับปรุงสัญญาณ Wi-Fi กุฏิโซน C"
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                  className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500"
-                  required
-                />
-              </div>
-
-              {/* Location */}
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  สถานที่หรือจุดที่พบปัญหา / อาคาร <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="เช่น หอฉันศากยบุตร, อาคารเรียน A 2, กุฏิสงฆ์โซน C"
-                  value={formLocation}
-                  onChange={(e) => setFormLocation(e.target.value)}
-                  className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500"
-                  required
-                />
-              </div>
-
-              {/* Details */}
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  รายละเอียดเหตุการณ์ / ข้อเสนอแนะ <span className="text-rose-500">*</span>
-                </label>
-                <textarea
-                  rows={4}
-                  placeholder="อธิบายรายละเอียดข้อเท็จจริง วันเวลา และข้อเสนอแนะที่ต้องการให้ดำเนินการ..."
-                  value={formDetails}
-                  onChange={(e) => setFormDetails(e.target.value)}
-                  className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500"
-                  required
-                />
-              </div>
-
-              {/* Anonymous Checkbox */}
-              <div className="p-3 bg-amber-50/80 rounded-xl border border-amber-200">
-                <label className="flex items-center gap-2 cursor-pointer font-semibold text-amber-950">
-                  <input
-                    type="checkbox"
-                    checked={formIsAnonymous}
-                    onChange={(e) => setFormIsAnonymous(e.target.checked)}
-                    className="w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500"
-                  />
-                  <span>ไม่ประสงค์ระบุตัวตน (Anonymous Submission)</span>
-                </label>
-                <p className="text-[11px] text-amber-800 mt-1 pl-6">
-                  เมื่อเลือกช่องนี้ ข้อมูลชื่อ เบอร์โทร และอีเมลของท่านจะไม่ถูกจัดเก็บในระบบเพื่อความปลอดภัยสูงสุด
-                </p>
-              </div>
-
-              {/* Contact Info (if not anonymous) */}
-              {!formIsAnonymous && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="block font-semibold text-slate-700 mb-1">
-                      ชื่อ-นามสกุล หรือฉายา
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="เช่น พระมหา... หรือ นาย..."
-                      value={formName}
-                      onChange={(e) => setFormName(e.target.value)}
-                      className="w-full p-2 border border-slate-300 rounded-lg"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-semibold text-slate-700 mb-1">
-                      เบอร์โทรศัพท์ติดต่อ
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="08X-XXX-XXXX"
-                      value={formPhone}
-                      onChange={(e) => setFormPhone(e.target.value)}
-                      className="w-full p-2 border border-slate-300 rounded-lg"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-semibold text-slate-700 mb-1">
-                      อีเมล (สำหรับรับผลการแก้ไข)
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="example@mcu.ac.th"
-                      value={formEmail}
-                      onChange={(e) => setFormEmail(e.target.value)}
-                      className="w-full p-2 border border-slate-300 rounded-lg"
-                    />
-                  </div>
-                </div>
-              )}
-
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-                <button
-                  onClick={() => setShowSubmitModal(false)}
-                  type="button"
-                  className="px-4 py-2 text-slate-600 hover:text-slate-800 font-medium"
-                >
-                  ยกเลิก
-                </button>
-                <button
-                  type="submit"
-                  className="flex items-center gap-1.5 px-5 py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold rounded-lg shadow-md transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>ส่งเรื่องร้องเรียน & รับรหัสติดตาม</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ------------------------------------------------------------- */}
-      {/* Modal: Complaint Detail & Resolution Note */}
-      {/* ------------------------------------------------------------- */}
-      {selectedComplaintDetail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-amber-300 my-8">
-            <div className="flex items-center justify-between px-6 py-4 bg-slate-900 text-white">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-amber-400" />
-                <h3 className="font-bold text-base">รายละเอียดและผลการดำเนินการแก้ไข</h3>
-              </div>
-              <button
-                onClick={() => setSelectedComplaintDetail(null)}
-                type="button"
-                className="text-slate-400 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="p-6 space-y-4 text-xs">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <span className="font-mono text-sm font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded-md border border-amber-300">
-                  {selectedComplaintDetail.trackingCode}
-                </span>
-                {getStatusBadge(selectedComplaintDetail.status)}
-              </div>
-
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm">
-                  {selectedComplaintDetail.title}
-                </h4>
-                <p className="text-slate-600 mt-1 leading-relaxed">
-                  {selectedComplaintDetail.details}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
-                <div>
-                  <span className="text-slate-400">หมวดหมู่:</span>
-                  <p className="font-semibold text-slate-800">{selectedComplaintDetail.categoryThai}</p>
-                </div>
-                <div>
-                  <span className="text-slate-400">สถานที่:</span>
-                  <p className="font-semibold text-slate-800">{selectedComplaintDetail.locationArea}</p>
-                </div>
-                <div>
-                  <span className="text-slate-400">ผู้ร้องเรียน:</span>
-                  <p className="font-semibold text-slate-800">
-                    {selectedComplaintDetail.isAnonymous
-                      ? "ไม่ประสงค์ระบุตัวตน (Anonymous)"
-                      : selectedComplaintDetail.complainantName}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-slate-400">วันเวลาที่ยื่นเรื่อง:</span>
-                  <p className="font-mono text-slate-800">{selectedComplaintDetail.submittedAt}</p>
-                </div>
-              </div>
-
-              {/* Resolution Note Section */}
-              <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-300 space-y-2">
-                <h5 className="font-bold text-emerald-950 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-700" />
-                  บันทึกผลการดำเนินการแก้ไข
-                </h5>
-                <p className="text-slate-700 leading-relaxed">
-                  {selectedComplaintDetail.resolutionNote || "อยู่ระหว่างการลงพื้นที่ตรวจสอบข้อเท็จจริง"}
-                </p>
-                <div className="pt-2 border-t border-emerald-200 grid grid-cols-2 text-[11px] text-slate-500">
-                  <div>
-                    <span>หน่วยงานรับผิดชอบ:</span>
-                    <p className="font-medium text-slate-800">{selectedComplaintDetail.assignedDepartment}</p>
-                  </div>
-                  <div>
-                    <span>เจ้าหน้าที่ผู้รับผิดชอบ:</span>
-                    <p className="font-medium text-slate-800">{selectedComplaintDetail.officerInCharge}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end pt-2">
-                <button
-                  onClick={() => setSelectedComplaintDetail(null)}
-                  type="button"
-                  className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold"
-                >
-                  ปิดหน้าต่าง
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ------------------------------------------------------------- */}
-      {/* Printable Modals */}
-      {/* ------------------------------------------------------------- */}
       <PrintableComplaintStandeeModal
         isOpen={isStandeeModalOpen}
         onClose={() => setIsStandeeModalOpen(false)}

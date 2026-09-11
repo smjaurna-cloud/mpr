@@ -101,7 +101,6 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
             <span className="text-[10px]">กำลังสร้าง QR Code...</span>
           </div>
         ) : dataUrl ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
           <img 
             src={dataUrl} 
             alt={title || "QR Code"} 

@@ -120,7 +120,25 @@
       - API Routes: `/api/auth/login`, `/api/auth/google`, `/api/auth/register`
       - XML Sitemap & Robots: บูรณาการ `/login` และ `/register` เข้าสู่ `sitemap.ts` (รวม ๓๙ เส้นทาง)
       - Automated Test Suite: ผ่านการทดสอบครบ ๔๓/๔๓ รายการ (100% Pass)
-* **Latest Action:** พัฒนาระบบยืนยันตัวตนหลายรูปแบบ (Multi-Identifier Login), Google SSO, ระบบสมัครสมาชิก และบัตรสมาชิกดิจิทัล (TASK-929 / MOD-24) บูรณาการ Navbar/Sidebar/Layouts ครบถ้วน ผ่านชุดทดสอบอัตโนมัติ ๔๓/๔๓ รายการสมบูรณ์ ๑๐๐%
+  - TASK-930: ติดตั้งและกำหนดค่าฐานข้อมูล PostgreSQL บน Localhost พร้อมสถาปัตยกรรม Dual-Database Switcher:
+    * ดำเนินการติดตั้ง Postgres Pro Standard 17 (`PostgresPro.Standard.17` v17.7) บน Windows สำเร็จ ๑๐๐%
+    * ตรวจสอบ Service `postgresql-X64-17` สถานะ Running และพอร์ต 5432 พร้อมรับการเชื่อมต่อ
+    * สร้างฐานข้อมูล `mpr_db`, กำหนดรหัสผ่าน Superuser `postgres` และจัดทำ `.env` เชื่อมต่อสมบูรณ์
+    * ดำเนินการ `prisma db push` ซิงค์ ๙ ตารางหลักเข้าสู่ PostgreSQL (AcademicRecord, AlmsBooking, ApprovalStep, MukhopathaRecord, PatronSamaneraPair, RoutineLog, SamaneraProfile, SarabanDocument, User)
+    * ดำเนินการ Seeding บัญชีผู้ดูแลระบบหลัก (อาจารย์ ดร.สมบูรณ์ จารุณะ) และผู้บริหารเข้าสู่ PostgreSQL สำเร็จ
+    * พัฒนาสคริปต์สลับฐานข้อมูลอัตโนมัติ `scripts/switch-db.mjs`, `scripts/switch-to-postgres.bat`, และ `scripts/switch-to-sqlite.bat`
+  - TASK-931: การตรวจสอบคุณภาพโค้ดทั้งระบบ (Comprehensive Code Quality Audit), เสริมความแข็งแกร่ง Type-Safety, Zod Schema Validation, และแยกโมดูลย่อย (Component Modularization):
+    * ติดตั้งและปรับใช้ Modern ESLint Flat Config (`eslint.config.mjs`) พร้อม `@eslint/js`, `typescript-eslint`, และ `eslint-config-next` ผ่านการตรวจ `npm run lint` ไร้ข้อผิดพลาดและคำเตือน (0 errors, 0 warnings)
+    * สร้าง Standard API Response Envelope (`src/lib/apiResponse.ts` & `src/types/common.ts`) กำหนดโครงสร้าง Response กลาง `apiSuccess`, `apiError`, `apiValidationError` รองรับ Type-safe Generics ทั่วทั้งระบบ API
+    * สร้างเลเยอร์ Zod Validation Schemas (`src/lib/validations/auth.ts`, `contact.ts`, `dataUpdater.ts`) คัดกรองและตรวจสอบ Payload ทุกช่องทางก่อนเข้าสู่ฐานข้อมูล ป้องกัน Injection และข้อมูลไม่สมบูรณ์
+    * แยกโมดูลย่อย (Component Modularization) ลดขนาดโค้ดของ ๓ หน้าขนาดใหญ่ลงกว่า ๕๐% - ๘๐%:
+      - `/contact` (ลดจาก ๑,๑๗๙ บรรทัดเหลือ ๓๒๑ บรรทัด): แยกเป็น `CampusMapCard`, `ContactDirectoryTable`, `InquiryFormCard`, `TicketStatusTracker`, `SocialChannelsGrid`
+      - `/complaints-tracking` (ลดจาก ๑,๓๙๔ บรรทัดเหลือ ๗๒๒ บรรทัด): แยกเป็น `UnifiedTaskTrackerTable`, `DigitalServicesGateway`, `ComplaintSubmissionModal`, `ComplaintDetailModal`
+      - `/attendance-tracking` (ลดจาก ๑,๑๙๖ บรรทัดเหลือ ๑๗๗ บรรทัด): สกัดข้อมูลห้องซูมสู่ `src/data/zoomScheduleData.ts` และแยกเป็น `ZoomClassroomsGrid`, `TuitionServicesCard`, `PetitionsTrackerCard`, `DownloadCenterCard`
+    * รวมฟังก์ชันยูทิลิตี้นิรภัย (`src/lib/utils.ts`): รวมศูนย์ `cleanIdDigits`, `formatCitizenId`, `maskCitizenId` (PDPA สังฆะและสามเณรผู้เยาว์), `getErrorMessage`, และ `cn`
+    * ขยายชุดทดสอบอัตโนมัติสู่ ๖๕ การทดสอบ (`npm test` / `tests/system-audit.test.mjs`): ครอบคลุมความถูกต้องของข้อมูลสังฆะ ๑๔๓ รูป, งบ ๘๑.๓๙ ลบ., เมทาดาทา ๒๖ เส้นทาง, สิทธิ์ RBAC, ระบบล็อกอิน ๔ รหัส, Zod Schemas, ยูทิลิตี้, API Envelopes, และขนาดคอมโพเนนต์ ผ่านฉลุย ๑๐๐% (๖๕/๖๕ รายการ)
+    * ผ่านการตรวจ Type Check (`npx tsc --noEmit`) 0 errors และ Next.js Production Build (`npm run build`) ๓๖/๓๖ routes สำเร็จสมบูรณ์แบบ
+* **Latest Action:** ดำเนินการตรวจสอบคุณภาพโค้ดทั้งระบบ (Code Quality Audit), ปรับใช้ ESLint Flat Config, วางระบบ Zod Validation & Uniform API Response, แยกคอมโพเนนต์หน้าใหญ่ ๓ โมดูล, ขยายชุดทดสอบสู่ ๖๕ การทดสอบ (100% Pass), และผ่าน Next.js Production Build สมบูรณ์แบบ ๑๐๐%
 
 ---
 
@@ -153,6 +171,8 @@
 | **MOD-22**| Smart Document Reader & Official File Viewer | ✅ Completed | `src/app/file-viewer/page.tsx`, `src/components/DocumentViewerModal.tsx`, `src/app/api/file-viewer/route.ts` (DOCX, XLSX, PDF, Text) |
 | **MOD-23**| Central Data Update & Sync Hub | ✅ Completed | `src/app/data-updater/page.tsx`, `src/app/data-updater/layout.tsx`, `src/components/QuickDataUpdateModal.tsx`, `src/app/api/data-updater/route.ts` (Super Admin & ๑๔ ฝ่าย, Batch Excel/CSV, Freshness Monitor, Audit Trail) |
 | **MOD-24**| Multi-Identifier Auth, Google SSO & Member Registration | ✅ Completed | `src/app/login/page.tsx`, `src/app/register/page.tsx`, `src/data/authData.ts`, `src/context/AuthContext.tsx`, `src/components/DigitalMemberCardModal.tsx`, `/api/auth/*` |
+| **QA-ENG**| Quality Assurance, Type Safety & Modular Architecture | ✅ Completed | Modern ESLint Flat Config, 65/65 Unit & System Tests (`npm test`), Zod Schema Validation, Uniform API Envelopes, Modular Decomposition |
+
 
 
 

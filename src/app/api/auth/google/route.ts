@@ -1,25 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 import { authenticateGoogleUser, initialAuthUsers, AuthUser } from "@/data/authData";
+import { googleAuthSchema } from "@/lib/validations/auth";
+import { apiSuccess, apiError, apiValidationError } from "@/lib/apiResponse";
+import { getErrorMessage } from "@/lib/utils";
 
 // Global store reference
-let googleUsersStore: AuthUser[] = [...initialAuthUsers];
+const googleUsersStore: AuthUser[] = [...initialAuthUsers];
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, name, avatarUrl } = body;
+    const parseResult = googleAuthSchema.safeParse(body);
 
-    if (!email) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "กรุณาระบุอีเมลบัญชี Google",
-        },
-        { status: 400 }
-      );
+    if (!parseResult.success) {
+      return apiValidationError(parseResult.error);
     }
+
+    const { email, name, avatarUrl } = parseResult.data;
 
     const { user, isNew } = authenticateGoogleUser(
       email,
@@ -32,24 +31,25 @@ export async function POST(req: NextRequest) {
       googleUsersStore.push(user);
     }
 
-    const { password, ...safeUser } = user;
+    const { password: _, ...safeUser } = user;
 
-    return NextResponse.json({
-      success: true,
-      isNewMember: isNew,
-      message: isNew
+    return apiSuccess(
+      safeUser,
+      isNew
         ? `สร้างบัญชีและเข้าสู่ระบบสำเร็จด้วย Google (${email})`
         : `เข้าสู่ระบบสำเร็จด้วย Google Workspace (${email})`,
-      user: safeUser,
-      token: `mpr-google-session-${safeUser.id}-${Date.now()}`,
-    });
-  } catch (error: any) {
-    return NextResponse.json(
+      200,
       {
-        success: false,
-        error: error?.message || "เกิดข้อผิดพลาดในการยืนยันตัวตนด้วย Google",
-      },
-      { status: 500 }
+        isNewMember: isNew,
+        user: safeUser,
+        token: `mpr-google-session-${safeUser.id}-${Date.now()}`,
+      }
+    );
+  } catch (error: unknown) {
+    return apiError(
+      getErrorMessage(error, "เกิดข้อผิดพลาดในการยืนยันตัวตนด้วย Google"),
+      500
     );
   }
 }
+

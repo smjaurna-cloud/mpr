@@ -1,16 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 import { 
   AuthUser, 
   initialAuthUsers, 
   MemberCategory, 
-  cleanIdDigits, 
   formatCitizenId 
 } from "@/data/authData";
 import { SystemRole, MonasticStatus } from "@/data/mockData";
+import { registerSchema } from "@/lib/validations/auth";
+import { apiSuccess, apiError, apiValidationError } from "@/lib/apiResponse";
+import { getErrorMessage } from "@/lib/utils";
 
-let registeredStore: AuthUser[] = [...initialAuthUsers];
+const registeredStore: AuthUser[] = [...initialAuthUsers];
 
 function getRegisteredStore(): AuthUser[] {
   return registeredStore;
@@ -19,6 +21,12 @@ function getRegisteredStore(): AuthUser[] {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const parseResult = registerSchema.safeParse(body);
+
+    if (!parseResult.success) {
+      return apiValidationError(parseResult.error);
+    }
+
     const {
       memberCategory,
       title,
@@ -34,29 +42,18 @@ export async function POST(req: NextRequest) {
       phone,
       password,
       department,
-    } = body;
-
-    // Validation
-    if (!fullName || !email) {
-      return NextResponse.json(
-        { success: false, error: "กรุณากรอกชื่อ-นามสกุล และอีเมลให้ครบถ้วน" },
-        { status: 400 }
-      );
-    }
+    } = parseResult.data;
 
     // Check duplicate email
     const duplicate = registeredStore.find(
-      (u) => u.email.toLowerCase() === email.trim().toLowerCase()
+      (u) => u.email.toLowerCase() === email.toLowerCase()
     );
     if (duplicate) {
-      return NextResponse.json(
-        { success: false, error: `อีเมล "${email}" มีการลงทะเบียนในระบบแล้ว กรุณาเข้าสู่ระบบ` },
-        { status: 409 }
-      );
+      return apiError(`อีเมล "${email}" มีการลงทะเบียนในระบบแล้ว กรุณาเข้าสู่ระบบ`, 409);
     }
 
     // Determine monastic status & role
-    const cat: MemberCategory = memberCategory || "PATRON";
+    const cat: MemberCategory = (memberCategory as MemberCategory) || "PATRON";
     let monasticStatus: MonasticStatus = "LAYPERSON";
     let defaultRole: SystemRole = "PATRON_USER";
 
@@ -98,7 +95,7 @@ export async function POST(req: NextRequest) {
       title: title || (cat === "MONK" ? "พระ" : cat === "SAMANERA" ? "สามเณร" : "คุณ"),
       paliName: paliName?.trim() || undefined,
       sanghaRank: sanghaRank?.trim() || undefined,
-      vassa: vassa ? Number(vassa) : undefined,
+      vassa: vassa !== undefined ? Number(vassa) : undefined,
       originTemple: originTemple?.trim() || undefined,
       email: email.trim().toLowerCase(),
       phone: phone?.trim() || "",
@@ -122,17 +119,17 @@ export async function POST(req: NextRequest) {
 
     const { password: _, ...safeMember } = newMember;
 
-    return NextResponse.json({
-      success: true,
-      message: `สมัครสมาชิกสำเร็จ! ยินดีต้อนรับสู่มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย รหัสสมาชิกของคุณคือ ${memberId}`,
-      memberId,
-      user: safeMember,
-      token: `mpr-session-${newMember.id}-${Date.now()}`,
-    });
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error?.message || "เกิดข้อผิดพลาดในการสมัครสมาชิก" },
-      { status: 500 }
+    return apiSuccess(
+      safeMember,
+      `สมัครสมาชิกสำเร็จ! ยินดีต้อนรับสู่มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย รหัสสมาชิกของคุณคือ ${memberId}`,
+      201,
+      {
+        memberId,
+        user: safeMember,
+        token: `mpr-session-${newMember.id}-${Date.now()}`,
+      }
     );
+  } catch (error: unknown) {
+    return apiError(getErrorMessage(error, "เกิดข้อผิดพลาดในการสมัครสมาชิก"), 500);
   }
 }
