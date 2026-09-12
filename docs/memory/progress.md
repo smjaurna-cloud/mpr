@@ -183,7 +183,23 @@
     * ซิงค์ข้อมูลข้ามหน้าด้วย `localStorage` (`mvu_academic_programs_curricula_v1`) พร้อมปุ่มรีเซ็ตค่าเริ่มต้นของวิทยาลัย
     * เพิ่มเมนูใน `src/components/Sidebar.tsx` และเพิ่ม URL ใน `src/app/sitemap.ts`
     * เพิ่มชุดทดสอบอัตโนมัติหมวดที่ ๑๓ ใน `tests/system-audit.test.mjs` ผ่านครบ ๘๖/๘๖ รายการ (100% Pass) และ Next.js Production Build ๓๘/๓๘ routes สำเร็จสมบูรณ์แบบ
-* **Latest Action:** ติดตั้งเส้นทาง `/academic-programs` และโมดอล "แก้ไขหลักสูตร" พร้อมระบบนำเข้า/ส่งออก JSON ครบวงจร ทั้งดาวน์โหลดไฟล์ คัดลอก ตรวจสอบโครงสร้างความถูกต้อง และซิงค์ LocalStorage, ผ่านชุดทดสอบ ๘๖/๘๖ รายการ และ Next.js Production Build ๓๘/๓๘ routes สำเร็จสมบูรณ์แบบ
+  - TASK-938: แปลงระบบเป็นโปรแกรมติดตั้งบนคอมพิวเตอร์ Windows PC (Desktop Application & Installer):
+    * ระบบ Electron Enterprise Application:
+      - กำหนดค่า Next.js 15 Standalone Bundle (`output: "standalone"` ใน `next.config.ts`) สำหรับรวมไฟล์เซิร์ฟเวอร์และ Node dependencies ที่จำเป็นเป็นชุดกะทัดรัด
+      - `electron/main.cjs`: สคริปต์ Main Process รองรับการตรวจจับพอร์ต TCP อัตโนมัติ (Dynamic Port Hunting), ควบคุมวงจรชีวิตของ Next.js Standalone Server, ตรวจสอบความพร้อมผ่าน Health Check, สร้างหน้าต่างโปรแกรม `BrowserWindow` (๑๓๐๐x๘๖๐) พุทธศิลป์สง่างาม, เมนูถาดระบบ (System Tray) พับเก็บหน้าจอและเรียกคืนได้รวดเร็ว, และคำสั่งยุติโพรเซสลูก (`taskkill /F /T`) หมดจดเมื่อปิดโปรแกรม ป้องกัน Zombie Node.exe
+      - `electron/preload.cjs`: รักษาความปลอดภัยตามมาตรฐาน Electron Security ปิด Node Integration ใน Renderer และเปิดเฉพาะ Desktop API ผ่าน `contextBridge`
+      - `electron-builder.json`: กำหนดค่าแพ็กเกจสำหรับ Windows x64 รองรับ ๒ เป้าหมายหลัก:
+        ๑. NSIS Installer (`MVU-College-ERP-Setup-0.1.0.exe`) พร้อมตัวช่วยติดตั้ง Wizard, เลือกไดเรกทอรี, สร้างไอคอนหน้าจอ Desktop และ Start Menu
+        ๒. Portable Executable (`MVU-College-ERP-Portable-0.1.0.exe`) พกพาใส่แฟลชไดรฟ์รันได้ทันทีโดยไม่ต้องติดตั้ง
+      - เพิ่มสคริปต์คำสั่งใน `package.json`: `npm run desktop:dev`, `npm run desktop:pack`, `npm run desktop:build`, `npm run desktop:shortcut`
+    * ระบบ Instant Windows Native App Launcher (Zero-Install Lightweight Mode):
+      - `start_desktop_app.bat`: สคริปต์เปิดแอปพลิเคชันเดสก์ท็อปทันใจโดยไม่ต้องติดตั้ง ตรวจสอบพอร์ต 3001 อัตโนมัติ หากยังไม่เริ่มทำงานจะสตาร์ทเซิร์ฟเวอร์ในพื้นหลัง แล้วเปิด Microsoft Edge ในโหมด App Mode (`--app=http://localhost:3001 --window-size=1280,850`) ให้ความรู้สึกเป็นโปรแกรมเดสก์ท็อปแท้ ๑๐๐% ไม่มีแถบ URL หรือ Bookmark กวนใจ
+      - `create_desktop_shortcut.bat` และ `scripts/create-windows-shortcut.vbs`: ดับเบิลคลิกเดียวเพื่อสร้าง Shortcut บนหน้าจอ Windows Desktop อัตโนมัติ พร้อมตั้งชื่อ "มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย (ERP)" และไอคอนสถาบัน
+    * การทดสอบและยืนยันคุณภาพ:
+      - เพิ่มชุดทดสอบ Section 14 ใน `tests/system-audit.test.mjs` ผ่านครบถ้วน ๙๐/๙๐ รายการ (100% Pass)
+      - ESLint ผ่าน 0 errors, 0 warnings
+      - TypeScript Strict Mode ผ่าน 0 errors
+* **Latest Action:** พัฒนาระบบ Desktop Packaging บน Windows PC ทั้งแบบ Electron Enterprise Installer (.exe NSIS/Portable) และ Instant Native App Launcher (.bat & Desktop Shortcut), ผ่านชุดทดสอบ ๙๐/๙๐ รายการ, ESLint และ Type-Check สมบูรณ์แบบ ๑๐๐%
 
 ---
 
@@ -216,8 +232,10 @@
 | **MOD-22**| Smart Document Reader & Official File Viewer | ✅ Completed | `src/app/file-viewer/page.tsx`, `src/components/DocumentViewerModal.tsx`, `src/app/api/file-viewer/route.ts` (DOCX, XLSX, PDF, Text) |
 | **MOD-23**| Central Data Update & Sync Hub | ✅ Completed | `src/app/data-updater/page.tsx`, `src/app/data-updater/layout.tsx`, `src/components/QuickDataUpdateModal.tsx`, `src/app/api/data-updater/route.ts` (Super Admin & ๑๔ ฝ่าย, Batch Excel/CSV, Freshness Monitor, Audit Trail) |
 | **MOD-24**| Multi-Identifier Auth, Google SSO & Member Registration | ✅ Completed | `src/app/login/page.tsx`, `src/app/register/page.tsx`, `src/data/authData.ts`, `src/context/AuthContext.tsx`, `src/components/DigitalMemberCardModal.tsx`, `/api/auth/*` |
-| **QA-ENG**| Quality Assurance, Type Safety & Modular Architecture | ✅ Completed | Modern ESLint Flat Config, 73/73 Unit & System Tests (`npm test`), Zod Schema Validation, Uniform API Envelopes, Modular Decomposition |
+| **PC-DESK**| Windows Desktop App & Installer (.exe & Launcher) | ✅ Completed | `electron/main.cjs`, `electron-builder.json`, `start_desktop_app.bat`, `create_desktop_shortcut.bat`, NSIS Installer, Portable Exe, Edge App Mode |
+| **QA-ENG**| Quality Assurance, Type Safety & Modular Architecture | ✅ Completed | Modern ESLint Flat Config, 90/90 Unit & System Tests (`npm test`), Zod Schema Validation, Uniform API Envelopes, Modular Decomposition |
 | **SEC-PROD**| Production Security Hardening & Malware Defense | ✅ Completed | CSP Anti-Crypto Mining, Path Traversal Guard, Rate Limiting, Scrypt Password Hashing, WannaCry SMB 445 Check, Prototype Pollution Sanitization |
+
 
 
 

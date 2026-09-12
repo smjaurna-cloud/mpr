@@ -10,8 +10,11 @@ export default tseslint.config(
       "smst/**",
       "public/**",
       "tests/**",
+      "electron/**",
+      "dist-desktop/**",
       "next-env.d.ts",
       "*.bat",
+      "*.vbs",
       "*.xlsx",
       "*.pdf",
       "*.docx"

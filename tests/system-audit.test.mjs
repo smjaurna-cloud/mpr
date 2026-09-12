@@ -693,6 +693,45 @@ runTest("Verify /graduate-curriculum route also integrates CurriculumEditJsonMod
   assert.ok(content.includes("นำเข้า JSON"), "Must contain 'นำเข้า JSON' action button");
 });
 
+// 14. Windows Desktop App Packaging & Standalone Execution
+console.log("\n--- 14. Windows Desktop App Packaging & Standalone Execution ---");
+
+runTest("Verify next.config.ts has output: 'standalone' enabled for self-contained desktop runtime", () => {
+  const nextConfigPath = path.join(rootDir, "next.config.ts");
+  const content = fs.readFileSync(nextConfigPath, "utf-8");
+  assert.ok(
+    content.includes('output: "standalone"') || content.includes("output: 'standalone'"),
+    "next.config.ts must set output: 'standalone'"
+  );
+});
+
+runTest("Verify electron/main.cjs exists and implements port detection, server spawning, and tray support", () => {
+  const mainPath = path.join(rootDir, "electron/main.cjs");
+  assert.ok(fs.existsSync(mainPath), "electron/main.cjs must exist");
+  const content = fs.readFileSync(mainPath, "utf-8");
+  assert.ok(content.includes("getAvailablePort"), "Must implement port detection");
+  assert.ok(content.includes("standaloneServer"), "Must support standalone server");
+  assert.ok(content.includes("setupTray"), "Must support system tray");
+  assert.ok(content.includes("BrowserWindow"), "Must create BrowserWindow");
+  assert.ok(content.includes("before-quit"), "Must handle graceful shutdown");
+});
+
+runTest("Verify electron-builder.json configures Windows NSIS installer and portable targets", () => {
+  const ebPath = path.join(rootDir, "electron-builder.json");
+  assert.ok(fs.existsSync(ebPath), "electron-builder.json must exist");
+  const config = JSON.parse(fs.readFileSync(ebPath, "utf-8"));
+  assert.strictEqual(config.appId, "th.ac.mcu.palitheravada.erp");
+  assert.ok(config.win, "Must configure win target");
+  assert.ok(config.nsis, "Must configure nsis installer");
+  assert.ok(config.portable, "Must configure portable target");
+});
+
+runTest("Verify Windows Native App Launcher scripts exist and are executable", () => {
+  assert.ok(fs.existsSync(path.join(rootDir, "start_desktop_app.bat")), "start_desktop_app.bat must exist");
+  assert.ok(fs.existsSync(path.join(rootDir, "create_desktop_shortcut.bat")), "create_desktop_shortcut.bat must exist");
+  assert.ok(fs.existsSync(path.join(rootDir, "scripts/create-windows-shortcut.vbs")), "create-windows-shortcut.vbs must exist");
+});
+
 // Summary
 console.log("\n==========================================================");
 console.log(`  AUDIT RESULTS: ${passedCount} / ${totalTests} TESTS PASSED`);

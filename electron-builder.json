@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "th.ac.mcu.palitheravada.erp",
+  "productName": "MVU-College-ERP",
+  "copyright": "Copyright © 2026 มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย (วส. มจร)",
+  "directories": {
+    "output": "dist-desktop"
+  },
+  "files": [
+    "electron/**/*",
+    ".next/standalone/**/*",
+    ".next/static/**/*",
+    "public/**/*",
+    "package.json"
+  ],
+  "extraMetadata": {
+    "main": "electron/main.cjs"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      {
+        "target": "portable",
+        "arch": ["x64"]
+      }
+    ],
+    "artifactName": "${productName}-Setup-${version}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "วิทยาลัยสงฆ์บาลีเถรวาท (MVU ERP)",
+    "uninstallDisplayName": "ถอนการติดตั้ง มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย ERP"
+  },
+  "portable": {
+    "artifactName": "${productName}-Portable-${version}.${ext}"
+  }
+}
