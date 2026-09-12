@@ -18,14 +18,17 @@ import {
   Briefcase,
   Printer,
   ChevronRight,
-  BookMarked
+  BookMarked,
+  Globe
 } from "lucide-react";
+import Link from "next/link";
 import {
   graduateCurricula,
   getCurriculumStats,
   GraduateCurriculum,
   CourseItem
 } from "@/data/graduateCurriculumData";
+import { facultyPublications } from "@/data/facultyPublicationsData";
 
 export default function GraduateCurriculumPage() {
   const stats = useMemo(() => getCurriculumStats(), []);
@@ -386,6 +389,25 @@ export default function GraduateCurriculumPage() {
                     <span className="font-semibold text-gray-700">ติดต่อ:</span> {lec.contact}
                   </div>
                 )}
+                {(() => {
+                  const cleanName = lec.name.replace(/^(อาจารย์|ดร\.|พระธรรม|พระมหา|รศ\.|ผศ\.)\s*/g, "").trim();
+                  const pubs = facultyPublications.filter(p => p.facultyPersonnel.includes(cleanName) || p.authors.some(a => a.includes(cleanName)));
+                  if (pubs.length === 0) return null;
+                  return (
+                    <div className="pt-2 border-t border-amber-100/80 flex items-center justify-between">
+                      <span className="text-[10px] text-purple-900 font-semibold flex items-center gap-1">
+                        <Globe className="w-3 h-3 text-purple-600" />
+                        <span>{pubs.length} บทความ TCI / วารสาร</span>
+                      </span>
+                      <Link
+                        href="/research-qa"
+                        className="text-[10px] font-bold text-purple-700 hover:text-purple-900 hover:underline"
+                      >
+                        สืบค้น TCI-ThaiJO &rarr;
+                      </Link>
+                    </div>
+                  );
+                })()}
               </div>
             ))}
           </div>

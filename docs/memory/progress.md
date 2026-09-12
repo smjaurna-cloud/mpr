@@ -145,7 +145,20 @@
     * ยกระดับการเข้ารหัสรหัสผ่าน (`src/lib/passwordSecurity.ts`): ใช้ NIST-recommended Scrypt algorithm (`crypto.scryptSync`) ผสม Salt สุ่ม ๑๖ ไบต์ พร้อม `crypto.timingSafeEqual` ป้องกัน Side-channel Timing Attacks และบูรณาการเข้าสู่ `src/data/authData.ts`
     * สร้างชุดสคริปต์ตรวจสอบความปลอดภัย: `scripts/security-audit-scan.mjs` (ผ่านการตรวจสอบ ๑๐/๑๐ รายการ) และ `scripts/windows-hardening-check.bat` (ตรวจสอบพอร์ต SMB 445 ป้องกัน WannaCry และพอร์ต PostgreSQL 5432 ป้องกันบอตเน็ต Kinsing)
     * ขยายชุดทดสอบอัตโนมัติรวม ๗๓ การทดสอบ (`npm test` / `tests/system-audit.test.mjs`) ผ่านครบ ๑๐๐% (๗๓/๗๓ รายการ), ESLint 0 errors, TypeScript 0 errors, และ Next.js Production Build ๓๖/๓๖ routes สำเร็จ
-* **Latest Action:** ดำเนินการยกระดับความปลอดภัยระดับ Production (Production Security Hardening), ติดตั้ง CSP Header สกัดกั้น Crypto Mining, ปิดช่องโหว่ Path Traversal ใน File Viewer, ติดตั้ง Rate Limiting ป้องกัน Brute-force, เข้ารหัสรหัสผ่านด้วย Scrypt + Salt, สร้างเครื่องมือสแกนและตรวจสอบพอร์ต SMB 445 (WannaCry), ผ่าน ๗๓/๗๓ Automated Tests และ Next.js Production Build สำเร็จ ๑๐๐%
+  - TASK-933: จัดทำพิมพ์เขียวและคู่มือการนำเสนอผลงาน (Master Presentation Guide & Live Demo Sequence) ครอบคลุม:
+    * Executive Pitch Strategy & Single Source of Truth: สังฆะ ๑๔๓ รูป (ภิกษุ ๒๐ + สามเณร ๑๒๓), งบปี ๖๙ วส. มจร ๘๑.๓๙ ลบ., ๒๔ โมดูลครบวงจร
+    * โครงสร้างสไลด์นำเสนอ ๑๐ หน้า (Slide Deck Blueprint) เจาะลึก ๔ ปีกงานสถาบัน และความมั่นคงปลอดภัย
+    * สคริปต์บทพูดและถ้อยคำกราบเรียนสงฆ์ (Presenter Script & Monastic Decorum) สำหรับกราบเรียนพระเดชพระคุณพระธรรมวชิราจารย์ และคณะผู้บริหาร
+    * ลำดับการสาธิตระบบจริง (Live Demonstration Sequence ๕ ซีนประทับใจ: Executive Dashboard, Multi-Identifier Login & บัตรสมาชิกดิจิทัล, ภัตตาหารโยมอุปถัมภ์ & ใบอนุโมทนาบัตรทองคำ A4, กระดานดุษฎีนิพนธ์ & Document Viewer, และเกราะความปลอดภัยระดับสากล)
+    * คลังคำถามและแนวทางตอบข้อซักถามคณะกรรมการ (Anticipated Q&A Matrix) ๔ ประเด็นสำคัญ (การใช้งานของสงฆ์, PDPA ผู้เยาว์, การป้องกันภัยไซเบอร์, และความพร้อมใช้งานบน Production)
+  - TASK-934: คลังบทความวิชาการและวิจัยระดับสากล TCI-ThaiJO (Faculty Publications & Global Journals Repository):
+    * สกัดและรวบรวมข้อมูลผลงานตีพิมพ์จริงของคณาจารย์และบุคลากรในระบบ ๘ รูป/ท่าน รวม ๒๑ บทความวิจัยและวิชาการ จากแฟ้มประวัติทางการ (`docs/faculty/`)
+    * จัดทำโมเดลข้อมูล `src/data/facultyPublicationsData.ts` ระบุรายละเอียดชื่อเรื่อง (ไทย-อังกฤษ), รายชื่อผู้แต่ง, วารสาร, ปีที่, ฉบับที่, ปี พ.ศ./ค.ศ., เลขหน้า, บทคัดย่อ, คำสำคัญ, ดัชนีวารสาร (Scopus Q1 ๑ เรื่อง, TCI กลุ่ม ๑ ๗ เรื่อง, TCI กลุ่ม ๒ ๑๓ เรื่อง) พร้อม Direct URL ลิงก์ตรงสู่บทความบนฐานข้อมูลวารสารจริง (https://www.tci-thaijo.org/, https://so0x.tci-thaijo.org/, Scopus Journal)
+    * พัฒนาหน้าแสดงผลใน `/research-qa` เพิ่มแท็บ "บทความวิชาการ & วิจัยระดับสากล / TCI-ThaiJO" พร้อมการ์ดสถิติสรุป ๔ มิติ, แถบศูนย์เชื่อมโยง TCI-ThaiJO, ระบบสืบค้นและตัวกรองบุคลากร ๘ ท่าน/ดัชนี/ประเภท, ปุ่มเปิดอ่านบนวารสารตรง (`ExternalLink`), และปุ่มคัดลอกรายการอ้างอิง (Copy Citation)
+    * เชื่อมโยงผลงานตีพิมพ์สู่บัตรคณาจารย์ในหน้าหลักสูตรระดับบัณฑิตศึกษา (`/graduate-curriculum`) แสดง Badge จำนวนบทความ TCI พร้อมลิงก์สืบค้น
+    * พัฒนา Backend API Route: `src/app/api/publications/route.ts` รองรับการสืบค้นและกรองผ่าน Query Parameters
+    * ขยายชุดทดสอบอัตโนมัติเป็น ๗๙ การทดสอบ (`tests/system-audit.test.mjs`): ผ่านฉลุย ๑๐๐% (๗๙/๗๙ รายการ), ESLint 0 errors, TypeScript 0 errors, และ Next.js Production Build ๓๗/๓๗ routes สำเร็จ ๑๐๐%
+* **Latest Action:** บูรณาการคลังบทความวิชาการและวิจัยระดับสากลและฐานข้อมูล TCI-ThaiJO ของบุคลากรในระบบ (ดร.สมบูรณ์ จารุณะ, พระธรรมวชิราจารย์, พระมหาศุภวัฒน์, ดร.ธนสิทธิ์, พระมหาเสฏฐวุฒิ, รศ.ดร.เวทย์, พระมหาทรงชัย) ครบ ๒๑ บทความ พร้อมลิงก์เชื่อมต่อตรงสู่วารสารจริง, เพิ่มแท็บใน `/research-qa`, เพิ่ม Badge ใน `/graduate-curriculum`, สร้าง API `/api/publications`, ผ่านการทดสอบ ๗๙/๗๙ รายการ และ Next.js Production Build ๓๗ เส้นทางเรียบร้อยสมบูรณ์
 
 ---
 

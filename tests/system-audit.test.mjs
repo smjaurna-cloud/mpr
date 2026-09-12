@@ -9,6 +9,7 @@ import { contactInquirySchema, updateTicketSchema } from "../src/lib/validations
 import { dataUpdatePayloadSchema } from "../src/lib/validations/dataUpdater.ts";
 import { checkRateLimit, clearRateLimitStore } from "../src/lib/rateLimiter.ts";
 import { hashPassword, verifyPassword, isPasswordHashed } from "../src/lib/passwordSecurity.ts";
+import { facultyPublications, facultyPublicationStats } from "../src/data/facultyPublicationsData.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -550,6 +551,74 @@ runTest("Verify Windows OS hardening script checks port 445 (SMB) and port 5432 
   assert.ok(scriptContent.includes("445"), "Must check SMB port 445 (WannaCry vector)");
   assert.ok(scriptContent.includes("5432"), "Must check PostgreSQL port 5432 (Database vector)");
   assert.ok(scriptContent.includes("SMB1Protocol"), "Must advise disabling SMBv1");
+});
+
+// 11. Faculty Research Publications & TCI-ThaiJO Repository
+console.log("\n--- 11. Faculty Research Publications & TCI-ThaiJO Global Repository ---");
+
+runTest("Verify facultyPublications contains authentic articles with required schema fields", () => {
+  assert.ok(facultyPublications.length >= 15, `Must have at least 15 publications (currently ${facultyPublications.length})`);
+  facultyPublications.forEach((pub) => {
+    assert.ok(pub.id, "Publication must have id");
+    assert.ok(pub.title, "Publication must have title");
+    assert.ok(pub.authors.length > 0, "Publication must have authors");
+    assert.ok(pub.facultyPersonnel, "Publication must have facultyPersonnel");
+    assert.ok(pub.journal, "Publication must have journal name");
+    assert.ok(pub.yearBE >= 2560, "Publication year must be >= 2560");
+    assert.ok(pub.journalTier, "Publication must have journalTier");
+    assert.ok(pub.externalUrl, "Publication must have externalUrl");
+  });
+});
+
+runTest("Verify all externalUrls start with http:// or https:// and link to legitimate journal databases", () => {
+  facultyPublications.forEach((pub) => {
+    assert.ok(
+      pub.externalUrl.startsWith("http://") || pub.externalUrl.startsWith("https://"),
+      `externalUrl must start with http(s): ${pub.externalUrl}`
+    );
+    const validDomains = ["tci-thaijo.org", "zkdx.ch", "scopus.com", "wjst.wu.ac.th"];
+    const hasValidDomain = validDomains.some((d) => pub.externalUrl.includes(d));
+    assert.ok(
+      hasValidDomain,
+      `externalUrl should point to a recognized academic database or journal domain: ${pub.externalUrl}`
+    );
+  });
+});
+
+runTest("Verify Scopus Q1 international publication is indexed with valid metadata", () => {
+  const scopusPubs = facultyPublications.filter((p) => p.journalTier === "Scopus Q1");
+  assert.ok(scopusPubs.length >= 1, "Must contain at least 1 Scopus Q1 article");
+  const scopus = scopusPubs[0];
+  assert.ok(scopus.database === "Scopus", "Database must be Scopus");
+  assert.ok(scopus.externalUrl.includes("zkdx.ch"), "Must have direct journal URL");
+});
+
+runTest("Verify key college personnel have authentic publications in repository", () => {
+  const authorsSet = new Set(facultyPublications.map((p) => p.facultyPersonnel));
+  assert.ok(Array.from(authorsSet).some((a) => a.includes("สมบูรณ์")), "Must include Dr. Somboon Jaruna publications");
+  assert.ok(Array.from(authorsSet).some((a) => a.includes("พระธรรมวชิราจารย์")), "Must include Phra Dharmavajiracharya publications");
+  assert.ok(Array.from(authorsSet).some((a) => a.includes("พระมหาศุภวัฒน์")), "Must include Phramaha Supawat publications");
+  assert.ok(Array.from(authorsSet).some((a) => a.includes("ธนสิทธิ์")), "Must include Dr. Thanasit Chatsuwan publications");
+  assert.ok(facultyPublicationStats.totalPublications === facultyPublications.length, "Stats total must match array length");
+});
+
+runTest("Verify /api/publications API route exists and exports GET handler with standard response", () => {
+  const apiPubPath = path.join(rootDir, "src/app/api/publications/route.ts");
+  assert.ok(fs.existsSync(apiPubPath), "api/publications/route.ts must exist");
+  const content = fs.readFileSync(apiPubPath, "utf-8");
+  assert.ok(content.includes("export async function GET"), "Must export GET handler");
+  assert.ok(content.includes("apiSuccess"), "Must use standard apiSuccess response envelope");
+  assert.ok(content.includes("facultyPublications"), "Must reference facultyPublications");
+});
+
+runTest("Verify Research-QA page integrates TCI-ThaiJO publications tab and direct portal links", () => {
+  const researchPagePath = path.join(rootDir, "src/app/research-qa/page.tsx");
+  assert.ok(fs.existsSync(researchPagePath), "research-qa/page.tsx must exist");
+  const content = fs.readFileSync(researchPagePath, "utf-8");
+  assert.ok(content.includes("facultyPublications"), "Must import facultyPublications");
+  assert.ok(content.includes("https://www.tci-thaijo.org/en"), "Must include official TCI-ThaiJO link");
+  assert.ok(content.includes("activeTab === \"publications\""), "Must have publications tab");
+  assert.ok(content.includes("คัดลอกรายการอ้างอิง"), "Must provide citation copy button");
 });
 
 // Summary
