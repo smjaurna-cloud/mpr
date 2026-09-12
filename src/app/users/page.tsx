@@ -25,18 +25,31 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
+  Upload,
+  FileSpreadsheet,
   AlertCircle,
   Eye,
   EyeOff
 } from "lucide-react";
 import { mockSystemUsers, SystemUser, SystemRole, MonasticStatus } from "@/data/mockData";
+import UserCsvImportExportModal from "@/components/users/UserCsvImportExportModal";
+import UserCsvManagementCard from "@/components/users/UserCsvManagementCard";
 
 export default function UserManagementPage() {
   const [users, setUsers] = useState<SystemUser[]>(mockSystemUsers);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRole, setSelectedRole] = useState<string>("ALL");
   const [selectedMonasticStatus, setSelectedMonasticStatus] = useState<string>("ALL");
-  const [activeTab, setActiveTab] = useState<"directory" | "rbac-matrix" | "disrobe-log">("directory");
+  const [activeTab, setActiveTab] = useState<"directory" | "rbac-matrix" | "disrobe-log" | "csv-hub">("directory");
+
+  // CSV Modal State
+  const [showCsvModal, setShowCsvModal] = useState(false);
+  const [csvModalMode, setCsvModalMode] = useState<"import" | "export">("import");
+
+  const handleBatchImportUsers = (newImportedUsers: SystemUser[]) => {
+    setUsers((prev) => [...newImportedUsers, ...prev]);
+    showNotification(`นำเข้าข้อมูลผู้ใช้งานสำเร็จเรียบร้อยแล้ว จำนวน ${newImportedUsers.length} รายการ`);
+  };
 
   // Pagination
   const [userPage, setUserPage] = useState(1);
@@ -217,11 +230,28 @@ export default function UserManagementPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
           <button
             type="button"
-            onClick={handleExportUsersCsv}
+            onClick={() => {
+              setCsvModalMode("import");
+              setShowCsvModal(true);
+            }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-semibold shadow-sm transition-all"
+            title="นำเข้าผู้ใช้งานจากไฟล์ CSV แบบกลุ่ม"
+          >
+            <Upload className="w-4 h-4 text-amber-700" />
+            <span>นำเข้า CSV</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setCsvModalMode("export");
+              setShowCsvModal(true);
+            }}
             className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-slate-700 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-sm transition-all"
+            title="ส่งออกรายชื่อผู้ใช้งานเป็นไฟล์ CSV (UTF-8 BOM รองรับ Excel)"
           >
             <Download className="w-4 h-4" />
             <span>ส่งออก CSV</span>
@@ -279,11 +309,11 @@ export default function UserManagementPage() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 text-xs font-semibold">
+      <div className="flex items-center gap-2 border-b border-slate-200 text-xs font-semibold overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab("directory")}
-          className={`pb-3 px-3 transition-all border-b-2 ${
+          className={`pb-3 px-3 transition-all border-b-2 whitespace-nowrap ${
             activeTab === "directory"
               ? "border-amber-600 text-amber-800 font-bold"
               : "border-transparent text-slate-500 hover:text-slate-800"
@@ -294,13 +324,25 @@ export default function UserManagementPage() {
         <button
           type="button"
           onClick={() => setActiveTab("rbac-matrix")}
-          className={`pb-3 px-3 transition-all border-b-2 ${
+          className={`pb-3 px-3 transition-all border-b-2 whitespace-nowrap ${
             activeTab === "rbac-matrix"
               ? "border-amber-600 text-amber-800 font-bold"
               : "border-transparent text-slate-500 hover:text-slate-800"
           }`}
         >
           ตารางกำหนดสิทธิ์รายโมดูล (RBAC Matrix)
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("csv-hub")}
+          className={`inline-flex items-center gap-1.5 pb-3 px-3 transition-all border-b-2 whitespace-nowrap ${
+            activeTab === "csv-hub"
+              ? "border-amber-600 text-amber-800 font-bold"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <FileSpreadsheet className="w-4 h-4 text-amber-600" />
+          <span>ศูนย์นำเข้า-ส่งออก CSV (CSV Hub)</span>
         </button>
       </div>
 
@@ -614,6 +656,16 @@ export default function UserManagementPage() {
             </table>
           </div>
         </div>
+      )}
+
+      {/* TAB 3: CSV Hub Full Workspace */}
+      {activeTab === "csv-hub" && (
+        <UserCsvManagementCard
+          users={users}
+          filteredUsers={filteredUsers}
+          onImportUsers={handleBatchImportUsers}
+          onNotify={showNotification}
+        />
       )}
 
       {/* MODAL 1: Add New User */}
@@ -967,6 +1019,17 @@ export default function UserManagementPage() {
           </div>
         </div>
       )}
+
+      {/* CSV Import/Export Modal */}
+      <UserCsvImportExportModal
+        key={`csv-modal-${csvModalMode}`}
+        isOpen={showCsvModal}
+        onClose={() => setShowCsvModal(false)}
+        users={users}
+        filteredUsers={filteredUsers}
+        onImportUsers={handleBatchImportUsers}
+        defaultMode={csvModalMode}
+      />
     </div>
   );
 }

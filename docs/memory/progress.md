@@ -167,7 +167,14 @@
       ๓. Linter: 0 errors, 0 warnings
       ๔. Type-Check: Strict Mode 0 errors
       ๕. Next.js Production Build: Prerendered ๓๗/๓๗ static & dynamic routes สำเร็จสมบูรณ์แบบ
-* **Latest Action:** ตรวจสอบระบบทั้งสิ้น ๕ มิติ ขจัดคำเตือน ESLint และ Node.js Typeless Module จนหมดสิ้น (Zero Errors, Zero Warnings), ผ่านชุดทดสอบ ๗๙/๗๙ รายการ, ผ่าน Production Security Scan ๑๐/๑๐ รายการ, สร้าง Production Build ๓๗ เส้นทางสำเร็จ ๑๐๐% และ Push ขึ้นสู่ GitHub เรียบร้อย
+  - TASK-936: ระบบนำเข้า (Import) และส่งออก (Export) ข้อมูลผู้ใช้งานด้วยไฟล์ CSV มาตรฐานสากล (MOD-06: `/users`):
+    * พัฒนาโมดอลนำเข้าและส่งออกอเนกประสงค์ `UserCsvImportExportModal.tsx`:
+      - นำเข้า (Import): ลากวางหรือเลือกไฟล์ CSV, ตัวแจกแจงแบบ Quote-aware ป้องกันเครื่องหมายจุลภาคคั่นในข้อความ, สร้างแม่แบบตัวอย่าง CSV ให้ดาวน์โหลด (`แม่แบบ_นำเข้าผู้ใช้งาน_วส_มจร.csv`), แสดงตารางพรีวิวและตรวจสอบความถูกต้องของข้อมูล (Validation Preview) จำแนกแถวสมบูรณ์ ข้อผิดพลาด และอีเมลซ้ำ พร้อมปุ่มบันทึกนำเข้าชุดใหญ่
+      - ส่งออก (Export): รองรับการเลือกขอบเขตข้อมูล ๕ รูปแบบ (ข้อมูลทั้งหมด, ตามเงื่อนไขตัวกรอง, เฉพาะพระภิกษุ, เฉพาะสามเณร, เฉพาะคฤหัสถ์), มีตัวเลือกแสดง/ซ่อนรหัสผ่าน, และเข้ารหัสด้วย UTF-8 BOM (`\uFEFF`) ทำให้เปิดด้วย Microsoft Excel บน Windows ได้ภาษาไทยถูกต้อง ๑๐๐% ไม่เป็นภาษาต่างดาว
+    * พัฒนาพื้นที่ทำงานศูนย์นำเข้า-ส่งออก CSV เต็มรูปแบบ `UserCsvManagementCard.tsx`: ติดตั้งเป็นแท็บที่ ๓ ในหน้า `/users` ("ศูนย์นำเข้า-ส่งออก CSV / CSV Hub")
+    * ปรับปรุงหน้า `src/app/users/page.tsx`: เพิ่มปุ่ม "นำเข้า CSV" (Upload) และ "ส่งออก CSV" (Download) ในแถบเมนูด้านบน, เพิ่มแท็บที่ ๓ "ศูนย์นำเข้า-ส่งออก CSV (CSV Hub)", และติดตั้ง Modal ครบวงจร
+    * อัปเดตชุดทดสอบอัตโนมัติ `tests/system-audit.test.mjs` เพิ่มหมวดที่ ๑๒ ครอบคลุมการทำงาน CSV Import/Export ผ่านการทดสอบครบถ้วน ๘๒/๘๒ รายการ (100% Pass) และผ่าน Next.js Production Build ๓๗/๓๗ routes สำเร็จ ไร้ข้อผิดพลาด
+* **Latest Action:** พัฒนาระบบนำเข้า (Import) และส่งออก (Export) CSV ผู้ใช้งานใน `/users` ครบทั้งปุ่มลอย Header Action, Interactive Modal และแท็บหน้างานเฉพาะ CSV Hub พร้อมทดสอบ UTF-8 BOM ภาษาไทย 100%, ผ่านชุดทดสอบ ๘๒/๘๒ รายการ และ Next.js Production Build สำเร็จสมบูรณ์แบบ
 
 ---
 
@@ -181,7 +188,7 @@
 | **MOD-03**| Mukhopātha & Pali Engine | ✅ Completed | `src/app/mukhopatha/page.tsx` (ตรวจมุขปาฐะ, คลังเสียงสวด, คัมภีร์) |
 | **MOD-04**| Mobile E-Approval | ✅ Completed | `src/app/e-approval/page.tsx` (เกษียณหนังสือด่วน, ลงนามดิจิทัล) |
 | **MOD-05**| MCU Data Bridge | ✅ Completed | `src/app/mcu-bridge/page.tsx` (ทะเบียนสองมิติ, ส่งออก MCU REG CSV) |
-| **MOD-06**| User & Role Management (RBAC) | ✅ Completed | `src/app/users/page.tsx` (จัดการบัญชีผู้ใช้, ข้อมูลสงฆ์, บันทึกการลาสิกขา, Masking) |
+| **MOD-06**| User & Role Management (RBAC) | ✅ Completed | `src/app/users/page.tsx`, `UserCsvImportExportModal.tsx`, `UserCsvManagementCard.tsx` (CSV Import/Export UTF-8 BOM, RBAC, Masking) |
 | **MOD-07**| Smart Meeting Room & Signage | ✅ Completed | `src/app/meeting-rooms/page.tsx` (จองห้องประชุม, ป้ายดิจิทัล, IoT, น้ำปานะ) |
 | **MOD-08**| Human Resource Management (HR) | ✅ Completed | `src/app/hr/page.tsx` (อัตรากำลังสงฆ์, ประวัติสมณศักดิ์, เลื่อนขั้น) |
 | **MOD-09**| Finance & Procurement | ✅ Completed | `src/app/finance-procurement/page.tsx` (๓ กองทุนบริจาค, คลังสังฆภัณฑ์) |

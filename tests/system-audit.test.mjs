@@ -621,6 +621,42 @@ runTest("Verify Research-QA page integrates TCI-ThaiJO publications tab and dire
   assert.ok(content.includes("คัดลอกรายการอ้างอิง"), "Must provide citation copy button");
 });
 
+// 12. User CSV Import & Export System (MOD-06)
+console.log("\n--- 12. User CSV Import & Export System (MOD-06) ---");
+
+runTest("Verify UserCsvImportExportModal exists and implements UTF-8 BOM, quote-aware parsing, and validation", () => {
+  const modalPath = path.join(rootDir, "src/components/users/UserCsvImportExportModal.tsx");
+  assert.ok(fs.existsSync(modalPath), "UserCsvImportExportModal.tsx must exist");
+  const content = fs.readFileSync(modalPath, "utf-8");
+  assert.ok(content.includes("\\uFEFF"), "Must use UTF-8 BOM for Excel Thai compatibility");
+  assert.ok(content.includes("parseCsvLine"), "Must contain quote-aware CSV parser");
+  assert.ok(content.includes("handleDownloadSampleTemplate"), "Must provide sample template download");
+  assert.ok(content.includes("exportScope"), "Must support multi-scope filtering for export");
+  assert.ok(content.includes("onImportUsers"), "Must commit validated users to state");
+});
+
+runTest("Verify UserCsvManagementCard exists as dedicated full-page CSV Hub workspace", () => {
+  const cardPath = path.join(rootDir, "src/components/users/UserCsvManagementCard.tsx");
+  assert.ok(fs.existsSync(cardPath), "UserCsvManagementCard.tsx must exist");
+  const content = fs.readFileSync(cardPath, "utf-8");
+  assert.ok(content.includes("\\uFEFF"), "Must use UTF-8 BOM in ManagementCard");
+  assert.ok(content.includes("parseCsvLine"), "Must parse CSV rows in ManagementCard");
+  assert.ok(content.includes("handleDownloadSampleTemplate"), "Must offer template download");
+  assert.ok(content.includes("UserCsvManagementCard"), "Must export default UserCsvManagementCard component");
+});
+
+runTest("Verify /users page integrates CSV Action buttons, Modal, and dedicated CSV Hub tab", () => {
+  const usersPagePath = path.join(rootDir, "src/app/users/page.tsx");
+  assert.ok(fs.existsSync(usersPagePath), "users/page.tsx must exist");
+  const content = fs.readFileSync(usersPagePath, "utf-8");
+  assert.ok(content.includes("UserCsvImportExportModal"), "Must import UserCsvImportExportModal");
+  assert.ok(content.includes("UserCsvManagementCard"), "Must import UserCsvManagementCard");
+  assert.ok(content.includes("csv-hub"), "Must define csv-hub tab in activeTab state");
+  assert.ok(content.includes("นำเข้า CSV"), "Must provide นำเข้า CSV action button");
+  assert.ok(content.includes("ส่งออก CSV"), "Must provide ส่งออก CSV action button");
+  assert.ok(content.includes("handleBatchImportUsers"), "Must handle batch imported users");
+});
+
 // Summary
 console.log("\n==========================================================");
 console.log(`  AUDIT RESULTS: ${passedCount} / ${totalTests} TESTS PASSED`);
