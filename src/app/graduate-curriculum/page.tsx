@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   GraduationCap,
   BookOpen,
   Scroll,
   FileText,
   Download,
+  Upload,
   ExternalLink,
   Search,
   CheckCircle2,
@@ -19,26 +20,86 @@ import {
   Printer,
   ChevronRight,
   BookMarked,
-  Globe
+  Globe,
+  Edit3,
+  FileJson
 } from "lucide-react";
 import Link from "next/link";
 import {
-  graduateCurricula,
+  graduateCurricula as defaultCurricula,
   getCurriculumStats,
   GraduateCurriculum,
   CourseItem
 } from "@/data/graduateCurriculumData";
 import { facultyPublications } from "@/data/facultyPublicationsData";
+import CurriculumEditJsonModal from "@/components/curriculum/CurriculumEditJsonModal";
+
+const LOCAL_STORAGE_KEY = "mvu_academic_programs_curricula_v1";
 
 export default function GraduateCurriculumPage() {
-  const stats = useMemo(() => getCurriculumStats(), []);
+  const [curricula, setCurricula] = useState<GraduateCurriculum[]>(defaultCurricula);
   const [selectedProgId, setSelectedProgId] = useState<string>("phd-tipitaka");
   const [courseCategoryFilter, setCourseCategoryFilter] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
+  const [notification, setNotification] = useState<string | null>(null);
+
+  // Modal State
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [modalTab, setModalTab] = useState<"edit" | "export" | "import">("edit");
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setCurricula(parsed);
+        }
+      }
+    } catch {
+      // Use defaults
+    }
+  }, []);
+
+  const showNotice = (msg: string) => {
+    setNotification(msg);
+    setTimeout(() => setNotification(null), 4000);
+  };
+
+  const handleSaveProgram = (updated: GraduateCurriculum) => {
+    const newCurricula = curricula.map((c) => (c.id === updated.id ? updated : c));
+    setCurricula(newCurricula);
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newCurricula));
+    } catch {
+      // Storage error
+    }
+    showNotice(`บันทึกการแก้ไขหลักสูตร "${updated.nameTh}" สำเร็จเรียบร้อยแล้ว`);
+  };
+
+  const handleImportPrograms = (imported: GraduateCurriculum[]) => {
+    setCurricula(imported);
+    if (imported.length > 0) {
+      setSelectedProgId(imported[0].id);
+    }
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(imported));
+    } catch {
+      // Storage error
+    }
+    showNotice(`นำเข้าข้อมูลหลักสูตรสำเร็จจำนวน ${imported.length} หลักสูตร`);
+  };
+
+  const stats = useMemo(() => {
+    const totalPrograms = curricula.length;
+    const totalCourses = curricula.reduce((sum, c) => sum + (c.courses?.length || 0), 0);
+    const totalPdfPages = curricula.reduce((sum, c) => sum + (c.totalPages || 0), 0);
+    return { totalPrograms, totalCourses, totalPdfPages };
+  }, [curricula]);
 
   const currentProgram: GraduateCurriculum = useMemo(() => {
-    return graduateCurricula.find((c) => c.id === selectedProgId) || graduateCurricula[0];
-  }, [selectedProgId]);
+    return curricula.find((c) => c.id === selectedProgId) || curricula[0];
+  }, [curricula, selectedProgId]);
 
   // Filter courses
   const filteredCourses = useMemo(() => {
@@ -126,7 +187,7 @@ export default function GraduateCurriculumPage() {
       {/* Program Selector Tabs */}
       <div className="bg-white rounded-xl border border-amber-200 p-2 shadow-xs">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-          {graduateCurricula.map((prog) => {
+          {curricula.map((prog) => {
             const isSelected = selectedProgId === prog.id;
             return (
               <button
@@ -213,24 +274,62 @@ export default function GraduateCurriculumPage() {
             </div>
           </div>
 
-          {/* Download & View PDF Buttons */}
+          {/* Download, Edit & JSON Action Buttons */}
           <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setModalTab("edit");
+                setShowEditModal(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+            >
+              <Edit3 className="w-4 h-4" />
+              <span>แก้ไขหลักสูตร</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setModalTab("export");
+                setShowEditModal(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors"
+              title="ส่งออกโครงสร้างเป็น JSON"
+            >
+              <FileJson className="w-4 h-4 text-amber-300" />
+              <span>ส่งออก JSON</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setModalTab("import");
+                setShowEditModal(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-300 rounded-xl text-xs font-semibold shadow-xs transition-colors"
+              title="นำเข้าโครงสร้างด้วย JSON"
+            >
+              <Upload className="w-4 h-4 text-teal-700" />
+              <span>นำเข้า JSON</span>
+            </button>
+
             <a
               href={currentProgram.pdfDownloadUrl}
               download={currentProgram.pdfFileName}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-medium border border-gray-200 transition-colors"
             >
-              <Download className="w-4 h-4" />
-              <span>ดาวน์โหลด มคอ.๒ (PDF {currentProgram.totalPages} หน้า)</span>
+              <Download className="w-4 h-4 text-gray-500" />
+              <span>มคอ.๒ (PDF)</span>
             </a>
             <a
               href={currentProgram.pdfDownloadUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-medium border border-gray-200 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-medium border border-gray-200 transition-colors"
             >
               <ExternalLink className="w-4 h-4 text-gray-500" />
-              <span>เปิดอ่านออนไลน์</span>
+              <span>เปิดอ่าน</span>
             </a>
           </div>
         </div>
@@ -545,6 +644,20 @@ export default function GraduateCurriculumPage() {
           </div>
         </div>
       </div>
+
+      {/* Curriculum Edit & JSON Import/Export Modal */}
+      {currentProgram && (
+        <CurriculumEditJsonModal
+          key={`${currentProgram.id}-${modalTab}-${showEditModal}`}
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          program={currentProgram}
+          allPrograms={curricula}
+          onSaveProgram={handleSaveProgram}
+          onImportPrograms={handleImportPrograms}
+          defaultTab={modalTab}
+        />
+      )}
     </div>
   );
 }

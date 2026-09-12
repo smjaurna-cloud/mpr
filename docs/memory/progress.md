@@ -174,7 +174,16 @@
     * พัฒนาพื้นที่ทำงานศูนย์นำเข้า-ส่งออก CSV เต็มรูปแบบ `UserCsvManagementCard.tsx`: ติดตั้งเป็นแท็บที่ ๓ ในหน้า `/users` ("ศูนย์นำเข้า-ส่งออก CSV / CSV Hub")
     * ปรับปรุงหน้า `src/app/users/page.tsx`: เพิ่มปุ่ม "นำเข้า CSV" (Upload) และ "ส่งออก CSV" (Download) ในแถบเมนูด้านบน, เพิ่มแท็บที่ ๓ "ศูนย์นำเข้า-ส่งออก CSV (CSV Hub)", และติดตั้ง Modal ครบวงจร
     * อัปเดตชุดทดสอบอัตโนมัติ `tests/system-audit.test.mjs` เพิ่มหมวดที่ ๑๒ ครอบคลุมการทำงาน CSV Import/Export ผ่านการทดสอบครบถ้วน ๘๒/๘๒ รายการ (100% Pass) และผ่าน Next.js Production Build ๓๗/๓๗ routes สำเร็จ ไร้ข้อผิดพลาด
-* **Latest Action:** พัฒนาระบบนำเข้า (Import) และส่งออก (Export) CSV ผู้ใช้งานใน `/users` ครบทั้งปุ่มลอย Header Action, Interactive Modal และแท็บหน้างานเฉพาะ CSV Hub พร้อมทดสอบ UTF-8 BOM ภาษาไทย 100%, ผ่านชุดทดสอบ ๘๒/๘๒ รายการ และ Next.js Production Build สำเร็จสมบูรณ์แบบ
+  - TASK-937: พัฒนาระบบจัดการหลักสูตรการศึกษา (Academic Programs) และโมดอล "แก้ไขหลักสูตร" พร้อมระบบ Import/Export JSON (MOD-15: `/academic-programs` & `/graduate-curriculum`):
+    * พัฒนาโมดอล "แก้ไขหลักสูตร" `src/components/curriculum/CurriculumEditJsonModal.tsx`:
+      - แท็บ ๑: ฟอร์มแก้ไขข้อมูลหลักสูตร (ชื่อไทย-อังกฤษ, ระดับการศึกษา ป.โท/ป.เอก, ชื่อปริญญา, อักษรย่อ, หน่วยกิต, ปรัชญา, วัตถุประสงค์, PLOs, อาชีพ และสรุปรายวิชา)
+      - แท็บ ๒: ส่งออก JSON (Export) รองรับทั้งเฉพาะหลักสูตรปัจจุบันหรือทุกหลักสูตรในระบบ มีตัวแสดงผลโค้ด JSON จัดรูปแบบสวยงาม พร้อมปุ่มคัดลอก และปุ่มดาวน์โหลดไฟล์ `.json`
+      - แท็บ ๓: นำเข้า JSON (Import) รองรับทั้งลากวางไฟล์ `.json` หรือวางโค้ด JSON ในกล่องข้อความ พร้อมระบบตรวจสอบความถูกต้องของโครงสร้าง (Schema Validation Engine) และดาวน์โหลดแม่แบบ JSON ตัวอย่าง
+    * พัฒนาหน้าเพจเส้นทางตรง `src/app/academic-programs/page.tsx` และ `layout.tsx` (Prerendered 200 OK) และอัปเกรด `src/app/graduate-curriculum/page.tsx` ติดตั้งปุ่ม "แก้ไขหลักสูตร", "ส่งออก JSON", "นำเข้า JSON"
+    * ซิงค์ข้อมูลข้ามหน้าด้วย `localStorage` (`mvu_academic_programs_curricula_v1`) พร้อมปุ่มรีเซ็ตค่าเริ่มต้นของวิทยาลัย
+    * เพิ่มเมนูใน `src/components/Sidebar.tsx` และเพิ่ม URL ใน `src/app/sitemap.ts`
+    * เพิ่มชุดทดสอบอัตโนมัติหมวดที่ ๑๓ ใน `tests/system-audit.test.mjs` ผ่านครบ ๘๖/๘๖ รายการ (100% Pass) และ Next.js Production Build ๓๘/๓๘ routes สำเร็จสมบูรณ์แบบ
+* **Latest Action:** ติดตั้งเส้นทาง `/academic-programs` และโมดอล "แก้ไขหลักสูตร" พร้อมระบบนำเข้า/ส่งออก JSON ครบวงจร ทั้งดาวน์โหลดไฟล์ คัดลอก ตรวจสอบโครงสร้างความถูกต้อง และซิงค์ LocalStorage, ผ่านชุดทดสอบ ๘๖/๘๖ รายการ และ Next.js Production Build ๓๘/๓๘ routes สำเร็จสมบูรณ์แบบ
 
 ---
 
@@ -197,7 +206,7 @@
 | **MOD-12**| Research & Educational QA | ✅ Completed | `src/app/research-qa/page.tsx` (คลังวิจัยพุทธศาสตร์, AUN-QA, สมศ.) |
 | **MOD-13**| Academic Services & Outreach | ✅ Completed | `src/app/academic-services/page.tsx` (ตารางสอนบาลี ๔ ชั้น, อบรมเยาวชน) |
 | **MOD-14**| Classrooms & Sanam Luang | ✅ Completed | `src/app/classrooms/page.tsx` (๖ ห้องเรียน A1-A6, นักธรรม, บาลีสนามหลวง, กฎระเบียบ, PDPA) |
-| **MOD-15**| Graduate Curricula (TQF 2) | ✅ Completed | `src/app/graduate-curriculum/page.tsx` (มคอ.๒ พธ.ด. พระไตรปิฎก, พธ.ม. พระไตรปิฎก, พธ.ม. พระอภิธรรม, ๕๓ รายวิชา, PDF) |
+| **MOD-15**| Graduate Curricula & Academic Programs | ✅ Completed | `src/app/academic-programs/page.tsx`, `src/app/graduate-curriculum/page.tsx`, `CurriculumEditJsonModal.tsx` (แก้ไขหลักสูตร, JSON Import/Export, มคอ.๒) |
 | **MOD-16**| Central Fleet & Vehicle Booking | ✅ Completed | `src/app/vehicle-booking/page.tsx` (รถส่วนกลาง ๑๐ คัน, ฟอร์มจองตามพระวินัย, ไทม์ไลน์, ใบขอใช้รถ A4, Quick Update) |
 | **MOD-17**| e-Complaint & Cross-System Tracker | ✅ Completed | `src/app/complaints-tracking/page.tsx` (QR Code ร้องเรียน, ป้าย Standee A4, ติดตาม ๗ ระบบ CMP/VB/DOC/MTG/PRJ/ALM, e-Bidding, ประตูบริการ มจร) |
 | **MOD-18**| Visitor Analytics & Traffic Insights | ✅ Completed | `src/app/visitor-analytics/page.tsx` (ทราฟฟิกสด ๔๒ คน, สถิติวัน/เดือน/ปี, แหล่งที่มา, อุปกรณ์, ส่งออก CSV) |

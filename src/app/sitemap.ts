@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/alms-patron", priority: 0.9, changeFrequency: "daily" as const },
     { path: "/mukhopatha", priority: 0.9, changeFrequency: "daily" as const },
     { path: "/graduate-curriculum", priority: 0.9, changeFrequency: "weekly" as const },
+    { path: "/academic-programs", priority: 0.9, changeFrequency: "weekly" as const },
     { path: "/graduate-progress", priority: 0.9, changeFrequency: "daily" as const },
     { path: "/contact", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/complaints-tracking", priority: 0.9, changeFrequency: "daily" as const },

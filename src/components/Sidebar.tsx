@@ -224,6 +224,13 @@ const navigationGroups: NavGroup[] = [
         badge: "มคอ.๒",
       },
       {
+        name: "จัดการหลักสูตร (JSON Hub)",
+        description: "แก้ไขหลักสูตร & นำเข้า-ส่งออก JSON",
+        href: "/academic-programs",
+        icon: Scroll,
+        badge: "JSON",
+      },
+      {
         name: "ติดตามเข้าเรียน & บัณฑิตศึกษา",
         description: "สแกนใบหน้า, ๔ ห้อง Zoom, ค่าเทอม & ร้องเรียน",
         href: "/attendance-tracking",

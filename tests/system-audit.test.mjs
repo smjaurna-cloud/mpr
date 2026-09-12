@@ -103,6 +103,7 @@ const expectedRoutes = [
   "academic-services",
   "classrooms",
   "graduate-curriculum",
+  "academic-programs",
   "vehicle-booking",
   "complaints-tracking",
   "visitor-analytics",
@@ -655,6 +656,41 @@ runTest("Verify /users page integrates CSV Action buttons, Modal, and dedicated 
   assert.ok(content.includes("นำเข้า CSV"), "Must provide นำเข้า CSV action button");
   assert.ok(content.includes("ส่งออก CSV"), "Must provide ส่งออก CSV action button");
   assert.ok(content.includes("handleBatchImportUsers"), "Must handle batch imported users");
+});
+
+// 13. Academic Programs & JSON Import/Export (MOD-15)
+console.log("\n--- 13. Academic Programs & JSON Import/Export (MOD-15) ---");
+
+runTest("Verify CurriculumEditJsonModal exists and supports edit form, JSON export, and JSON import", () => {
+  const modalPath = path.join(rootDir, "src/components/curriculum/CurriculumEditJsonModal.tsx");
+  assert.ok(fs.existsSync(modalPath), "CurriculumEditJsonModal.tsx must exist");
+  const content = fs.readFileSync(modalPath, "utf-8");
+  assert.ok(content.includes("handleDownloadJson"), "Must provide handleDownloadJson");
+  assert.ok(content.includes("handleCopyJson"), "Must provide handleCopyJson");
+  assert.ok(content.includes("validateJsonPayload"), "Must implement JSON validation engine");
+  assert.ok(content.includes("handleDownloadSampleTemplate"), "Must provide sample template download");
+  assert.ok(content.includes("onSaveProgram"), "Must support saving program");
+});
+
+runTest("Verify /academic-programs route exists and implements edit popup with JSON import/export", () => {
+  const progPath = path.join(rootDir, "src/app/academic-programs/page.tsx");
+  assert.ok(fs.existsSync(progPath), "academic-programs/page.tsx must exist");
+  const content = fs.readFileSync(progPath, "utf-8");
+  assert.ok(content.includes("CurriculumEditJsonModal"), "Must import CurriculumEditJsonModal");
+  assert.ok(content.includes("แก้ไขหลักสูตร"), "Must contain 'แก้ไขหลักสูตร' action button");
+  assert.ok(content.includes("ส่งออก JSON"), "Must contain 'ส่งออก JSON' action button");
+  assert.ok(content.includes("นำเข้า JSON"), "Must contain 'นำเข้า JSON' action button");
+  assert.ok(content.includes("mvu_academic_programs_curricula_v1"), "Must persist state to localStorage");
+});
+
+runTest("Verify /graduate-curriculum route also integrates CurriculumEditJsonModal", () => {
+  const gradPath = path.join(rootDir, "src/app/graduate-curriculum/page.tsx");
+  assert.ok(fs.existsSync(gradPath), "graduate-curriculum/page.tsx must exist");
+  const content = fs.readFileSync(gradPath, "utf-8");
+  assert.ok(content.includes("CurriculumEditJsonModal"), "Must import CurriculumEditJsonModal");
+  assert.ok(content.includes("แก้ไขหลักสูตร"), "Must contain 'แก้ไขหลักสูตร' action button");
+  assert.ok(content.includes("ส่งออก JSON"), "Must contain 'ส่งออก JSON' action button");
+  assert.ok(content.includes("นำเข้า JSON"), "Must contain 'นำเข้า JSON' action button");
 });
 
 // Summary
