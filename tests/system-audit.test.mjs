@@ -7,6 +7,8 @@ import { cleanIdDigits, formatCitizenId, maskCitizenId, getErrorMessage, cn } fr
 import { loginSchema, googleAuthSchema, registerSchema } from "../src/lib/validations/auth.ts";
 import { contactInquirySchema, updateTicketSchema } from "../src/lib/validations/contact.ts";
 import { dataUpdatePayloadSchema } from "../src/lib/validations/dataUpdater.ts";
+import { checkRateLimit, clearRateLimitStore } from "../src/lib/rateLimiter.ts";
+import { hashPassword, verifyPassword, isPasswordHashed } from "../src/lib/passwordSecurity.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -471,6 +473,83 @@ runTest("Verify /attendance-tracking modular decomposition into 4 standalone com
   const pageContent = fs.readFileSync(path.join(rootDir, "src/app/attendance-tracking/page.tsx"), "utf-8");
   const lineCount = pageContent.split("\n").length;
   assert.ok(lineCount < 300, `/attendance-tracking/page.tsx should be under 300 lines (currently ${lineCount})`);
+});
+
+// 10. Production Security Hardening & Malware Defense (WannaCry / Crypto Mining / OWASP)
+console.log("\n--- 10. Production Security Hardening & Malware Defense ---");
+
+runTest("Verify Content-Security-Policy (CSP) blocks unauthorized scripts and crypto-mining WebSocket pools", () => {
+  const nextConfigContent = fs.readFileSync(path.join(rootDir, "next.config.ts"), "utf-8");
+  assert.ok(nextConfigContent.includes("Content-Security-Policy"), "Must configure Content-Security-Policy");
+  assert.ok(nextConfigContent.includes("default-src 'self'"), "CSP must set default-src 'self'");
+  assert.ok(nextConfigContent.includes("object-src 'none'"), "CSP must block object-src to prevent plugin exploits");
+  assert.ok(
+    nextConfigContent.includes("connect-src 'self' https://accounts.google.com"),
+    "connect-src must restrict connections to self & Google (blocks crypto-mining pools wss://)"
+  );
+});
+
+runTest("Verify in-memory sliding window Rate Limiter enforces thresholds and provides retry-after", () => {
+  clearRateLimitStore();
+  const testKey = "system-test-ip-127.0.0.1";
+  const limit = 2;
+  const windowSec = 10;
+
+  assert.strictEqual(checkRateLimit(testKey, limit, windowSec).success, true);
+  assert.strictEqual(checkRateLimit(testKey, limit, windowSec).success, true);
+  const blocked = checkRateLimit(testKey, limit, windowSec);
+  assert.strictEqual(blocked.success, false);
+  assert.strictEqual(blocked.remaining, 0);
+  assert.ok(blocked.retryAfterSeconds > 0);
+});
+
+runTest("Verify Login route integrates Rate Limiter and SECURITY_ALERT logging", () => {
+  const loginRouteContent = fs.readFileSync(path.join(rootDir, "src/app/api/auth/login/route.ts"), "utf-8");
+  assert.ok(loginRouteContent.includes("checkRateLimit"), "Login route must check rate limit");
+  assert.ok(loginRouteContent.includes("429"), "Login route must return HTTP 429 when rate limited");
+  assert.ok(loginRouteContent.includes("SECURITY_ALERT"), "Login route must log security alert on brute force");
+});
+
+runTest("Verify Scrypt password hashing with unique salts and timing-safe comparison", () => {
+  const testPass = "DhammaCollege#2569";
+  const hash1 = hashPassword(testPass);
+  const hash2 = hashPassword(testPass);
+
+  assert.ok(hash1.startsWith("scrypt:"), "Hash format must start with scrypt: prefix");
+  assert.ok(isPasswordHashed(hash1), "isPasswordHashed must return true");
+  assert.notStrictEqual(hash1, hash2, "Salts must be unique for each hash");
+  assert.strictEqual(verifyPassword(testPass, hash1), true, "Correct password must verify");
+  assert.strictEqual(verifyPassword("WrongPassword", hash1), false, "Wrong password must fail");
+});
+
+runTest("Verify Auth Data uses verifyPassword instead of plaintext string equality", () => {
+  const authDataContent = fs.readFileSync(path.join(rootDir, "src/data/authData.ts"), "utf-8");
+  assert.ok(authDataContent.includes("verifyPassword"), "authData.ts must use verifyPassword");
+  assert.ok(!authDataContent.includes("uPassword === normSecret"), "Must not perform raw string equality on passwords");
+});
+
+runTest("Verify File Viewer route strictly confines paths and rejects Path Traversal (CWE-22)", () => {
+  const fvContent = fs.readFileSync(path.join(rootDir, "src/app/api/file-viewer/route.ts"), "utf-8");
+  assert.ok(fvContent.includes("FORBIDDEN_TRAVERSAL"), "Must return FORBIDDEN_TRAVERSAL on traversal injection");
+  assert.ok(fvContent.includes("isPathConfinedAndSafe"), "Must enforce chroot confinement to docs/ or public/");
+  assert.ok(fvContent.includes(".env"), "Must explicitly block .env files");
+});
+
+runTest("Verify File Viewer blocks dangerous executable malware extensions and enforces size limit", () => {
+  const fvContent = fs.readFileSync(path.join(rootDir, "src/app/api/file-viewer/route.ts"), "utf-8");
+  assert.ok(fvContent.includes("BLOCKED_EXTENSIONS"), "Must maintain BLOCKED_EXTENSIONS list");
+  assert.ok(fvContent.includes(".exe"), "Must block .exe");
+  assert.ok(fvContent.includes(".bat"), "Must block .bat");
+  assert.ok(fvContent.includes(".sh"), "Must block .sh");
+  assert.ok(fvContent.includes(".ps1"), "Must block .ps1");
+  assert.ok(fvContent.includes("MAX_FILE_SIZE_BYTES"), "Must enforce maximum upload file size");
+});
+
+runTest("Verify Windows OS hardening script checks port 445 (SMB) and port 5432 (PostgreSQL)", () => {
+  const scriptContent = fs.readFileSync(path.join(rootDir, "scripts/windows-hardening-check.bat"), "utf-8");
+  assert.ok(scriptContent.includes("445"), "Must check SMB port 445 (WannaCry vector)");
+  assert.ok(scriptContent.includes("5432"), "Must check PostgreSQL port 5432 (Database vector)");
+  assert.ok(scriptContent.includes("SMB1Protocol"), "Must advise disabling SMBv1");
 });
 
 // Summary

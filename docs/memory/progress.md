@@ -138,7 +138,14 @@
     * รวมฟังก์ชันยูทิลิตี้นิรภัย (`src/lib/utils.ts`): รวมศูนย์ `cleanIdDigits`, `formatCitizenId`, `maskCitizenId` (PDPA สังฆะและสามเณรผู้เยาว์), `getErrorMessage`, และ `cn`
     * ขยายชุดทดสอบอัตโนมัติสู่ ๖๕ การทดสอบ (`npm test` / `tests/system-audit.test.mjs`): ครอบคลุมความถูกต้องของข้อมูลสังฆะ ๑๔๓ รูป, งบ ๘๑.๓๙ ลบ., เมทาดาทา ๒๖ เส้นทาง, สิทธิ์ RBAC, ระบบล็อกอิน ๔ รหัส, Zod Schemas, ยูทิลิตี้, API Envelopes, และขนาดคอมโพเนนต์ ผ่านฉลุย ๑๐๐% (๖๕/๖๕ รายการ)
     * ผ่านการตรวจ Type Check (`npx tsc --noEmit`) 0 errors และ Next.js Production Build (`npm run build`) ๓๖/๓๖ routes สำเร็จสมบูรณ์แบบ
-* **Latest Action:** ดำเนินการตรวจสอบคุณภาพโค้ดทั้งระบบ (Code Quality Audit), ปรับใช้ ESLint Flat Config, วางระบบ Zod Validation & Uniform API Response, แยกคอมโพเนนต์หน้าใหญ่ ๓ โมดูล, ขยายชุดทดสอบสู่ ๖๕ การทดสอบ (100% Pass), และผ่าน Next.js Production Build สมบูรณ์แบบ ๑๐๐%
+  - TASK-932: การยกระดับความปลอดภัยระบบระดับ Production (Production Security Hardening & Vulnerability Remediation) ป้องกัน WannaCry, Ransomware, และ Crypto Mining:
+    * ติดตั้ง Content-Security-Policy (CSP) ที่เข้มงวดใน `next.config.ts` ปิดกั้นการเชื่อมต่อ WebSocket ไปยัง Mining Pools (`wss://`) บล็อกสคริปต์ภายนอกที่ไม่ได้รับอนุญาต และป้องกัน XSS / Cryptojacking
+    * พัฒนาระบบ In-Memory Sliding Window Rate Limiter (`src/lib/rateLimiter.ts`) สกัดกั้นการโจมตีแบบ Brute-force บน `/api/auth/login` (๕ ครั้ง/๑๕ นาที) และ File Viewer (๖๐ ครั้ง/นาที) พร้อมคืนค่า HTTP 429 Too Many Requests
+    * ปิดช่องโหว่ Path Traversal (CWE-22) ใน `/api/file-viewer`: กักบริเวณไฟล์แบบ Strict Canonicalization ให้อยู่เฉพาะ `docs/` และ `public/`, บล็อก `..` และ Null bytes, บล็อกไฟล์ `.env` / ไฟล์ระบบ, จำกัดขนาดอัปโหลด ๑๐ MB, ปฏิเสธไฟล์ปฏิบัติการอันตราย (`.exe`, `.bat`, `.sh`, `.ps1`), และทำ Prototype Pollution Sanitization สำหรับไฟล์ `.xlsx`
+    * ยกระดับการเข้ารหัสรหัสผ่าน (`src/lib/passwordSecurity.ts`): ใช้ NIST-recommended Scrypt algorithm (`crypto.scryptSync`) ผสม Salt สุ่ม ๑๖ ไบต์ พร้อม `crypto.timingSafeEqual` ป้องกัน Side-channel Timing Attacks และบูรณาการเข้าสู่ `src/data/authData.ts`
+    * สร้างชุดสคริปต์ตรวจสอบความปลอดภัย: `scripts/security-audit-scan.mjs` (ผ่านการตรวจสอบ ๑๐/๑๐ รายการ) และ `scripts/windows-hardening-check.bat` (ตรวจสอบพอร์ต SMB 445 ป้องกัน WannaCry และพอร์ต PostgreSQL 5432 ป้องกันบอตเน็ต Kinsing)
+    * ขยายชุดทดสอบอัตโนมัติรวม ๗๓ การทดสอบ (`npm test` / `tests/system-audit.test.mjs`) ผ่านครบ ๑๐๐% (๗๓/๗๓ รายการ), ESLint 0 errors, TypeScript 0 errors, และ Next.js Production Build ๓๖/๓๖ routes สำเร็จ
+* **Latest Action:** ดำเนินการยกระดับความปลอดภัยระดับ Production (Production Security Hardening), ติดตั้ง CSP Header สกัดกั้น Crypto Mining, ปิดช่องโหว่ Path Traversal ใน File Viewer, ติดตั้ง Rate Limiting ป้องกัน Brute-force, เข้ารหัสรหัสผ่านด้วย Scrypt + Salt, สร้างเครื่องมือสแกนและตรวจสอบพอร์ต SMB 445 (WannaCry), ผ่าน ๗๓/๗๓ Automated Tests และ Next.js Production Build สำเร็จ ๑๐๐%
 
 ---
 
@@ -171,7 +178,9 @@
 | **MOD-22**| Smart Document Reader & Official File Viewer | ✅ Completed | `src/app/file-viewer/page.tsx`, `src/components/DocumentViewerModal.tsx`, `src/app/api/file-viewer/route.ts` (DOCX, XLSX, PDF, Text) |
 | **MOD-23**| Central Data Update & Sync Hub | ✅ Completed | `src/app/data-updater/page.tsx`, `src/app/data-updater/layout.tsx`, `src/components/QuickDataUpdateModal.tsx`, `src/app/api/data-updater/route.ts` (Super Admin & ๑๔ ฝ่าย, Batch Excel/CSV, Freshness Monitor, Audit Trail) |
 | **MOD-24**| Multi-Identifier Auth, Google SSO & Member Registration | ✅ Completed | `src/app/login/page.tsx`, `src/app/register/page.tsx`, `src/data/authData.ts`, `src/context/AuthContext.tsx`, `src/components/DigitalMemberCardModal.tsx`, `/api/auth/*` |
-| **QA-ENG**| Quality Assurance, Type Safety & Modular Architecture | ✅ Completed | Modern ESLint Flat Config, 65/65 Unit & System Tests (`npm test`), Zod Schema Validation, Uniform API Envelopes, Modular Decomposition |
+| **QA-ENG**| Quality Assurance, Type Safety & Modular Architecture | ✅ Completed | Modern ESLint Flat Config, 73/73 Unit & System Tests (`npm test`), Zod Schema Validation, Uniform API Envelopes, Modular Decomposition |
+| **SEC-PROD**| Production Security Hardening & Malware Defense | ✅ Completed | CSP Anti-Crypto Mining, Path Traversal Guard, Rate Limiting, Scrypt Password Hashing, WannaCry SMB 445 Check, Prototype Pollution Sanitization |
+
 
 
 

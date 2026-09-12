@@ -12,6 +12,7 @@
  */
 
 import { SystemRole, MonasticStatus } from "./mockData";
+import { verifyPassword } from "@/lib/passwordSecurity";
 
 export type MemberCategory = 
   | "MONK"          // พระภิกษุสงฆ์
@@ -325,7 +326,7 @@ export function authenticateMultiIdentifier(
     }
 
     if (idType === "PASSWORD" || idType === "ALL") {
-      if (uPassword && uPassword === normSecret) {
+      if (uPassword && verifyPassword(normSecret, uPassword)) {
         return { user: u, matchReason: "รหัสผ่าน (Password)" };
       }
     }
