@@ -726,6 +726,29 @@ runTest("Verify electron-builder.json configures Windows NSIS installer and port
   assert.ok(config.portable, "Must configure portable target");
 });
 
+runTest("Verify electron-builder.json configures Per-Machine installation and GitHub Releases publish", () => {
+  const ebPath = path.join(rootDir, "electron-builder.json");
+  const config = JSON.parse(fs.readFileSync(ebPath, "utf-8"));
+  assert.strictEqual(config.nsis.perMachine, true, "Must be configured as perMachine: true for Program Files installation");
+  assert.ok(Array.isArray(config.publish), "Must have publish array configured");
+  assert.strictEqual(config.publish[0].provider, "github", "Publish provider must be github");
+  assert.strictEqual(config.publish[0].repo, "mpr", "Publish repo must be mpr");
+});
+
+runTest("Verify electron-updater is installed and electron/main.cjs includes Auto-Update and Tray check", () => {
+  const pkgPath = path.join(rootDir, "package.json");
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+  assert.ok(pkg.dependencies["electron-updater"], "electron-updater must be installed in dependencies");
+
+  const mainPath = path.join(rootDir, "electron/main.cjs");
+  const content = fs.readFileSync(mainPath, "utf-8");
+  assert.ok(content.includes("electron-updater"), "Must require electron-updater");
+  assert.ok(content.includes("setupAutoUpdater"), "Must define setupAutoUpdater");
+  assert.ok(content.includes("checkForUpdatesManual"), "Must define checkForUpdatesManual");
+  assert.ok(content.includes("DATABASE_URL"), "Must resolve DATABASE_URL for SQLite dev.db");
+  assert.ok(content.includes("Check for Updates"), "Tray must include Check for Updates option");
+});
+
 runTest("Verify Windows Native App Launcher scripts exist and are executable", () => {
   assert.ok(fs.existsSync(path.join(rootDir, "start_desktop_app.bat")), "start_desktop_app.bat must exist");
   assert.ok(fs.existsSync(path.join(rootDir, "create_desktop_shortcut.bat")), "create_desktop_shortcut.bat must exist");

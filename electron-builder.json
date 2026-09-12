@@ -6,11 +6,19 @@
   "directories": {
     "output": "dist-desktop"
   },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "smjaurna-cloud",
+      "repo": "mpr"
+    }
+  ],
   "files": [
     "electron/**/*",
     ".next/standalone/**/*",
     ".next/static/**/*",
     "public/**/*",
+    "prisma/**/*",
     "package.json"
   ],
   "extraMetadata": {
@@ -31,11 +39,13 @@
   },
   "nsis": {
     "oneClick": false,
+    "perMachine": true,
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "วิทยาลัยสงฆ์บาลีเถรวาท (MVU ERP)",
-    "uninstallDisplayName": "ถอนการติดตั้ง มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย ERP"
+    "shortcutName": "มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย (ERP)",
+    "uninstallDisplayName": "ถอนการติดตั้ง มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย ERP",
+    "runAfterFinish": true
   },
   "portable": {
     "artifactName": "${productName}-Portable-${version}.${ext}"

@@ -10,6 +10,14 @@ let mainWindow = null;
 let tray = null;
 let serverProcess = null;
 
+let autoUpdater = null;
+try {
+  const updaterModule = require("electron-updater");
+  autoUpdater = updaterModule.autoUpdater;
+} catch (e) {
+  console.warn("electron-updater not loaded:", e.message);
+}
+
 // Find an available TCP port starting from defaultPort
 function getAvailablePort(defaultPort = 38501) {
   return new Promise((resolve, reject) => {
@@ -81,12 +89,14 @@ async function startServer(port) {
   const assignedPort = await getAvailablePort(port);
   const rootDir = path.resolve(__dirname, "..");
   const standaloneServer = path.join(rootDir, ".next", "standalone", "server.js");
+  const defaultDbPath = path.join(rootDir, "prisma", "dev.db");
 
   const env = {
     ...process.env,
     PORT: String(assignedPort),
     HOSTNAME: "localhost",
     NODE_ENV: "production",
+    DATABASE_URL: process.env.DATABASE_URL || `file:${defaultDbPath.replace(/\\/g, "/")}`,
   };
 
   if (require("fs").existsSync(standaloneServer)) {
@@ -109,6 +119,107 @@ async function startServer(port) {
   const url = `http://localhost:${assignedPort}`;
   await waitForServer(url);
   return { port: assignedPort, url };
+}
+
+// Setup Auto Updater
+function setupAutoUpdater() {
+  if (!autoUpdater) return;
+
+  autoUpdater.autoDownload = !isDev;
+
+  autoUpdater.on("checking-for-update", () => {
+    console.log("Checking for updates via GitHub Releases...");
+  });
+
+  autoUpdater.on("update-available", (info) => {
+    console.log("Update available:", info.version);
+    if (mainWindow) {
+      dialog.showMessageBox(mainWindow, {
+        type: "info",
+        title: "พบการอัปเดตเวอร์ชันใหม่",
+        message: `มีเวอร์ชันใหม่ (v${info.version}) สำหรับระบบ ERP วิทยาลัยสงฆ์`,
+        detail: "ระบบกำลังดาวน์โหลดการอัปเดตในพื้นหลัง...",
+        buttons: ["ตกลง"],
+      });
+    }
+  });
+
+  autoUpdater.on("update-not-available", () => {
+    console.log("Current version is up to date.");
+  });
+
+  autoUpdater.on("error", (err) => {
+    console.error("AutoUpdater error:", err ? err.message : err);
+  });
+
+  autoUpdater.on("update-downloaded", (info) => {
+    dialog
+      .showMessageBox(mainWindow || undefined, {
+        type: "question",
+        title: "พร้อมติดตั้งการอัปเดต",
+        message: `ดาวน์โหลดเวอร์ชัน v${info.version} สำเร็จแล้ว`,
+        detail: "ต้องการเริ่มการติดตั้งและรีสตาร์ทโปรแกรมทันทีหรือไม่?",
+        buttons: ["ติดตั้งและรีสตาร์ททันที", "ไว้ภายหลัง"],
+        defaultId: 0,
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall();
+        }
+      });
+  });
+
+  // Check on startup if in production
+  if (!isDev) {
+    setTimeout(() => {
+      autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+        console.warn("Initial update check failed:", err.message);
+      });
+    }, 5000);
+  }
+}
+
+// Manual Check for Updates
+function checkForUpdatesManual() {
+  if (!autoUpdater) {
+    dialog.showMessageBox(mainWindow || undefined, {
+      type: "info",
+      title: "ระบบอัปเดตอัตโนมัติ",
+      message: `เวอร์ชันปัจจุบัน: v${app.getVersion()}`,
+      detail: "กำลังทำงานในโหมดพัฒนา",
+      buttons: ["ตกลง"],
+    });
+    return;
+  }
+
+  dialog.showMessageBox(mainWindow || undefined, {
+    type: "info",
+    title: "กำลังตรวจสอบเวอร์ชัน",
+    message: `กำลังตรวจสอบอัปเดตจาก GitHub Releases... (เวอร์ชันปัจจุบัน: v${app.getVersion()})`,
+    buttons: ["ตกลง"],
+  });
+
+  autoUpdater
+    .checkForUpdates()
+    .then((result) => {
+      if (!result || !result.updateInfo || result.updateInfo.version === app.getVersion()) {
+        dialog.showMessageBox(mainWindow || undefined, {
+          type: "info",
+          title: "ระบบเป็นเวอร์ชันล่าสุด",
+          message: `วิทยาลัยสงฆ์บาลีเถรวาท ERP เป็นเวอร์ชันล่าสุดแล้ว (v${app.getVersion()})`,
+          buttons: ["ตกลง"],
+        });
+      }
+    })
+    .catch((err) => {
+      dialog.showMessageBox(mainWindow || undefined, {
+        type: "warning",
+        title: "การตรวจสอบเวอร์ชัน",
+        message: `ไม่สามารถตรวจสอบการอัปเดตได้ในขณะนี้`,
+        detail: err.message,
+        buttons: ["ตกลง"],
+      });
+    });
 }
 
 // Create Main Application Window
@@ -177,6 +288,15 @@ function setupTray(targetUrl) {
       },
       { type: "separator" },
       {
+        label: `เวอร์ชันระบบ: v${app.getVersion()}`,
+        enabled: false,
+      },
+      {
+        label: "ตรวจสอบการอัปเดต (Check for Updates)",
+        click: () => checkForUpdatesManual(),
+      },
+      { type: "separator" },
+      {
         label: "ออกจากระบบ (Quit)",
         click: () => {
           app.quit();
@@ -203,6 +323,7 @@ app.whenReady().then(async () => {
     const { url } = await startServer(38501);
     createMainWindow(url);
     setupTray(url);
+    setupAutoUpdater();
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {
