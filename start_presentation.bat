@@ -27,10 +27,12 @@ timeout /t 1 /nobreak > nul
 start http://localhost:3000/graduate-progress
 timeout /t 1 /nobreak > nul
 start http://localhost:3000/file-viewer
+timeout /t 1 /nobreak > nul
+start http://localhost:3000/research-qa
 
 echo.
 echo ======================================================================
-echo   [สำเร็จ] ระบบเปิดหน้าต่างเบราว์เซอร์ 5 แท็บสำหรับการนำเสนอเรียบร้อยแล้ว!
+echo   [สำเร็จ] ระบบเปิดหน้าต่างเบราว์เซอร์ 6 แท็บสำหรับการนำเสนอเรียบร้อยแล้ว!
 echo.
 echo   คำแนะนำในการนำเสนอ:
 echo   - กดปุ่ม F11 บนคีย์บอร์ด เพื่อแสดงผลแบบเต็มจอ (Full Screen)

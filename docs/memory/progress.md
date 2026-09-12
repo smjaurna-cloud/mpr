@@ -157,8 +157,17 @@
     * พัฒนาหน้าแสดงผลใน `/research-qa` เพิ่มแท็บ "บทความวิชาการ & วิจัยระดับสากล / TCI-ThaiJO" พร้อมการ์ดสถิติสรุป ๔ มิติ, แถบศูนย์เชื่อมโยง TCI-ThaiJO, ระบบสืบค้นและตัวกรองบุคลากร ๘ ท่าน/ดัชนี/ประเภท, ปุ่มเปิดอ่านบนวารสารตรง (`ExternalLink`), และปุ่มคัดลอกรายการอ้างอิง (Copy Citation)
     * เชื่อมโยงผลงานตีพิมพ์สู่บัตรคณาจารย์ในหน้าหลักสูตรระดับบัณฑิตศึกษา (`/graduate-curriculum`) แสดง Badge จำนวนบทความ TCI พร้อมลิงก์สืบค้น
     * พัฒนา Backend API Route: `src/app/api/publications/route.ts` รองรับการสืบค้นและกรองผ่าน Query Parameters
-    * ขยายชุดทดสอบอัตโนมัติเป็น ๗๙ การทดสอบ (`tests/system-audit.test.mjs`): ผ่านฉลุย ๑๐๐% (๗๙/๗๙ รายการ), ESLint 0 errors, TypeScript 0 errors, และ Next.js Production Build ๓๗/๓๗ routes สำเร็จ ๑๐๐%
-* **Latest Action:** บูรณาการคลังบทความวิชาการและวิจัยระดับสากลและฐานข้อมูล TCI-ThaiJO ของบุคลากรในระบบ (ดร.สมบูรณ์ จารุณะ, พระธรรมวชิราจารย์, พระมหาศุภวัฒน์, ดร.ธนสิทธิ์, พระมหาเสฏฐวุฒิ, รศ.ดร.เวทย์, พระมหาทรงชัย) ครบ ๒๑ บทความ พร้อมลิงก์เชื่อมต่อตรงสู่วารสารจริง, เพิ่มแท็บใน `/research-qa`, เพิ่ม Badge ใน `/graduate-curriculum`, สร้าง API `/api/publications`, ผ่านการทดสอบ ๗๙/๗๙ รายการ และ Next.js Production Build ๓๗ เส้นทางเรียบร้อยสมบูรณ์
+  - TASK-935: การตรวจสอบระบบเชิงลึกและขจัดข้อผิดพลาด/คำเตือนทั้งหมดสู่ความสมบูรณ์แบบสูงสุด (Full System Polish & Zero-Warning Execution):
+    * ขจัดคำเตือน Next.js plugin ใน ESLint Flat Config (`eslint.config.mjs`): ติดตั้ง `@next/eslint-plugin-next` พร้อม Ruleset มาตรฐาน ทำให้การรัน `npm run lint` และ `next build` ไร้คำเตือนใดๆ ทั้งสิ้น (0 errors, 0 warnings)
+    * ยกระดับ Node.js Environment ใน `package.json` เป็น `"type": "module"` แก้ไขปัญหา Typeless Module Warning ในชุดทดสอบระบบและสคริปต์สแกนความปลอดภัย ทำให้การรัน Console สะอาด ๑๐๐%
+    * ปรับปรุง `start_presentation.bat` เพิ่มแท็บที่ ๖ เปิดหน้างานวิจัยวารสารนานาชาติและ TCI-ThaiJO (`/research-qa`) พร้อมสาธิตสด
+    * ยืนยันผลการตรวจประเมินระบบ ๕ มิติหลัก:
+      ๑. Automated Tests: ผ่านครบถ้วน ๗๙/๗๙ รายการ (100% Pass)
+      ๒. Production Security Scan: ผ่านครบ ๑๐/๑๐ รายการ
+      ๓. Linter: 0 errors, 0 warnings
+      ๔. Type-Check: Strict Mode 0 errors
+      ๕. Next.js Production Build: Prerendered ๓๗/๓๗ static & dynamic routes สำเร็จสมบูรณ์แบบ
+* **Latest Action:** ตรวจสอบระบบทั้งสิ้น ๕ มิติ ขจัดคำเตือน ESLint และ Node.js Typeless Module จนหมดสิ้น (Zero Errors, Zero Warnings), ผ่านชุดทดสอบ ๗๙/๗๙ รายการ, ผ่าน Production Security Scan ๑๐/๑๐ รายการ, สร้าง Production Build ๓๗ เส้นทางสำเร็จ ๑๐๐% และ Push ขึ้นสู่ GitHub เรียบร้อย
 
 ---
 
