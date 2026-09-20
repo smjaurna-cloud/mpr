@@ -201,7 +201,27 @@
       - เพิ่มชุดทดสอบ Section 14 ใน `tests/system-audit.test.mjs` ผ่านครบถ้วน ๙๒/๙๒ รายการ (100% Pass)
       - ESLint ผ่าน 0 errors, 0 warnings
       - TypeScript Strict Mode ผ่าน 0 errors
-* **Latest Action:** พัฒนาระบบ Enterprise Desktop Packaging บน Windows PC ติดตั้งลง Program Files (Per-Machine NSIS .exe), ระบบ Auto-Update ผ่าน GitHub Releases (electron-updater), ฐานข้อมูล Zero-Config Embedded SQLite + Remote Postgres Ready, และ Instant Native App Launcher (.bat & Desktop Shortcut), ผ่านชุดทดสอบ ๙๒/๙๒ รายการ, ESLint และ Type-Check สมบูรณ์แบบ ๑๐๐%
+  - TASK-939: ระบบ Preview DOCX ผ่าน Microsoft Word COM → PDF → PNG (DOCX Page-by-Page Image Viewer):
+    * พัฒนา `scripts/docx-preview-render.ps1` — PowerShell script ใช้ Word COM Automation เปิดไฟล์ .docx แบบ ReadOnly ส่งออกเป็น PDF ชั่วคราว (wdFormatPDF = 17) จากนั้นเรียก `pdftoppm` (Poppler) หรือ `mutool` (MuPDF) แปลง PDF → PNG ทีละหน้า (150 DPI, configurable) ส่ง JSON output กลับทาง stdout และ cleanup temp files อัตโนมัติ
+    * พัฒนา `scripts/check-word-available.ps1` — สคริปต์ตรวจสอบ dependencies (Word COM, pdftoppm, mutool) และส่งออก JSON status report
+    * พัฒนา `scripts/setup-pdf-renderer.bat` — คู่มือแนะนำการติดตั้ง Poppler for Windows พร้อมรัน check script อัตโนมัติ
+    * ยกระดับ `src/app/api/file-viewer/route.ts`: เพิ่ม helper `renderDocxToPngPages()` เรียก PowerShell async ผ่าน `child_process.execFile` (timeout 45s), แปลง PNG → base64 data URLs ในหน่วยความจำ, เพิ่ม `?preview=png` branch ใน GET handler ส่งกลับ `fileFormat: "DOCX_PNG_PREVIEW"` พร้อม `pages[]` array, fallback อัตโนมัติสู่ mammoth HTML ถ้า Word/Poppler ไม่พร้อม
+    * ยกระดับ `src/components/DocumentViewerModal.tsx`: เพิ่ม `currentPage` state สำหรับ navigation, อัปเดต `loadFile()` ให้ request `?preview=png` สำหรับ DOCX files อัตโนมัติ, เพิ่ม PNG viewer section พร้อม Prev/Next buttons + Jump-to-page (สำหรับเอกสาร ≤12 หน้า) + renderer badge + Zoom support, loading message แสดงข้อความ Word rendering แยกต่างหาก
+    * ไฟล์ .docx ต้นฉบับ **ไม่ถูกแก้ไขเลย** — เปิดแบบ ReadOnly ใน Word, ไฟล์ .docx ยังคงเป็น deliverable หลัก; PNG เป็นเพียงการ preview ชั่วคราวในเซสชัน
+    * Security: temp files เก็บใน OS temp dir (`os.tmpdir()`) พร้อม UUID job ID, cleanup สมบูรณ์ทุกกรณีใน finally block
+  - TASK-940: ระบบความปลอดภัย Admin Login Gate, First-Run Admin Setup Wizard, และการคอมไพล์ตัวติดตั้งจริง Windows PC (.exe):
+    * ระบบ Admin Security Gate (`src/components/AdminGate.tsx`): บังคับ Redirect เข้าสู่หน้า `/login` ทันทีที่เปิดโปรแกรม และปิดกั้นการเข้าถึงหน้าแดชบอร์ดและโมดูลสารสนเทศทั้งหมดจนกว่าจะเข้าสู่ระบบด้วยสิทธิ์ผู้ดูแลระบบสำเร็จ พร้อมโหมดโหลดหน้าจอป้องกันข้อมูลสงฆ์รั่วไหล
+    * ระบบตั้งรหัสผ่านผู้ดูแลระบบครั้งแรก (`src/components/FirstRunAdminSetupModal.tsx`): หน้าต่างต้อนรับพุทธศิลป์สง่างามสำหรับการเปิดใช้งานโปรแกรมครั้งแรกบนเครื่อง PC ให้กำหนดรหัสผ่านสำหรับบัญชี Super Admin (`somboon` / อาจารย์ ดร.สมบูรณ์ จารุณะ) พร้อมตรวจสอบความปลอดภัย
+    * ปรับปรุงเส้นทางเข้าเริ่มต้นของโปรแกรมเดสก์ท็อป: ทั้ง [electron/main.cjs](file:///d:/mpr/electron/main.cjs) และ [start_desktop_app.bat](file:///d:/mpr/start_desktop_app.bat) กำหนดให้เปิดเข้าสู่หน้า `/login` เป็นหน้าแรกโดยตรงเสมอ
+    * ซ่อน Sidebar บนหน้าจอ `/login` และ `/register` ใน [src/components/Sidebar.tsx](file:///d:/mpr/src/components/Sidebar.tsx) เพื่อความเป็นระเบียบและให้ประสบการณ์แอปพลิเคชันเดสก์ท็อปเต็มรูปแบบ
+    * คอมไพล์ไฟล์ติดตั้งจริง Windows Application สำเร็จสมบูรณ์ใน `dist-desktop/`:
+      ๑. `MVU-College-ERP-Setup-0.1.0.exe` (๒๖๔ MB) — ตัวติดตั้งระดับ Enterprise NSIS Installer ติดตั้งลงใน `C:\Program Files\MVU-College-ERP` ด้วยสิทธิ์ Administrator, สร้าง Shortcut บน Desktop และ Start Menu, พร้อมระบบ Uninstall ถอนการติดตั้ง
+      ๒. `MVU-College-ERP-Portable-0.1.0.exe` (๒๖๓ MB) — โปรแกรมไฟล์เดี่ยวพกพาใส่ Flash Drive รันได้ทันทีโดยไม่ต้องติดตั้ง
+    * การทดสอบและยืนยันคุณภาพ:
+      - ผ่านชุดทดสอบระบบครบถ้วน ๙๕/๙๕ รายการ (`tests/system-audit.test.mjs` 100% Pass)
+      - ESLint ผ่าน 0 errors, 0 warnings
+      - TypeScript Strict Mode ผ่าน 0 errors
+* **Latest Action:** ติดตั้งระบบความปลอดภัย Admin Login Gate & First-Run Setup Wizard และคอมไพล์ตัวติดตั้งจริง Windows Application (.exe ทั้ง NSIS Setup 264MB และ Portable 263MB) ใน `dist-desktop/` ผ่านชุดทดสอบ ๙๕/๙๕ รายการ สมบูรณ์แบบ ๑๐๐%
 
 ---
 

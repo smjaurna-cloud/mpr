@@ -252,6 +252,11 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { currentUser, logout } = useAuth();
 
+  // Hide sidebar on login and register pages for clean authentication view
+  if (pathname === "/login" || pathname === "/register") {
+    return null;
+  }
+
   return (
     <aside className="w-full md:w-64 lg:w-72 bg-white/70 backdrop-blur border-r border-amber-200/70 shrink-0 flex flex-col justify-between p-4 space-y-6 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:overflow-y-auto">
       <div className="space-y-4">

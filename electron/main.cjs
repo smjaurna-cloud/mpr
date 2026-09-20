@@ -241,8 +241,9 @@ function createMainWindow(targetUrl) {
     },
   });
 
-  // Load URL
-  mainWindow.loadURL(targetUrl);
+  // Load URL directly to /login for enforced admin authentication gate
+  const initialUrl = targetUrl.endsWith("/login") ? targetUrl : `${targetUrl.replace(/\/$/, "")}/login`;
+  mainWindow.loadURL(initialUrl);
 
   mainWindow.once("ready-to-show", () => {
     if (mainWindow) {

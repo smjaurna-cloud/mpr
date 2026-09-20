@@ -1,11 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import os from "os";
+import crypto from "crypto";
+import { execFile } from "child_process";
+import { promisify } from "util";
 import mammoth from "mammoth";
 import * as XLSX from "xlsx";
 import { officialInstitutionalDocuments } from "@/data/officialDocumentsData";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimiter";
 import { logAuditEvent } from "@/lib/auditLogger";
+
+const execFileAsync = promisify(execFile);
+
+// Path to the PowerShell DOCX preview render script
+const DOCX_PREVIEW_SCRIPT = path.resolve(process.cwd(), "scripts", "docx-preview-render.ps1");
+
+// Maximum time (ms) to wait for Word COM + PDF → PNG conversion
+const DOCX_PREVIEW_TIMEOUT_MS = 45_000;
 
 export const dynamic = "force-dynamic";
 
@@ -72,6 +84,72 @@ function isPathConfinedAndSafe(candidatePath: string): boolean {
     });
   } catch {
     return false;
+  }
+}
+
+/**
+ * Render DOCX → PNG pages via Microsoft Word COM + Poppler/MuPDF.
+ * Returns base64 data URLs for every page, or null if unavailable/error.
+ * The original .docx file is opened ReadOnly and is never modified.
+ */
+async function renderDocxToPngPages(
+  docxPath: string,
+  dpi: number = 150
+): Promise<{ pages: string[]; totalPages: number; renderer: string } | null> {
+  // Verify the script exists
+  if (!fs.existsSync(DOCX_PREVIEW_SCRIPT)) return null;
+
+  // Create an isolated temp directory for this render job
+  const jobId = crypto.randomBytes(8).toString("hex");
+  const tmpDir = path.join(os.tmpdir(), `mvu-docx-preview-${jobId}`);
+  fs.mkdirSync(tmpDir, { recursive: true });
+
+  try {
+    const { stdout } = await execFileAsync(
+      "powershell.exe",
+      [
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        DOCX_PREVIEW_SCRIPT,
+        "-InputDocx",
+        docxPath,
+        "-OutputDir",
+        tmpDir,
+        "-Dpi",
+        dpi.toString(),
+      ],
+      { timeout: DOCX_PREVIEW_TIMEOUT_MS, windowsHide: true }
+    );
+
+    const result = JSON.parse(stdout.trim());
+    if (!result.success || !Array.isArray(result.pages) || result.pages.length === 0) {
+      return null;
+    }
+
+    // Convert PNG files to base64 data URLs
+    const dataUrls: string[] = [];
+    for (const pngPath of result.pages as string[]) {
+      if (!fs.existsSync(pngPath)) continue;
+      const pngBuf = fs.readFileSync(pngPath);
+      dataUrls.push(`data:image/png;base64,${pngBuf.toString("base64")}`);
+    }
+
+    return dataUrls.length > 0
+      ? { pages: dataUrls, totalPages: dataUrls.length, renderer: result.renderer ?? "Word COM" }
+      : null;
+  } catch {
+    // PowerShell not available, Word not installed, or timeout — silently fall back
+    return null;
+  } finally {
+    // Always clean up temp directory
+    try {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    } catch {
+      // ignore cleanup errors
+    }
   }
 }
 
@@ -262,8 +340,39 @@ export async function GET(req: NextRequest) {
     const stat = fs.statSync(fullPath);
     const fileSizeFormatted = (stat.size / 1024).toFixed(1) + " KB";
 
-    // 1. DOCX Handling
+    // 1. DOCX Handling — PNG preview (Word COM) or mammoth HTML fallback
     if (fileExt === ".docx") {
+      const previewMode = searchParams.get("preview"); // "png" | null
+      const dpiParam = parseInt(searchParams.get("dpi") ?? "150", 10);
+      const dpi = isNaN(dpiParam) || dpiParam < 72 || dpiParam > 300 ? 150 : dpiParam;
+
+      // ── PNG Preview via Microsoft Word ────────────────────────────────────
+      if (previewMode === "png") {
+        const pngResult = await renderDocxToPngPages(fullPath, dpi);
+        if (pngResult) {
+          return NextResponse.json({
+            success: true,
+            fileFormat: "DOCX_PNG_PREVIEW",
+            fileName,
+            displayName: matchedDoc?.displayName || fileName,
+            category: matchedDoc?.category || "เอกสารทั่วไป",
+            department: matchedDoc?.department || "วิทยาลัยสงฆ์",
+            downloadUrl: matchedDoc?.downloadUrl || `/${path.relative(path.join(process.cwd(), "public"), fullPath).replace(/\\/g, "/")}`,
+            fileSize: fileSizeFormatted,
+            pages: pngResult.pages,
+            totalPages: pngResult.totalPages,
+            renderer: pngResult.renderer,
+            dpi,
+            metadata: {
+              lastModified: stat.mtime.toISOString(),
+              sizeBytes: stat.size,
+            },
+          });
+        }
+        // PNG rendering failed → fall through to mammoth HTML (graceful fallback)
+      }
+
+      // ── Fallback: mammoth HTML extraction ─────────────────────────────────
       const buffer = fs.readFileSync(fullPath);
       const htmlResult = await mammoth.convertToHtml({ buffer });
       const textResult = await mammoth.extractRawText({ buffer });
@@ -279,6 +388,8 @@ export async function GET(req: NextRequest) {
         fileSize: fileSizeFormatted,
         html: htmlResult.value,
         rawText: textResult.value,
+        // Signal to the UI that PNG preview was attempted but unavailable
+        pngPreviewUnavailable: previewMode === "png",
         metadata: {
           lastModified: stat.mtime.toISOString(),
           sizeBytes: stat.size,
@@ -286,6 +397,7 @@ export async function GET(req: NextRequest) {
         },
       });
     }
+
 
     // 2. XLSX Handling with Prototype Pollution Sanitization
     if (fileExt === ".xlsx" || fileExt === ".xls") {

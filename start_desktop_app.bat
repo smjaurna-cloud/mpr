@@ -10,7 +10,7 @@ echo ===========================================================================
 echo.
 
 set TARGET_PORT=3001
-set APP_URL=http://localhost:%TARGET_PORT%
+set APP_URL=http://localhost:%TARGET_PORT%/login
 
 :: 1. ตรวจสอบว่าเซิร์ฟเวอร์รันอยู่หรือไม่
 echo [*] กำลังตรวจสอบสถานะระบบที่ %APP_URL% ...

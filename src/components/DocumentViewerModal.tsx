@@ -23,6 +23,9 @@ import {
   AlertCircle,
   Loader2,
   BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  Monitor,
 } from "lucide-react";
 
 export interface DocumentViewerModalProps {
@@ -51,6 +54,8 @@ export default function DocumentViewerModal({
   const [copied, setCopied] = useState(false);
   const [selectedSheet, setSelectedSheet] = useState<string>("");
   const [sheetSearch, setSheetSearch] = useState("");
+  // PNG page-by-page navigation state
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     if (isOpen && fileIdentifier) {
@@ -65,8 +70,13 @@ export default function DocumentViewerModal({
   const loadFile = async (target: string) => {
     setLoading(true);
     setError(null);
+    setCurrentPage(0);
     try {
-      const res = await fetch(`/api/file-viewer?file=${encodeURIComponent(target)}`);
+      // For DOCX files, request PNG preview via Word COM; fallback handled server-side
+      const isDOCX = target.toLowerCase().endsWith(".docx") ||
+        (!target.includes(".") && target.startsWith("doc-")); // document ID heuristic
+      const previewParam = isDOCX ? "&preview=png" : "";
+      const res = await fetch(`/api/file-viewer?file=${encodeURIComponent(target)}${previewParam}`);
       const data = await res.json();
       if (data.success) {
         setFileData(data);
@@ -312,6 +322,11 @@ export default function DocumentViewerModal({
             <div className="flex flex-col items-center justify-center py-20 text-slate-500 space-y-3">
               <Loader2 className="w-8 h-8 text-amber-600 animate-spin" />
               <p className="text-xs font-semibold">กำลังแปลงและเรนเดอร์เอกสาร...</p>
+              {fileIdentifier?.toLowerCase().endsWith(".docx") && (
+                <p className="text-[10px] text-slate-400 text-center max-w-xs">
+                  กำลังใช้ Microsoft Word เปิดและส่งออกเป็น PNG — อาจใช้เวลา 10–30 วินาที
+                </p>
+              )}
             </div>
           )}
 
@@ -342,8 +357,87 @@ export default function DocumentViewerModal({
               {/* TAB: DOCUMENT VIEW */}
               {activeTab === "doc" && (
                 <div className="w-full flex justify-center">
-                  {/* 1. DOCX RENDERED DOCUMENT */}
-                  {currentFormat === "DOCX" && (
+                  {/* 0. DOCX PNG PAGE PREVIEW (Word COM renderer) */}
+                  {currentFormat === "DOCX_PNG_PREVIEW" && Array.isArray(fileData.pages) && fileData.pages.length > 0 && (
+                    <div className="w-full max-w-4xl flex flex-col items-center gap-4">
+                      {/* Renderer badge */}
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-full text-[11px] text-blue-700 font-semibold">
+                        <Monitor className="w-3.5 h-3.5 text-blue-500" />
+                        <span>ดูตัวอย่างจาก Microsoft Word ({fileData.renderer ?? "Word COM"}) — ไฟล์ต้นฉบับไม่ถูกแก้ไข</span>
+                      </div>
+
+                      {/* Page navigation controls */}
+                      <div className="flex items-center gap-3 bg-white rounded-xl shadow border border-slate-200 px-4 py-2 text-sm">
+                        <button
+                          type="button"
+                          onClick={() => setCurrentPage((p) => Math.max(p - 1, 0))}
+                          disabled={currentPage === 0}
+                          aria-label="หน้าก่อนหน้า"
+                          className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 transition-colors"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <span className="font-semibold text-slate-700 tabular-nums min-w-[80px] text-center">
+                          หน้า {currentPage + 1} / {fileData.totalPages}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setCurrentPage((p) => Math.min(p + 1, (fileData.totalPages ?? 1) - 1))}
+                          disabled={currentPage >= (fileData.totalPages ?? 1) - 1}
+                          aria-label="หน้าถัดไป"
+                          className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 transition-colors"
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <span className="text-slate-400 text-[11px] hidden sm:inline">|</span>
+                        {/* Jump to page buttons for small docs */}
+                        {fileData.totalPages <= 12 && (
+                          <div className="hidden sm:flex items-center gap-1">
+                            {Array.from({ length: fileData.totalPages }, (_, i) => (
+                              <button
+                                key={i}
+                                type="button"
+                                onClick={() => setCurrentPage(i)}
+                                className={`w-6 h-6 rounded text-[10px] font-bold transition-colors ${
+                                  currentPage === i
+                                    ? "bg-amber-600 text-white"
+                                    : "bg-slate-100 hover:bg-slate-200 text-slate-600"
+                                }`}
+                              >
+                                {i + 1}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* The actual page image */}
+                      <div
+                        className="bg-white rounded-xl shadow-xl border border-slate-300 overflow-hidden transition-all duration-150"
+                        style={{ zoom: `${zoomLevel}%` }}
+                      >
+                        <img
+                          src={fileData.pages[currentPage]}
+                          alt={`หน้าที่ ${currentPage + 1} ของ ${fileData.displayName ?? fileData.fileName}`}
+                          className="max-w-full h-auto block"
+                          style={{ maxWidth: "900px" }}
+                        />
+                      </div>
+
+                      {/* Fallback notice if pngPreviewUnavailable */}
+                      {fileData.pngPreviewUnavailable && (
+                        <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-700">
+                          <AlertCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                          <span>
+                            ไม่สามารถใช้ Word preview ได้ (Word/Poppler ไม่พร้อม) — แสดงในโหมด HTML แทน
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* 1. DOCX RENDERED DOCUMENT (mammoth HTML fallback) */}
+                  {(currentFormat === "DOCX" || (currentFormat === "DOCX_PNG_PREVIEW" && (!fileData.pages || fileData.pages.length === 0))) && (
                     <div
                       style={{ zoom: `${zoomLevel}%` }}
                       className="w-full max-w-4xl bg-white rounded-xl shadow-xl border border-slate-300 p-8 sm:p-14 transition-all duration-150 relative min-h-[700px]"

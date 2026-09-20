@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -8,6 +8,8 @@ import {
   User,
   KeyRound,
   ShieldCheck,
+  ShieldAlert,
+  Lock,
   Sparkles,
   ArrowRight,
   CheckCircle2,
@@ -19,10 +21,12 @@ import {
   Briefcase,
   Layers,
   HelpCircle,
-  UserPlus
+  UserPlus,
+  Settings
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { IdentifierType, initialAuthUsers } from "@/data/authData";
+import FirstRunAdminSetupModal from "@/components/FirstRunAdminSetupModal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -38,6 +42,29 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [showFirstRunModal, setShowFirstRunModal] = useState(false);
+
+  // Check if first-run setup has not been completed
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const isSetupCompleted = localStorage.getItem("mvu_admin_setup_completed");
+        if (!isSetupCompleted) {
+          setShowFirstRunModal(true);
+        }
+      }
+    } catch {
+      // Ignore
+    }
+  }, []);
+
+  const handleFirstRunComplete = (newPass: string) => {
+    setShowFirstRunModal(false);
+    setIdentifierName("somboon");
+    setSecretCode(newPass);
+    setIdType("ALL");
+    setSuccessMessage("บันทึกรหัสผ่านผู้ดูแลระบบหลักสำเร็จ! กรุณากดปุ่มเข้าสู่ระบบด้านล่าง");
+  };
 
   // Handle Multi-ID Login
   const handleMultiIdLogin = async (e: React.FormEvent) => {
@@ -108,6 +135,27 @@ export default function LoginPage() {
         <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
           ยินดีต้อนรับพระภิกษุสงฆ์ ศากยบุตรสามเณร นิสิต คณาจารย์ บุคลากร และโยมอุปถัมภ์ สู่ศูนย์กลางระบบ ERP วิทยาลัยสงฆ์ ๒๓ โมดูล (วส. มจร)
         </p>
+      </div>
+
+      {/* Security Gate Notice */}
+      <div className="max-w-xl mx-auto p-3.5 rounded-2xl bg-amber-500/10 border border-amber-300/80 flex items-center justify-between gap-3 text-xs text-amber-950 shadow-xs">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center flex-shrink-0">
+            <Lock className="w-4 h-4" />
+          </div>
+          <div>
+            <p className="font-bold">ระบบปิดกั้นความปลอดภัย (Admin Gate Enforced)</p>
+            <p className="text-[11px] text-amber-800/90">ต้องเข้าสู่ระบบด้วยบัญชีผู้ดูแลระบบก่อนเข้าใช้งานระบบสารสนเทศ</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowFirstRunModal(true)}
+          className="px-2.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-medium text-[11px] flex items-center gap-1 transition-colors cursor-pointer flex-shrink-0"
+        >
+          <Settings className="w-3.5 h-3.5" />
+          <span>ตั้งรหัสแอดมินใหม่</span>
+        </button>
       </div>
 
       {/* Main Login Card */}
@@ -447,6 +495,13 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+
+      {/* First Run Admin Setup Modal */}
+      <FirstRunAdminSetupModal
+        isOpen={showFirstRunModal}
+        onComplete={handleFirstRunComplete}
+        onClose={() => setShowFirstRunModal(false)}
+      />
     </div>
   );
 }

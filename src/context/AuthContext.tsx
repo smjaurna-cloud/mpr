@@ -35,8 +35,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const STORAGE_KEY = "mpr_auth_session_user";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // Default to Dr. Somboon as initial active admin
-  const [currentUser, setCurrentUser] = useState<AuthUser | null>(initialAuthUsers[0]);
+  // Strict mode: default to null so user must log in
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Restore session on mount
@@ -75,6 +75,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     secretCode: string, 
     idType: IdentifierType = "ALL"
   ) => {
+    // Check if matching custom admin password from first-run setup
+    try {
+      const customPass = typeof window !== "undefined" ? localStorage.getItem("mvu_admin_custom_password") : null;
+      if (customPass && secretCode === customPass) {
+        const idLower = identifierName.trim().toLowerCase();
+        if (
+          idLower === "somboon" ||
+          idLower === "smjaurna@gmail.com" ||
+          idLower === "admin" ||
+          identifierName.includes("สมบูรณ์") ||
+          idLower === "pos-admin-001" ||
+          idLower === "mbr-somboon"
+        ) {
+          const superAdmin = initialAuthUsers[0];
+          updateSessionUser(superAdmin);
+          return { success: true, message: `เข้าสู่ระบบสำเร็จในฐานะผู้ดูแลระบบหลัก (${superAdmin.fullName})` };
+        }
+      }
+    } catch {
+      // Ignore and proceed to API
+    }
+
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",

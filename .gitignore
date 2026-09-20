@@ -9,6 +9,9 @@ node_modules/
 out/
 build/
 dist/
+dist-desktop/
+*.exe
+*.blockmap
 
 # Environment variables & secrets (Cultural & Monastic / AI Security Rule)
 .env

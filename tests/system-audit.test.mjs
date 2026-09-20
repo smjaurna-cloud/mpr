@@ -755,6 +755,46 @@ runTest("Verify Windows Native App Launcher scripts exist and are executable", (
   assert.ok(fs.existsSync(path.join(rootDir, "scripts/create-windows-shortcut.vbs")), "create-windows-shortcut.vbs must exist");
 });
 
+runTest("Verify AdminGate and FirstRunAdminSetupModal components exist and enforce authentication", () => {
+  const gatePath = path.join(rootDir, "src/components/AdminGate.tsx");
+  assert.ok(fs.existsSync(gatePath), "AdminGate.tsx must exist");
+  const gateContent = fs.readFileSync(gatePath, "utf-8");
+  assert.ok(gateContent.includes("useAuth"), "AdminGate must check useAuth");
+  assert.ok(gateContent.includes("/login"), "AdminGate must redirect unauthenticated users to /login");
+
+  const setupModalPath = path.join(rootDir, "src/components/FirstRunAdminSetupModal.tsx");
+  assert.ok(fs.existsSync(setupModalPath), "FirstRunAdminSetupModal.tsx must exist");
+  const modalContent = fs.readFileSync(setupModalPath, "utf-8");
+  assert.ok(modalContent.includes("mvu_admin_setup_completed"), "Must save setup completion state");
+  assert.ok(modalContent.includes("somboon"), "Must identify super admin account");
+
+  const providersPath = path.join(rootDir, "src/components/Providers.tsx");
+  const provContent = fs.readFileSync(providersPath, "utf-8");
+  assert.ok(provContent.includes("AdminGate"), "Providers must wrap tree with AdminGate");
+});
+
+runTest("Verify electron/main.cjs and start_desktop_app.bat target /login as initial entry point", () => {
+  const mainPath = path.join(rootDir, "electron/main.cjs");
+  const mainContent = fs.readFileSync(mainPath, "utf-8");
+  assert.ok(mainContent.includes("/login"), "electron/main.cjs must target /login initially");
+
+  const batPath = path.join(rootDir, "start_desktop_app.bat");
+  const batContent = fs.readFileSync(batPath, "utf-8");
+  assert.ok(batContent.includes("/login"), "start_desktop_app.bat must target /login");
+});
+
+runTest("Verify compiled Windows Installer and Portable executables exist in dist-desktop", () => {
+  const setupExe = path.join(rootDir, "dist-desktop/MVU-College-ERP-Setup-0.1.0.exe");
+  assert.ok(fs.existsSync(setupExe), "MVU-College-ERP-Setup-0.1.0.exe must be compiled in dist-desktop");
+  const setupStats = fs.statSync(setupExe);
+  assert.ok(setupStats.size > 50 * 1024 * 1024, "Setup exe size must be substantial (>50MB)");
+
+  const portableExe = path.join(rootDir, "dist-desktop/MVU-College-ERP-Portable-0.1.0.exe");
+  assert.ok(fs.existsSync(portableExe), "MVU-College-ERP-Portable-0.1.0.exe must be compiled in dist-desktop");
+  const portableStats = fs.statSync(portableExe);
+  assert.ok(portableStats.size > 50 * 1024 * 1024, "Portable exe size must be substantial (>50MB)");
+});
+
 // Summary
 console.log("\n==========================================================");
 console.log(`  AUDIT RESULTS: ${passedCount} / ${totalTests} TESTS PASSED`);
