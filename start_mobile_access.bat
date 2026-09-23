@@ -41,13 +41,6 @@ echo [3/3] กำลังเริ่มต้นเซิร์ฟเวอร
 echo       (กด Ctrl+C ในหน้าต่างนี้เพื่อหยุดการทำงาน)
 echo.
 
-:: Check if production build exists
-if exist ".next\standalone\server.js" (
-    echo [โหมด Standalone Production Build]
-    node .next\standalone\server.js
-) else (
-    echo [โหมด Next.js Standard Start]
-    npx next start -H 0.0.0.0 -p 3001
-)
+npx next start -H 0.0.0.0 -p 3001
 
 pause
