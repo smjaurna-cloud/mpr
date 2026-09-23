@@ -4,52 +4,70 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { 
   Bell, 
-  ShieldCheck, 
-  UserCircle2, 
-  Sparkles, 
   BookOpen, 
   MessageSquareText, 
   Phone, 
-  Database,
-  LogIn,
-  UserPlus,
-  LogOut,
-  ChevronDown,
-  IdCard,
-  Users
+  Database, 
+  LogIn, 
+  UserPlus, 
+  LogOut, 
+  ChevronDown, 
+  IdCard, 
+  Users,
+  Menu,
+  Smartphone,
 } from "lucide-react";
 import { VisitorCounterBadge } from "./VisitorCounterBadge";
 import { useAuth } from "@/context/AuthContext";
+import { useMobileNav } from "@/context/MobileNavContext";
 import { initialAuthUsers } from "@/data/authData";
 import DigitalMemberCardModal from "./DigitalMemberCardModal";
 
 export default function Navbar() {
   const { currentUser, logout, switchPersona } = useAuth();
+  const { toggleDrawer, isMemberCardOpen, closeMemberCard } = useMobileNav();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [showMemberCardModal, setShowMemberCardModal] = useState(false);
+  const [localMemberCardOpen, setLocalMemberCardOpen] = useState(false);
+
+  const isCardModalOpen = localMemberCardOpen || isMemberCardOpen;
+  const handleCloseCardModal = () => {
+    setLocalMemberCardOpen(false);
+    closeMemberCard();
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-amber-200/80 px-4 lg:px-8 py-3 transition-all shadow-sm">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-amber-200/80 px-3 sm:px-4 lg:px-8 py-2.5 sm:py-3 transition-all shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Brand & Emblem */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 flex items-center justify-center text-white shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
-            <BookOpen className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-800 text-base md:text-lg tracking-tight">
-                มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย
-              </span>
-              <span className="hidden sm:inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 border border-amber-300/60">
-                วส. มจร
-              </span>
+        {/* Brand & Emblem + Mobile Hamburger */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <button
+            type="button"
+            onClick={toggleDrawer}
+            className="md:hidden p-2 rounded-xl text-amber-900 hover:bg-amber-100/70 border border-amber-300/60 transition-colors shrink-0"
+            aria-label="เปิดเมนูสารบบ ๒๔ โมดูล"
+          >
+            <Menu className="w-5 h-5 text-amber-800" />
+          </button>
+
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 flex items-center justify-center text-white shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform shrink-0">
+              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-xs text-amber-800 font-medium hidden sm:block">
-              สถาบันการศึกษาพระปริยัติธรรมบาลีเถรวาท • โรงเรียนศากยบุตรสามเณรสีหะ
-            </p>
-          </div>
-        </Link>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-bold text-slate-800 text-sm sm:text-base md:text-lg tracking-tight truncate max-w-[190px] xs:max-w-[240px] sm:max-w-none">
+                  มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย
+                </span>
+                <span className="hidden sm:inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 border border-amber-300/60 shrink-0">
+                  วส. มจร
+                </span>
+              </div>
+              <p className="text-xs text-amber-800 font-medium hidden sm:block">
+                สถาบันการศึกษาพระปริยัติธรรมบาลีเถรวาท • โรงเรียนศากยบุตรสามเณรสีหะ
+              </p>
+            </div>
+          </Link>
+        </div>
 
         {/* Center Quick Navigation */}
         <nav className="hidden xl:flex items-center gap-1 bg-amber-50/60 p-1 rounded-xl border border-amber-200/50">
@@ -81,7 +99,17 @@ export default function Navbar() {
         </nav>
 
         {/* Right Actions & Profile */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
+          {/* Mobile QR Connect Link */}
+          <Link
+            href="/mobile-connect"
+            title="เปิดบนโทรศัพท์มือถือ (Android & iOS QR Code)"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 text-xs font-semibold transition-colors"
+          >
+            <Smartphone className="w-3.5 h-3.5 text-amber-700" />
+            <span className="hidden sm:inline">เปิดบนมือถือ</span>
+          </Link>
+
           {/* Visitor Counter Live Badge */}
           <VisitorCounterBadge className="hidden md:inline-flex" />
 
@@ -89,51 +117,51 @@ export default function Navbar() {
           <Link
             href="/data-updater"
             title="ศูนย์อัปเดตข้อมูลทุกระบบ (MOD-23)"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-semibold transition-all shadow-xs"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-semibold transition-all shadow-xs"
           >
             <Database className="w-3.5 h-3.5 text-yellow-300" />
-            <span className="hidden sm:inline">อัปเดตข้อมูล</span>
+            <span className="hidden md:inline">อัปเดตข้อมูล</span>
           </Link>
 
           {/* Quick Contact Access */}
           <Link
             href="/contact"
             title="ช่องทางติดต่อราชการ & ทำเนียบ ๘ ฝ่ายงาน (MOD-21)"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 text-xs font-semibold transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 text-xs font-semibold transition-colors"
           >
             <Phone className="w-3.5 h-3.5 text-amber-700" />
-            <span className="hidden sm:inline">ติดต่อเรา</span>
+            <span className="hidden md:inline">ติดต่อเรา</span>
           </Link>
 
           {/* Quick Chat Board Access */}
           <Link
             href="/chat-board"
             title="แชตบอร์ด & สนทนาธรรมออนไลน์ (MOD-19)"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 text-xs font-semibold transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 text-xs font-semibold transition-colors"
           >
             <MessageSquareText className="w-4 h-4 text-amber-700" />
-            <span className="hidden sm:inline">แชตบอร์ด</span>
+            <span className="hidden md:inline">แชตบอร์ด</span>
           </Link>
 
           <button 
             type="button" 
             title="การแจ้งเตือน"
             aria-label="เปิดกล่องข้อความแจ้งเตือนระบบ"
-            className="p-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-amber-50 transition-colors relative cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-amber-50 transition-colors relative cursor-pointer"
           >
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
+            <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
           </button>
 
           {/* User Authentication Profile Area */}
           {currentUser ? (
-            <div className="relative pl-2 border-l border-slate-200">
+            <div className="relative pl-1.5 sm:pl-2 border-l border-slate-200">
               <button
                 type="button"
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-2 text-left p-1 rounded-xl hover:bg-amber-50 transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 sm:gap-2 text-left p-1 rounded-xl hover:bg-amber-50 transition-colors cursor-pointer"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 text-white font-bold flex items-center justify-center text-xs shadow-sm ring-2 ring-amber-300/40 shrink-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 text-white font-bold flex items-center justify-center text-xs shadow-sm ring-2 ring-amber-300/40 shrink-0">
                   {currentUser.avatarText || "SB"}
                 </div>
                 <div className="hidden lg:block text-left text-xs">
@@ -172,7 +200,7 @@ export default function Navbar() {
                     <button
                       type="button"
                       onClick={() => {
-                        setShowMemberCardModal(true);
+                        setLocalMemberCardOpen(true);
                         setShowProfileMenu(false);
                       }}
                       className="w-full text-left px-3 py-2 rounded-lg hover:bg-amber-50 flex items-center gap-2 text-slate-700 hover:text-amber-900 transition-colors cursor-pointer"
@@ -237,13 +265,13 @@ export default function Navbar() {
             </div>
           ) : (
             /* Guest Buttons (Not Logged In) */
-            <div className="flex items-center gap-1.5 pl-2 border-l border-slate-200">
+            <div className="flex items-center gap-1.5 pl-1.5 sm:pl-2 border-l border-slate-200">
               <Link
                 href="/login"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold transition-colors"
+                className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold transition-colors"
               >
                 <LogIn className="w-3.5 h-3.5 text-amber-700" />
-                <span>เข้าสู่ระบบ</span>
+                <span className="hidden xs:inline">เข้าสู่ระบบ</span>
               </Link>
               <Link
                 href="/register"
@@ -260,8 +288,8 @@ export default function Navbar() {
       {/* Digital Member Card Modal */}
       {currentUser && (
         <DigitalMemberCardModal
-          isOpen={showMemberCardModal}
-          onClose={() => setShowMemberCardModal(false)}
+          isOpen={isCardModalOpen}
+          onClose={handleCloseCardModal}
           user={currentUser}
         />
       )}

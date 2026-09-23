@@ -221,7 +221,25 @@
       - ผ่านชุดทดสอบระบบครบถ้วน ๙๕/๙๕ รายการ (`tests/system-audit.test.mjs` 100% Pass)
       - ESLint ผ่าน 0 errors, 0 warnings
       - TypeScript Strict Mode ผ่าน 0 errors
-* **Latest Action:** ติดตั้งระบบความปลอดภัย Admin Login Gate & First-Run Setup Wizard และคอมไพล์ตัวติดตั้งจริง Windows Application (.exe ทั้ง NSIS Setup 264MB และ Portable 263MB) ใน `dist-desktop/` ผ่านชุดทดสอบ ๙๕/๙๕ รายการ สมบูรณ์แบบ ๑๐๐%
+  - TASK-941: ระบบรองรับโทรศัพท์มือถือทุกระบบปฏิบัติการหลัก (Android & iOS PWA Architecture & Mobile UX Redesign):
+    * Web App Manifest & Dynamic PWA Icons: กำหนดค่า `src/app/manifest.ts` โหมด `display: standalone`, ธีมสีจีวรสงฆ์ Saffron Amber (`#d97706`), และ Dynamic OpenGraph Icons (`/icon` 192x192, `/apple-icon` 180x180) ผ่าน `next/og ImageResponse`
+    * Mobile Navigation & Responsive Architecture:
+      - รวมศูนย์โครงสร้างสารบบงาน ๒๔ โมดูลสู่ `src/data/navigationData.ts` เป็น Single Source of Truth
+      - ปรับปรุง `src/components/Sidebar.tsx` เป็น `hidden md:flex` ขจัดปัญหาเมนูยาวบดบังเนื้อหาบนหน้าจอมือถือ
+      - พัฒนา `src/components/MobileNavDrawer.tsx` เมนูสไลด์บานเลื่อน (Slide-over Off-canvas Drawer) แสดงครบ ๒๔ โมดูลพร้อมกล่องค้นหาแบบเรียลไทม์ และระบบสถานะผู้ใช้งาน
+      - พัฒนา `src/components/MobileBottomNav.tsx` แถบนำทางด่วนด้านล่าง (Bottom Navigation Bar) ๕ เมนูด่วน รองรับ iOS Safe Area (`env(safe-area-inset-bottom)`) สำหรับ iPhone ทุกรุ่น (Dynamic Island & Notch)
+      - พัฒนา `src/components/MobileInstallBanner.tsx` แนะนำการติดตั้ง PWA แยกตามระบบ (Android WebAPK ดักจับ beforeinstallprompt, Apple iOS Safari แนะนำแตะปุ่มแชร์ [Share] -> เพิ่มไปยังหน้าจอโฮม)
+      - พัฒนา `src/context/MobileNavContext.tsx` และเชื่อมโยง Navbar Hamburger Button
+    * ระบบเชื่อมต่อ Wi-Fi และสแกน QR Code เปิดบนมือถือ:
+      - พัฒนา Backend API `src/app/api/mobile-info/route.ts` ค้นหา Local IPv4 ในวงแลน/Wi-Fi อัตโนมัติ พร้อมสร้าง Dynamic QR Code ความละเอียดสูง
+      - พัฒนาหน้าเชื่อมต่อ `/mobile-connect` พร้อมคู่มือสำหรับ Android (Samsung, Xiaomi, OPPO, Vivo, Realme) และ iOS (iPhone, iPad)
+      - พัฒนาสคริปต์ `start_mobile_access.bat` ผูกเซิร์ฟเวอร์กับ `0.0.0.0:3001` และเปิดหน้าจอแสดง QR Code ให้สแกนได้ทันที
+    * การทดสอบและรับรองคุณภาพ:
+      - ผ่านชุดทดสอบ Section 15 ใน `tests/system-audit.test.mjs` ครบถ้วน ๑๐๑/๑๐๑ รายการ (100% Pass)
+      - ESLint ผ่าน 0 errors, 0 warnings
+      - TypeScript Strict Mode ผ่าน 0 errors
+      - Next.js Production Build ประมวลผลผ่านครบ ๔๓/๔๓ static & dynamic routes
+* **Latest Action:** พัฒนาระบบรองรับโทรศัพท์มือถือทุกระบบปฏิบัติการหลัก (Android & iOS PWA Architecture, MobileBottomNav, MobileNavDrawer, MobileInstallBanner, Wi-Fi LAN Binding 0.0.0.0, และ start_mobile_access.bat พร้อม QR Code) ผ่านการทดสอบ ๑๐๑/๑๐๑ รายการ สมบูรณ์แบบ ๑๐๐%
 
 ---
 

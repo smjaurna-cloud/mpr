@@ -33,6 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/data-updater", priority: 0.9, changeFrequency: "daily" as const },
     { path: "/login", priority: 0.8, changeFrequency: "daily" as const },
     { path: "/register", priority: 0.8, changeFrequency: "daily" as const },
+    { path: "/mobile-connect", priority: 0.85, changeFrequency: "monthly" as const },
   ];
 
   return routes.map((r) => ({

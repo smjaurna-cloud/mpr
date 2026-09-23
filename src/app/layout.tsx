@@ -1,10 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import QuickContactSpeedDial from "@/components/QuickContactSpeedDial";
 import { Providers } from "@/components/Providers";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#d97706",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -14,6 +22,15 @@ export const metadata: Metadata = {
   description:
     "Smart Pali Gurukula ERP - แพลตฟอร์มบริหารจัดการสถาบันศาสนทายาท บาลีศากยบุตร และวิทยาลัยสงฆ์อัจฉริยะ ๒๒ โมดูล มหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย",
   applicationName: "Pali Gurukula ERP",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "วส. มจร ERP",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   keywords: [
     "มหาวชิราลงกรณบาลีเถรวาทราชวิทยาลัย",
     "วส. มจร",
@@ -130,7 +147,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#faf8f5] text-slate-900 antialiased selection:bg-amber-200">
+      <body className="min-h-screen flex flex-col bg-[#faf8f5] text-slate-900 antialiased selection:bg-amber-200 pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
         <Providers>
           <Navbar />
           <div className="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto">

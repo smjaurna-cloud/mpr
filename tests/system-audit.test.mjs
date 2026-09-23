@@ -115,6 +115,7 @@ const expectedRoutes = [
   "attendance-tracking",
   "login",
   "register",
+  "mobile-connect",
 ];
 
 for (const route of expectedRoutes) {
@@ -793,6 +794,81 @@ runTest("Verify compiled Windows Installer and Portable executables exist in dis
   assert.ok(fs.existsSync(portableExe), "MVU-College-ERP-Portable-0.1.0.exe must be compiled in dist-desktop");
   const portableStats = fs.statSync(portableExe);
   assert.ok(portableStats.size > 50 * 1024 * 1024, "Portable exe size must be substantial (>50MB)");
+});
+
+
+// 15. Mobile Responsiveness, Android & iOS PWA Architecture
+console.log("\n--- 15. Mobile Responsiveness, Android & iOS PWA Architecture ---");
+
+runTest("Verify Web App Manifest and PWA Icons exist with Standalone mode", () => {
+  const manifestPath = path.join(rootDir, "src/app/manifest.ts");
+  assert.ok(fs.existsSync(manifestPath), "manifest.ts must exist");
+  const manifestContent = fs.readFileSync(manifestPath, "utf-8");
+  assert.ok(manifestContent.includes('display: "standalone"'), "Manifest must specify standalone display");
+  assert.ok(manifestContent.includes("#d97706"), "Manifest theme_color must be saffron amber (#d97706)");
+
+  const iconPath = path.join(rootDir, "src/app/icon.tsx");
+  assert.ok(fs.existsSync(iconPath), "icon.tsx must exist for PWA dynamic icon");
+  const appleIconPath = path.join(rootDir, "src/app/apple-icon.tsx");
+  assert.ok(fs.existsSync(appleIconPath), "apple-icon.tsx must exist for iOS touch icon");
+});
+
+runTest("Verify Root Layout exports Viewport with cover and Apple Web App meta tags", () => {
+  const layoutPath = path.join(rootDir, "src/app/layout.tsx");
+  const layoutContent = fs.readFileSync(layoutPath, "utf-8");
+  assert.ok(layoutContent.includes("export const viewport: Viewport"), "Root layout must export viewport object");
+  assert.ok(layoutContent.includes('viewportFit: "cover"'), "Viewport must specify viewportFit: 'cover' for iPhone notch/Dynamic Island");
+  assert.ok(layoutContent.includes("appleWebApp"), "Root layout must include appleWebApp configuration");
+  assert.ok(layoutContent.includes('manifest: "/manifest.webmanifest"'), "Root layout must link manifest");
+  assert.ok(layoutContent.includes("safe-area-inset-bottom"), "Root layout body must include safe-area-inset-bottom padding");
+});
+
+runTest("Verify Mobile Navigation Architecture (Drawer, BottomNav, Context)", () => {
+  const drawerPath = path.join(rootDir, "src/components/MobileNavDrawer.tsx");
+  assert.ok(fs.existsSync(drawerPath), "MobileNavDrawer.tsx must exist");
+  const drawerContent = fs.readFileSync(drawerPath, "utf-8");
+  assert.ok(drawerContent.includes("navigationGroups"), "MobileNavDrawer must import and render navigationGroups");
+  assert.ok(drawerContent.includes("searchQuery"), "MobileNavDrawer must support live module search");
+
+  const bottomNavPath = path.join(rootDir, "src/components/MobileBottomNav.tsx");
+  assert.ok(fs.existsSync(bottomNavPath), "MobileBottomNav.tsx must exist");
+  const bottomContent = fs.readFileSync(bottomNavPath, "utf-8");
+  assert.ok(bottomContent.includes("safe-area-inset-bottom"), "MobileBottomNav must respect iOS safe area");
+  assert.ok(bottomContent.includes("/alms-patron"), "MobileBottomNav must link to Alms");
+  assert.ok(bottomContent.includes("/mukhopatha"), "MobileBottomNav must link to Mukhopatha");
+
+  const contextPath = path.join(rootDir, "src/context/MobileNavContext.tsx");
+  assert.ok(fs.existsSync(contextPath), "MobileNavContext.tsx must exist");
+});
+
+runTest("Verify MobileInstallBanner supports both Android WebAPK and iOS Safari Add-to-Home", () => {
+  const bannerPath = path.join(rootDir, "src/components/MobileInstallBanner.tsx");
+  assert.ok(fs.existsSync(bannerPath), "MobileInstallBanner.tsx must exist");
+  const bannerContent = fs.readFileSync(bannerPath, "utf-8");
+  assert.ok(bannerContent.includes("beforeinstallprompt"), "Banner must listen for Android beforeinstallprompt");
+  assert.ok(bannerContent.includes("isIOS"), "Banner must detect iOS devices");
+  assert.ok(bannerContent.includes("เพิ่มไปยังหน้าจอโฮม"), "Banner must guide iOS users to Add to Home Screen");
+  assert.ok(bannerContent.includes("standalone"), "Banner must check standalone mode to avoid redundant display");
+});
+
+runTest("Verify Mobile Connection API and start_mobile_access.bat script exist", () => {
+  const apiPath = path.join(rootDir, "src/app/api/mobile-info/route.ts");
+  assert.ok(fs.existsSync(apiPath), "api/mobile-info/route.ts must exist");
+  const apiContent = fs.readFileSync(apiPath, "utf-8");
+  assert.ok(apiContent.includes("networkInterfaces"), "Must detect OS network interfaces");
+  assert.ok(apiContent.includes("QRCode.toDataURL"), "Must generate QR code data URL");
+
+  const connectPagePath = path.join(rootDir, "src/app/mobile-connect/page.tsx");
+  assert.ok(fs.existsSync(connectPagePath), "mobile-connect/page.tsx must exist");
+  const pageContent = fs.readFileSync(connectPagePath, "utf-8");
+  assert.ok(pageContent.includes("Android"), "Page must provide Android guide");
+  assert.ok(pageContent.includes("iOS"), "Page must provide iOS guide");
+
+  const batPath = path.join(rootDir, "start_mobile_access.bat");
+  assert.ok(fs.existsSync(batPath), "start_mobile_access.bat must exist");
+  const batContent = fs.readFileSync(batPath, "utf-8");
+  assert.ok(batContent.includes("0.0.0.0"), "Batch script must bind to 0.0.0.0 for LAN access");
+  assert.ok(batContent.includes("mobile-connect"), "Batch script must launch mobile-connect page");
 });
 
 // Summary
